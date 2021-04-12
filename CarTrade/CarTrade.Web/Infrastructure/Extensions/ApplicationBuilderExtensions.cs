@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 
-namespace CarTrade.Web.Infrastructure
+namespace CarTrade.Web.Infrastructure.Extensions
 {
     public static class ApplicationBuilderExtensions
     {

@@ -1,0 +1,42 @@
+﻿@model UserListingViewModel
+@{
+    ViewData["Title"] = "All users";
+}
+<h2>@ViewData["Title"]</h2>
+
+@*това може да се направи на глобално ниво не само за този контролер*@
+@if (TempData["SuccessMessage"] != null)
+{
+    <h2 class="text-success">@TempData["SuccessMessage"]</h2>
+}
+
+<div>
+    <a href="/identity/register" class="btn btn-primary">Register</a>
+</div>
+<br />
+
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>UserName</th>
+        <th>E-mail</th>
+        <th>Компания</th>
+        <th>Град</th>
+        <th>Адрес</th>
+        <th></th>
+    </tr>
+    @foreach (var user in Model.Users)
+    {
+        <tr>
+            <th>@user.Username</th>
+            <th>@user.Email</th>
+            <th>@user.CompanyName</th>
+            <th>@user.BranchTown</th>
+            <th>@user.BranchAddress</th>
+            <th>
+                <a href="/users/changepassword/@user.Id" class="btn btn-secondary">Change Password</a>
+                <a href="/users/userroles/@user.Id" class="btn btn-info">Roles</a>
+                <a href="/users/delete/@user.Id" class="btn btn-danger">Remove</a>
+            </th>
+        </tr>
+    }
+</table>

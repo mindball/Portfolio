@@ -1,10 +1,12 @@
 ﻿using CarTrade.Data.Models;
+using CarTrade.Services.Branches;
+using CarTrade.Services.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -21,18 +23,30 @@ namespace CarTrade.Web.Areas.Identity.Pages.Account
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
         private readonly ILogger<RegisterModel> _logger;
-        private readonly IEmailSender _emailSender;
+        private readonly IBranchesService brancService;
+
 
         public RegisterModel(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IBranchesService brancService
+           )
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
-            _emailSender = emailSender;
+
+            this.brancService = brancService;
+            var allBranches = this.brancService.AllAsync().Result.AsEnumerable();
+
+            this.Branches = (List<SelectListItem>)allBranches
+                .Select(b => new SelectListItem
+                {
+                    Text = b.FullAddress,
+                    Value = b.Id.ToString()
+                })
+                .ToList();
         }
 
         [BindProperty]
@@ -41,6 +55,8 @@ namespace CarTrade.Web.Areas.Identity.Pages.Account
         public string ReturnUrl { get; set; }
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
+
+        public List<SelectListItem> Branches { get; }
 
         public class InputModel
         {
@@ -82,6 +98,9 @@ namespace CarTrade.Web.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            public string Branch { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -93,7 +112,7 @@ namespace CarTrade.Web.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            //ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
                 var user = new User 
@@ -103,6 +122,7 @@ namespace CarTrade.Web.Areas.Identity.Pages.Account
                     SecondName = Input.SecondName,
                     LastName = Input.LastName,
                     Email = Input.Email,
+                    BranchId = int.Parse(Input.Branch)
                 };
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
