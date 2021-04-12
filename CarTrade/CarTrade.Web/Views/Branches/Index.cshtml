@@ -1,0 +1,29 @@
+﻿@model BranchListingViewModel
+@{
+    ViewData["Title"] = "All branches";
+}
+<h2>@ViewData["Title"]</h2>
+
+<div>
+    <a href="/branches/add" class="btn btn-primary">Add branch</a>
+</div>
+<br />
+
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>Град</th>
+        <th>Адрес</th>       
+        <th></th>       
+    </tr>
+    @foreach (var branch in Model.Branches)
+    {
+        <tr>                       
+            <th>@branch.Town</th>
+            <th>@branch.Address</th>
+            <th>
+                <a href="/branches/edit/@branch.Id" class="btn btn-secondary">Edit branch</a>               
+                <a href="/branches/delete/@branch.Id" class="btn btn-danger">Delete branch</a>
+            </th>
+        </tr>
+    }
+</table>

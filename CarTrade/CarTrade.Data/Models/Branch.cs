@@ -10,6 +10,7 @@ namespace CarTrade.Data.Models
         [Required]
         public string Town { get; set; }
 
+        [Required]
         public string Address { get; set; }
 
         public virtual IList<Vehicle> Vehicles { get; set; } = new List<Vehicle>();

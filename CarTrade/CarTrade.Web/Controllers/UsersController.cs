@@ -38,18 +38,6 @@ namespace CarTrade.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var users = await this.usersService.AllAsync();
-            //var userIds = this.dbContext.Users.ToList();
-
-            //this.userManager.
-
-            //var roles = await this.roleManager
-            //.Roles
-            //.Select(r => new SelectListItem
-            //{
-            //    Text = r.Name,
-            //    Value = r.Name
-            //})
-            //.ToListAsync();
 
             return View(new UserListingViewModel
             {
@@ -76,24 +64,24 @@ namespace CarTrade.Web.Controllers
             return this.View(viewModelResults);
         }
 
-        public async Task<IActionResult> AddRole(string userId)
+        public async Task<IActionResult> AddRole()
         {
-            var rolesSelectItems = this.roleManager
+            var rolesSelectItems = await this.roleManager
                 .Roles
                 .Select(r => new SelectListItem
                 {
                     Text = r.Name,
                     Value = r.Name
                 })
-                .ToList();
+                .ToListAsync();
 
             return this.View(rolesSelectItems);
         }
 
-        [HttpPost]        
-        public async Task<IActionResult> AddRole(string id, string role)
+        [HttpPost]
+        public async Task<IActionResult> AddRole([FromRoute(Name = "id")] string userId, string role)
         {
-            var user = await this.userManager.FindByIdAsync(id);
+            var user = await this.userManager.FindByIdAsync(userId);
             var roleName = await this.roleManager.FindByNameAsync(role);
 
             if (user == null || roleName == null)
@@ -108,10 +96,76 @@ namespace CarTrade.Web.Controllers
                 return BadRequest(this.ModelState);
             }
 
-            //TempDataPopUpMessage.AddSuccessMessage(GlobalConstants.SuccessMsg,
-            //         $"User {user.UserName} added to {roleName.Name} role!");
+            TempData.AddSuccessMessage($"User {user.UserName} added to {roleName.Name} role!");
 
             return this.RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> ChangePassword([FromRoute(Name = "id")] string userId)
+        {
+            var user = await this.userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return this.NotFound();
+            }
+
+            return this.View(
+                new UserChangePasswordViewModel
+                {
+                    UserName = user.UserName
+                });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword([FromRoute(Name = "id")] string userId,
+            UserChangePasswordViewModel userModel)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(userModel);
+            }
+
+            var user = await this.userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return this.NotFound();
+            }
+            var token = await this.userManager.GeneratePasswordResetTokenAsync(user);
+            var result = await this.userManager.ResetPasswordAsync(user, token, userModel.Password);
+
+            TempData.AddSuccessMessage($"{user.UserName} successfully change password");
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Delete([FromRoute(Name = "id")] string userId)
+        {
+            var user = await this.userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return this.NotFound();
+            }
+
+            return this.View(new UserDetailViewModel
+            {
+                UserId = user.Id,
+                Name = user.FirstName + " " + user.LastName
+            });
+        }
+
+        public async Task<IActionResult> Destroy([FromRoute(Name = "id")] string userId)
+        {
+            var user = await this.userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return this.NotFound();
+            }
+
+            await this.userManager.DeleteAsync(user);
+
+            return RedirectToAction(nameof(Index));
         }
 
         private void AddModelError(IdentityResult result)

@@ -7,5 +7,7 @@ namespace CarTrade.Services.Branches
     public interface IBranchesService
     {
         Task<IEnumerable<BrachListingServiceModel>> AllAsync();
+
+        Task AddBranchAsync(string town, string address);
     }
 }
