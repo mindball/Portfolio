@@ -25,7 +25,7 @@ namespace CarTrade.Web.Controllers
             });
         }
 
-        public async Task<IActionResult> Add()
+        public IActionResult Add()
             => this.View();
 
         [HttpPost]
@@ -37,6 +37,31 @@ namespace CarTrade.Web.Controllers
             }
 
             await branchesService.AddBranchAsync(branch.Town, branch.Address);
+
+            return this.RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Edit([FromRoute(Name = "id")] int branchId)
+        {
+            var branch = await this.branchesService.GetByIdAsync(branchId);
+            var editBranch = new BranchDetailViewModel
+            {
+                Town = branch.Town,
+                Address = branch.Address
+            };
+
+            return this.View(editBranch);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(BranchDetailViewModel brancModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return this.BadRequest();
+            }
+
+            await this.branchesService.EditAsync(brancModel.Id, brancModel.Town, brancModel.Address);
 
             return this.RedirectToAction(nameof(Index));
         }

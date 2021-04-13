@@ -24,13 +24,17 @@
                         </li>
                         @if (User.IsInRole(WebConstants.AdministratorRole))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">All users</a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Branches" asp-action="Index">All branches</a>
-                            </li>
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Administration
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Users" asp-action="Index">All users</a>
+                                    <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Brands" asp-action="Index">All brands</a>
+                                    <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Branches" asp-action="Index">All branches</a>
+                                    <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Companies" asp-action="Index">All company</a>
+                                </div>
+                            </div>                           
                         }
 
                     </ul>

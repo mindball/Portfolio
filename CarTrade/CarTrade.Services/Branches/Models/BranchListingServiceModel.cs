@@ -3,7 +3,7 @@ using CarTrade.Data.Models;
 
 namespace CarTrade.Services.Branches.Models
 {
-    public class BrachListingServiceModel : IMapFrom<Branch>
+    public class BranchListingServiceModel : IMapFrom<Branch>
     {
         public int Id { get; set; }
         

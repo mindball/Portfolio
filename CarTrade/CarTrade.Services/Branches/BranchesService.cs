@@ -4,6 +4,7 @@ using CarTrade.Data.Models;
 using CarTrade.Services.Branches.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CarTrade.Services.Branches
@@ -30,9 +31,29 @@ namespace CarTrade.Services.Branches
             await this.db.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<BrachListingServiceModel>> AllAsync()
+        public async Task<IEnumerable<BranchListingServiceModel>> AllAsync()
             => await this.db.Branches
-            .ProjectTo<BrachListingServiceModel>()
+            .ProjectTo<BranchListingServiceModel>()
             .ToListAsync();
+
+        public async Task EditAsync(int id, string town, string address)
+        {
+            if (!this.db.Branches.Any(b => b.Id == id))
+            {
+                return;
+            }
+
+            var branchToEdit = await this.db.Branches.FirstOrDefaultAsync(b => b.Id == id);
+            branchToEdit.Town = town;
+            branchToEdit.Address = address;
+
+            await this.db.SaveChangesAsync();
+        }
+
+        public async Task<BranchListingServiceModel> GetByIdAsync(int id)
+            => await this.db.Branches
+                .Where(b => b.Id == id)
+                .ProjectTo<BranchListingServiceModel>()
+                .FirstOrDefaultAsync();
     }
 }

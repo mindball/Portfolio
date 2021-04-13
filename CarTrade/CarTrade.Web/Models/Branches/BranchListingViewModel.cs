@@ -5,6 +5,6 @@ namespace CarTrade.Web.Models.Branches
 {
     public class BranchListingViewModel
     {
-        public IEnumerable<BrachListingServiceModel> Branches { get; set; }        
+        public IEnumerable<BranchListingServiceModel> Branches { get; set; }        
     }
 }

@@ -1,9 +1,9 @@
-﻿namespace CarTrade.Web.Models.Users
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CarTrade.Web.Models.Users
 {
-    public class UserDetailViewModel
+    public class UserDetailViewModel : BasicDetailViewModel
     {
         public string UserId { get; set; }
-
-        public string Name { get; set; }
     }
 }

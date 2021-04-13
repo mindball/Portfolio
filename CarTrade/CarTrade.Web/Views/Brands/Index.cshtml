@@ -1,0 +1,27 @@
+﻿@model BrandListingViewModel
+@{
+    ViewData["Title"] = "All brands";
+}
+<h2>@ViewData["Title"]</h2>
+
+<div>
+    <a href="/brands/add" class="btn btn-primary">Add brands</a>
+</div>
+<br />
+
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>Марка</th>           
+        <th></th>       
+    </tr>
+    @foreach (var brand in Model.Brands)
+    {
+        <tr>                       
+            <th>@brand.Name</th>            
+            <th>
+                <a href="/brands/edit/@brand.Id" class="btn btn-secondary">Edit brand</a>               
+                <a href="/brands/delete/@brand.Id" class="btn btn-danger disabled" >Delete brand</a>
+            </th>
+        </tr>
+    }
+</table>

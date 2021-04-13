@@ -6,8 +6,12 @@ namespace CarTrade.Services.Branches
 {
     public interface IBranchesService
     {
-        Task<IEnumerable<BrachListingServiceModel>> AllAsync();
+        Task<IEnumerable<BranchListingServiceModel>> AllAsync();
 
         Task AddBranchAsync(string town, string address);
+
+        Task<BranchListingServiceModel> GetByIdAsync(int id);
+
+        Task EditAsync(int id, string town, string address);
     }
 }

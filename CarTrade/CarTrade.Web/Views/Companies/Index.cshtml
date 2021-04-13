@@ -1,0 +1,27 @@
+﻿@model CompanyListingViewModel
+@{
+    ViewData["Title"] = "All brands";
+}
+<h2>@ViewData["Title"]</h2>
+
+<div>
+    <a href="/companies/add" class="btn btn-primary">Add company</a>
+</div>
+<br />
+
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>Име на компанията</th>           
+        <th></th>       
+    </tr>
+    @foreach (var company in Model.Companies)
+    {
+        <tr>                       
+            <th>@company.Name</th>            
+            <th>
+                <a href="/companies/edit/@company.Id" class="btn btn-secondary">Edit company</a>               
+                <a href="/companies/delete/@company.Id" class="btn btn-danger disabled" >Delete company</a>
+            </th>
+        </tr>
+    }
+</table>
