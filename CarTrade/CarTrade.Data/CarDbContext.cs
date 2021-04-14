@@ -6,10 +6,9 @@ namespace CarTrade.Data
 {
     public class CarDbContext : IdentityDbContext<User>
     {
-        //when manual initial migration
+        ////when manual initial migration
         //public CarDbContext()
         //{
-
         //}
 
         public CarDbContext(DbContextOptions<CarDbContext> options)
@@ -22,7 +21,7 @@ namespace CarTrade.Data
         //{
         //    // Specify that we will use sqlite and the path of the database here
         //    var options = optionsBuilder
-        //        .UseSqlServer("ConnectionString");
+        //        .UseSqlServer("DefaultConnectionString");
 
         //    base.OnConfiguring(options);
         //}
@@ -30,12 +29,23 @@ namespace CarTrade.Data
         public DbSet<VehicleStuff> VehicleStuffs { get; set; }
 
         public DbSet<VehiclePicture> VehiclePictures { get; set; }
+
         public DbSet<Vehicle> Vehicles { get; set; }
+
         public DbSet<Rental> Rentals { get; set; }
-        public DbSet<Insurance> Insurances { get; set; }
+
+        public DbSet<InsurancePolicy> InsurancePolicies { get; set; }
+
+        public DbSet<InsuranceCompany> InsuranceCompanies { get; set; }
+
         public DbSet<Company> Companies { get; set; }
+
         public DbSet<Brand> Brands { get; set; }
+
         public DbSet<Branch> Branches { get; set; }
+
+        //TODO: apply migration when car status is total damage;
+        public DbSet<SparaParts> SparaParts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

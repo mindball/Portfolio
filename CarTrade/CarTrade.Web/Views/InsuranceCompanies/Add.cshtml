@@ -1,0 +1,14 @@
+﻿@model AddInsuranceCompanyViewModel
+@{
+    ViewData["Title"] = "Add insurance company";
+}
+<h2>@ViewData["Title"]</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>    
+    <button type="submit" class="btn btn-primary">Add insurance company</button>
+</form>

@@ -41,6 +41,9 @@ namespace CarTrade.Web.Controllers
         public async Task<IActionResult> Edit([FromRoute(Name = "id")] int brandId)
         {
             var brand = await this.brandService.GetByIdAsync(brandId);
+
+            if (brand == null) return this.BadRequest();
+
             var editBranch = new BrandDetailViewModel
             {
                 Name = brand.Name,                

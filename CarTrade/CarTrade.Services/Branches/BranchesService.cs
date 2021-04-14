@@ -20,6 +20,8 @@ namespace CarTrade.Services.Branches
 
         public async Task AddBranchAsync(string town, string address)
         {
+            if (town == null && address == null) return;
+
             var newBranch = new Branch
             {
                 Town = town,
@@ -38,12 +40,14 @@ namespace CarTrade.Services.Branches
 
         public async Task EditAsync(int id, string town, string address)
         {
-            if (!this.db.Branches.Any(b => b.Id == id))
+            var branchToEdit = await this.db.Branches.FirstOrDefaultAsync(b => b.Id == id);
+
+            if (branchToEdit == null || 
+                !(town == null && address == null))
             {
                 return;
             }
-
-            var branchToEdit = await this.db.Branches.FirstOrDefaultAsync(b => b.Id == id);
+           
             branchToEdit.Town = town;
             branchToEdit.Address = address;
 

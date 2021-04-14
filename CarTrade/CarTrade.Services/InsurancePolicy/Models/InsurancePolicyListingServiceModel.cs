@@ -2,19 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text;
 
-using static CarTrade.Common.DataConstants;
-
-namespace CarTrade.Data.Models
+namespace CarTrade.Services.InsurancePolicy.Models
 {
-    public class Insurance
+    public class InsurancePolicyListingServiceModel
     {
         public int Id { get; set; }
-
-        [Required]
-        [MinLength(MinNameLength)]
-        [MaxLength(MaxNameLength)]
-        public string CompanyName { get; set; }
 
         [Required]
         public TypeInsurance TypeInsurance { get; set; }
@@ -25,6 +19,6 @@ namespace CarTrade.Data.Models
         [Required]
         public DateTime EndDate { get; set; }
 
-        public IList<Vehicle> Vehicles { get; set; } = new List<Vehicle>();
+        public int InsuranceCompanyId { get; set; }
     }
 }

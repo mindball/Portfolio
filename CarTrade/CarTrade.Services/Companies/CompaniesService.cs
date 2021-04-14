@@ -4,6 +4,7 @@ using CarTrade.Services.Companies.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,7 +20,7 @@ namespace CarTrade.Services.Companies
         }
         public async Task AddCompanyAsync(string name)
         {
-            if (name == null) return;
+            if (name == null || !this.db.Companies.Any(b => b.Name == name)) return;
 
             await this.db.AddAsync(new Data.Models.Company { Name = name });
             await this.db.SaveChangesAsync();
@@ -36,7 +37,7 @@ namespace CarTrade.Services.Companies
                 .Companies
                 .FirstOrDefaultAsync(c => c.Id == id && c.Name == name);
 
-            if (company == null) return;
+            if (company == null || name == null) return;
 
             company.Name = name;
             await this.db.SaveChangesAsync();

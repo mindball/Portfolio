@@ -18,7 +18,8 @@ namespace CarTrade.Services.Brand
         }
         public async Task AddBrandAsync(string name)
         {
-            if (name == null) return;
+            if (!this.db.Brands.Any(b => b.Name == name) || 
+                name == null) return;
 
             var newBrand = new Data.Models.Brand { Name = name };
 
@@ -33,12 +34,13 @@ namespace CarTrade.Services.Brand
 
         public async Task EditAsync(int id, string name)
         {
-            if (!this.db.Brands.Any(b => b.Id == id))
+            var brandToEdit = await this.db.Brands.FirstOrDefaultAsync(b => b.Id == id);
+
+            if (brandToEdit == null || name == null)
             {
                 return;
             }
-
-            var brandToEdit = await this.db.Brands.FirstOrDefaultAsync(b => b.Id == id);
+            
             brandToEdit.Name = name;            
 
             await this.db.SaveChangesAsync();

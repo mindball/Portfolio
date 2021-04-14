@@ -44,6 +44,8 @@ namespace CarTrade.Web.Controllers
         public async Task<IActionResult> Edit([FromRoute(Name = "id")] int branchId)
         {
             var branch = await this.branchesService.GetByIdAsync(branchId);
+            if (branch == null) return this.BadRequest();
+
             var editBranch = new BranchDetailViewModel
             {
                 Town = branch.Town,

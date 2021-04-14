@@ -63,5 +63,8 @@ namespace CarTrade.Data.Models
         public virtual IList<VehicleStuff> Stuff { get; set; } = new List<VehicleStuff>();
 
         public virtual IList<Rental> Rentals { get; set; } = new List<Rental>();
+
+        //TODO: apply migration when car status is total damage;
+        public virtual IList<SpareParts> Parts { get; set; } = new List<SpareParts>();
     }
 }
