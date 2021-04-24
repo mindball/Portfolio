@@ -27,10 +27,10 @@ namespace CarTrade.Services.InsurancePolicy
 
             if (!isEnumValid)
             {
-                throw new Exception("Wrong policy");
+                throw new Exception("Wrong policy type");
             }
 
-            if (startDate >= endDate)
+            if (!this.CompareStartEndDate(startDate, endDate))
             {
                 throw new ArgumentException("Start date must be small than end date");
             }
@@ -46,7 +46,7 @@ namespace CarTrade.Services.InsurancePolicy
                 TypeInsurance = type,
                 StartDate = startDate,
                 EndDate = endDate,
-                InsuanceCompanyId = insuranceCompany.Id
+                InsuranceCompanyId = insuranceCompany.Id
             };
 
             await this.db.InsurancePolicies.AddAsync(newInsurancePolicy);
@@ -61,9 +61,14 @@ namespace CarTrade.Services.InsurancePolicy
                 throw new ArgumentException("Missing policy");
             }
 
+            if (!this.CompareStartEndDate(insurancePolicyModel.StartDate, insurancePolicyModel.EndDate))
+            {
+                throw new ArgumentException("Start date must be small than end date");
+            }
+
             existInsurancePolicy.StartDate = insurancePolicyModel.StartDate;
             existInsurancePolicy.EndDate = insurancePolicyModel.EndDate;
-            existInsurancePolicy.InsuanceCompanyId = insurancePolicyModel.InsuranceCompanyId;
+            existInsurancePolicy.InsuranceCompanyId = insurancePolicyModel.InsuranceCompanyId;
             existInsurancePolicy.TypeInsurance = insurancePolicyModel.TypeInsurance;
 
             await this.db.SaveChangesAsync();
@@ -79,6 +84,16 @@ namespace CarTrade.Services.InsurancePolicy
             if (existInsurancePolicy == null) throw new ArgumentException("Missing policy");
 
             return existInsurancePolicy;
+        }
+
+        private bool CompareStartEndDate(DateTime startDate, DateTime endDate)
+        {
+            if (startDate >= endDate)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

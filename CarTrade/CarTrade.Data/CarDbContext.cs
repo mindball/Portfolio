@@ -45,7 +45,7 @@ namespace CarTrade.Data
         public DbSet<Branch> Branches { get; set; }
 
         //TODO: apply migration when car status is total damage;
-        public DbSet<SparaParts> SparaParts { get; set; }
+        //public DbSet<SparaParts> SpareParts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

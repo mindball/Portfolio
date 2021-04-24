@@ -16,6 +16,7 @@ namespace CarTrade.Services.Vehicle
         {
             this.db = db;
         }
+
         public async Task AddVehicleAsync(AddVehicleServiceModel vehicleModel)
         {
             var vehicleStatus = VehicleStatus(vehicleModel.Status);

@@ -20,9 +20,9 @@ namespace CarTrade.Data.Models
         [Required]
         public DateTime EndDate { get; set; }
 
-        public int InsuanceCompanyId { get; set; }
+        public int InsuranceCompanyId { get; set; }
 
-        public virtual InsuranceCompany InsuranceCompany { get; set; }
+        public virtual InsuranceCompany InsuanceCompany { get; set; }
 
         public virtual IList<Vehicle> Vehicles { get; set; } = new List<Vehicle>();
     }

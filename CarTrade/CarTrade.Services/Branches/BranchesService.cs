@@ -20,7 +20,7 @@ namespace CarTrade.Services.Branches
 
         public async Task AddBranchAsync(string town, string address)
         {
-            if (town == null && address == null) return;
+            if (town == null && address == null) return;                   
 
             var newBranch = new Branch
             {
