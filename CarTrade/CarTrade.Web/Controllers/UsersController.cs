@@ -1,6 +1,10 @@
 ﻿using CarTrade.Data;
 using CarTrade.Data.Models;
+using CarTrade.Services;
+using CarTrade.Services.Branches;
+using CarTrade.Services.Companies;
 using CarTrade.Services.Users;
+using CarTrade.Services.Users.Models;
 using CarTrade.Web.Infrastructure.Extensions;
 using CarTrade.Web.Models.Users;
 using Microsoft.AspNetCore.Authorization;
@@ -8,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,16 +26,23 @@ namespace CarTrade.Web.Controllers
         private readonly IUsersService usersService;
         private readonly UserManager<User> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
+        private readonly IBranchesService brancService;
+        private readonly ICompaniesService employerService;
+
         private readonly CarDbContext dbContext;
 
         public UsersController(IUsersService usersService,
             UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager,
-            CarDbContext dbContext)
+            CarDbContext dbContext,
+            IBranchesService brancService,
+            ICompaniesService employerService)
         {
             this.usersService = usersService;
             this.userManager = userManager;
             this.roleManager = roleManager;
+            this.brancService = brancService;
+            this.employerService = employerService;
 
             this.dbContext = dbContext;
         }
@@ -43,6 +55,37 @@ namespace CarTrade.Web.Controllers
             {
                 Users = users
             });
+        }
+
+        public async Task<IActionResult> Edit([FromRoute(Name = "id")] string userId)
+        {
+            var userDetail = await this.usersService.GetByIdAsync(userId);
+            //var allBranches = this.brancService.AllAsync().Result.AsEnumerable();
+            //this.Branches = (List<SelectListItem>)allBranches
+            //   .Select(b => new SelectListItem
+            //   {
+            //       Text = b.FullAddress,
+            //       Value = b.Id.ToString()
+            //   })
+            //   .ToList();
+
+            //var test = GetEmployers(this.brancService);
+            //var test2 = GetEmployers(this.employerService);
+
+
+            if (userDetail == null)
+            {
+                return this.NotFound();
+            }
+
+
+            return this.View(userDetail);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(UserListingServiceModel userModel)
+        {
+            return this.View();
         }
 
         public async Task<IActionResult> UserRoles(string id)
@@ -168,12 +211,26 @@ namespace CarTrade.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> Company([FromRoute(Name = "id")] string userId)
+        {
+            var user = await this.userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return this.NotFound();
+            }
+
+           
+
+            return this.View();
+        }
+
         private void AddModelError(IdentityResult result)
         {
             foreach (var error in result.Errors)
             {
                 this.ModelState.AddModelError(string.Empty, error.Description);
             }
-        }
+        }       
     }
 }

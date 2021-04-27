@@ -19,9 +19,9 @@ namespace CarTrade.Data
         //when manual initial migration
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
-        //    // Specify that we will use sqlite and the path of the database here
-        //    var options = optionsBuilder
-        //        .UseSqlServer("DefaultConnectionString");
+        //    //Specify that we will use sqlite and the path of the database here
+        //   var options = optionsBuilder
+        //       .UseSqlServer("DefaultConnectionString");
 
         //    base.OnConfiguring(options);
         //}
@@ -38,14 +38,15 @@ namespace CarTrade.Data
 
         public DbSet<InsuranceCompany> InsuranceCompanies { get; set; }
 
-        public DbSet<Company> Companies { get; set; }
+        public DbSet<Employer> Companies { get; set; }
 
         public DbSet<Brand> Brands { get; set; }
 
         public DbSet<Branch> Branches { get; set; }
+        
+        public DbSet<VehiclesSpareParts> VehiclesSpareParts { get; set; }
 
-        //TODO: apply migration when car status is total damage;
-        //public DbSet<SparaParts> SpareParts { get; set; }
+        public DbSet<SparePart> SpareParts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -54,6 +55,9 @@ namespace CarTrade.Data
                 .WithMany(r => r.Rentals)
                 .HasForeignKey(v => v.VehicleId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<VehiclesSpareParts>()
+                .HasKey(c => new { c.SparePartId, c.VehicleId });
 
             //    builder.Entity<Rental>()
             //       .HasOne(c => c.Driver)

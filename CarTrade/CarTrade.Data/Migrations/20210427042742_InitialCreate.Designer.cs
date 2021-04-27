@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarTrade.Data.Migrations
 {
     [DbContext(typeof(CarDbContext))]
-    [Migration("20210409065915_InitialCreate")]
+    [Migration("20210427042742_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,6 +29,7 @@ namespace CarTrade.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Town")
@@ -57,7 +58,7 @@ namespace CarTrade.Data.Migrations
                     b.ToTable("Brands");
                 });
 
-            modelBuilder.Entity("CarTrade.Data.Models.Company", b =>
+            modelBuilder.Entity("CarTrade.Data.Models.Employer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -74,20 +75,35 @@ namespace CarTrade.Data.Migrations
                     b.ToTable("Companies");
                 });
 
-            modelBuilder.Entity("CarTrade.Data.Models.Insurance", b =>
+            modelBuilder.Entity("CarTrade.Data.Models.InsuranceCompany", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CompanyName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
+                    b.HasKey("Id");
+
+                    b.ToTable("InsuranceCompanies");
+                });
+
+            modelBuilder.Entity("CarTrade.Data.Models.InsurancePolicy", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("InsuranceCompanyId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
@@ -97,7 +113,9 @@ namespace CarTrade.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Insurances");
+                    b.HasIndex("InsuranceCompanyId");
+
+                    b.ToTable("InsurancePolicies");
                 });
 
             modelBuilder.Entity("CarTrade.Data.Models.Rental", b =>
@@ -138,6 +156,28 @@ namespace CarTrade.Data.Migrations
                     b.ToTable("Rentals");
                 });
 
+            modelBuilder.Entity("CarTrade.Data.Models.SparePart", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OENumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PartsNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SpareParts");
+                });
+
             modelBuilder.Entity("CarTrade.Data.Models.User", b =>
                 {
                     b.Property<string>("Id")
@@ -160,7 +200,7 @@ namespace CarTrade.Data.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("EmployerId")
+                    b.Property<int>("EmployerId")
                         .HasColumnType("int");
 
                     b.Property<string>("FirstName")
@@ -186,9 +226,6 @@ namespace CarTrade.Data.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
-
-                    b.Property<int>("OwnerId")
-                        .HasColumnType("int");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -251,7 +288,7 @@ namespace CarTrade.Data.Migrations
                     b.Property<int>("EndOilChange")
                         .HasColumnType("int");
 
-                    b.Property<int?>("InsuranceId")
+                    b.Property<int?>("InsurancePolicyId")
                         .HasColumnType("int");
 
                     b.Property<string>("Model")
@@ -287,7 +324,7 @@ namespace CarTrade.Data.Migrations
 
                     b.HasIndex("BrandId");
 
-                    b.HasIndex("InsuranceId");
+                    b.HasIndex("InsurancePolicyId");
 
                     b.HasIndex("OwnerId");
 
@@ -337,6 +374,21 @@ namespace CarTrade.Data.Migrations
                     b.HasIndex("VehicleId");
 
                     b.ToTable("VehicleStuffs");
+                });
+
+            modelBuilder.Entity("CarTrade.Data.Models.VehiclesSpareParts", b =>
+                {
+                    b.Property<int>("SparePartId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VehicleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SparePartId", "VehicleId");
+
+                    b.HasIndex("VehicleId");
+
+                    b.ToTable("VehiclesSpareParts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -470,6 +522,15 @@ namespace CarTrade.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("CarTrade.Data.Models.InsurancePolicy", b =>
+                {
+                    b.HasOne("CarTrade.Data.Models.InsuranceCompany", "InsuanceCompany")
+                        .WithMany("InsurancePolicies")
+                        .HasForeignKey("InsuranceCompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("CarTrade.Data.Models.Rental", b =>
                 {
                     b.HasOne("CarTrade.Data.Models.User", "User")
@@ -491,9 +552,11 @@ namespace CarTrade.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CarTrade.Data.Models.Company", "Employer")
+                    b.HasOne("CarTrade.Data.Models.Employer", "Employer")
                         .WithMany("Employees")
-                        .HasForeignKey("EmployerId");
+                        .HasForeignKey("EmployerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CarTrade.Data.Models.Vehicle", b =>
@@ -510,11 +573,11 @@ namespace CarTrade.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CarTrade.Data.Models.Insurance", null)
+                    b.HasOne("CarTrade.Data.Models.InsurancePolicy", null)
                         .WithMany("Vehicles")
-                        .HasForeignKey("InsuranceId");
+                        .HasForeignKey("InsurancePolicyId");
 
-                    b.HasOne("CarTrade.Data.Models.Company", "Owner")
+                    b.HasOne("CarTrade.Data.Models.Employer", "Owner")
                         .WithMany("Vehicles")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -534,6 +597,21 @@ namespace CarTrade.Data.Migrations
                 {
                     b.HasOne("CarTrade.Data.Models.Vehicle", "Vehicle")
                         .WithMany("Stuff")
+                        .HasForeignKey("VehicleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CarTrade.Data.Models.VehiclesSpareParts", b =>
+                {
+                    b.HasOne("CarTrade.Data.Models.SparePart", "SpareParts")
+                        .WithMany("Parts")
+                        .HasForeignKey("SparePartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CarTrade.Data.Models.Vehicle", "Vehicle")
+                        .WithMany("Parts")
                         .HasForeignKey("VehicleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

@@ -54,6 +54,13 @@
                 </select>
                 <span asp-validation-for="Input.Branch" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <select asp-for="Input.Employeer"
+                        asp-items="@(Model.Companies)" class="form-select form-select-lg mb-lg-1">
+                    <option>Please select a branch</option>
+                </select>
+                <span asp-validation-for="Input.Employeer" class="text-danger"></span>
+            </div>
             <br />
             <button type="submit" class="btn btn-primary">Register</button>
         </form>

@@ -56,7 +56,7 @@ namespace CarTrade.Data.Migrations
                     b.ToTable("Brands");
                 });
 
-            modelBuilder.Entity("CarTrade.Data.Models.Company", b =>
+            modelBuilder.Entity("CarTrade.Data.Models.Employer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -100,7 +100,7 @@ namespace CarTrade.Data.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("InsuanceCompanyId")
+                    b.Property<int>("InsuranceCompanyId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")
@@ -111,7 +111,7 @@ namespace CarTrade.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("InsuanceCompanyId");
+                    b.HasIndex("InsuranceCompanyId");
 
                     b.ToTable("InsurancePolicies");
                 });
@@ -154,6 +154,28 @@ namespace CarTrade.Data.Migrations
                     b.ToTable("Rentals");
                 });
 
+            modelBuilder.Entity("CarTrade.Data.Models.SparePart", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OENumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PartsNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SpareParts");
+                });
+
             modelBuilder.Entity("CarTrade.Data.Models.User", b =>
                 {
                     b.Property<string>("Id")
@@ -176,7 +198,7 @@ namespace CarTrade.Data.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("EmployerId")
+                    b.Property<int>("EmployerId")
                         .HasColumnType("int");
 
                     b.Property<string>("FirstName")
@@ -202,9 +224,6 @@ namespace CarTrade.Data.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
-
-                    b.Property<int>("OwnerId")
-                        .HasColumnType("int");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -355,6 +374,21 @@ namespace CarTrade.Data.Migrations
                     b.ToTable("VehicleStuffs");
                 });
 
+            modelBuilder.Entity("CarTrade.Data.Models.VehiclesSpareParts", b =>
+                {
+                    b.Property<int>("SparePartId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VehicleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SparePartId", "VehicleId");
+
+                    b.HasIndex("VehicleId");
+
+                    b.ToTable("VehiclesSpareParts");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -490,7 +524,7 @@ namespace CarTrade.Data.Migrations
                 {
                     b.HasOne("CarTrade.Data.Models.InsuranceCompany", "InsuanceCompany")
                         .WithMany("InsurancePolicies")
-                        .HasForeignKey("InsuanceCompanyId")
+                        .HasForeignKey("InsuranceCompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -516,9 +550,11 @@ namespace CarTrade.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CarTrade.Data.Models.Company", "Employer")
+                    b.HasOne("CarTrade.Data.Models.Employer", "Employer")
                         .WithMany("Employees")
-                        .HasForeignKey("EmployerId");
+                        .HasForeignKey("EmployerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CarTrade.Data.Models.Vehicle", b =>
@@ -539,7 +575,7 @@ namespace CarTrade.Data.Migrations
                         .WithMany("Vehicles")
                         .HasForeignKey("InsurancePolicyId");
 
-                    b.HasOne("CarTrade.Data.Models.Company", "Owner")
+                    b.HasOne("CarTrade.Data.Models.Employer", "Owner")
                         .WithMany("Vehicles")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -559,6 +595,21 @@ namespace CarTrade.Data.Migrations
                 {
                     b.HasOne("CarTrade.Data.Models.Vehicle", "Vehicle")
                         .WithMany("Stuff")
+                        .HasForeignKey("VehicleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CarTrade.Data.Models.VehiclesSpareParts", b =>
+                {
+                    b.HasOne("CarTrade.Data.Models.SparePart", "SpareParts")
+                        .WithMany("Parts")
+                        .HasForeignKey("SparePartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CarTrade.Data.Models.Vehicle", "Vehicle")
+                        .WithMany("Parts")
                         .HasForeignKey("VehicleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

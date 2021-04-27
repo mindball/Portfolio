@@ -5,7 +5,7 @@ using static CarTrade.Common.DataConstants;
 
 namespace CarTrade.Data.Models
 {
-    public class Company
+    public class Employer
     {
         public int Id { get; set; }
 

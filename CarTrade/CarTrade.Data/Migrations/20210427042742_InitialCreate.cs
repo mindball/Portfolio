@@ -28,7 +28,7 @@ namespace CarTrade.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Town = table.Column<string>(nullable: false),
-                    Address = table.Column<string>(nullable: true)
+                    Address = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -62,19 +62,31 @@ namespace CarTrade.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Insurances",
+                name: "InsuranceCompanies",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CompanyName = table.Column<string>(maxLength: 50, nullable: false),
-                    TypeInsurance = table.Column<int>(nullable: false),
-                    StartDate = table.Column<DateTime>(nullable: false),
-                    EndDate = table.Column<DateTime>(nullable: false)
+                    Name = table.Column<string>(maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Insurances", x => x.Id);
+                    table.PrimaryKey("PK_InsuranceCompanies", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SpareParts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OENumber = table.Column<string>(nullable: true),
+                    PartsNumber = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SpareParts", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -120,8 +132,7 @@ namespace CarTrade.Data.Migrations
                     FirstName = table.Column<string>(maxLength: 50, nullable: false),
                     SecondName = table.Column<string>(maxLength: 50, nullable: false),
                     LastName = table.Column<string>(maxLength: 50, nullable: false),
-                    OwnerId = table.Column<int>(nullable: false),
-                    EmployerId = table.Column<int>(nullable: true),
+                    EmployerId = table.Column<int>(nullable: false),
                     BranchId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -138,53 +149,27 @@ namespace CarTrade.Data.Migrations
                         column: x => x.EmployerId,
                         principalTable: "Companies",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Vehicles",
+                name: "InsurancePolicies",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Model = table.Column<string>(maxLength: 50, nullable: false),
-                    PlateNumber = table.Column<string>(maxLength: 12, nullable: false),
-                    Description = table.Column<string>(maxLength: 200, nullable: true),
-                    YearОfМanufacture = table.Column<DateTime>(nullable: false),
-                    TravelledDistance = table.Column<int>(nullable: false),
-                    EndOilChange = table.Column<int>(nullable: false),
-                    Vin = table.Column<string>(maxLength: 17, nullable: false),
-                    Status = table.Column<int>(nullable: false),
-                    BranchId = table.Column<int>(nullable: false),
-                    BrandId = table.Column<int>(nullable: false),
-                    OwnerId = table.Column<int>(nullable: false),
-                    InsuranceId = table.Column<int>(nullable: true)
+                    TypeInsurance = table.Column<int>(nullable: false),
+                    StartDate = table.Column<DateTime>(nullable: false),
+                    EndDate = table.Column<DateTime>(nullable: false),
+                    InsuranceCompanyId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Vehicles", x => x.Id);
+                    table.PrimaryKey("PK_InsurancePolicies", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Vehicles_Branches_BranchId",
-                        column: x => x.BranchId,
-                        principalTable: "Branches",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Vehicles_Brands_BrandId",
-                        column: x => x.BrandId,
-                        principalTable: "Brands",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Vehicles_Insurances_InsuranceId",
-                        column: x => x.InsuranceId,
-                        principalTable: "Insurances",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Vehicles_Companies_OwnerId",
-                        column: x => x.OwnerId,
-                        principalTable: "Companies",
+                        name: "FK_InsurancePolicies_InsuranceCompanies_InsuranceCompanyId",
+                        column: x => x.InsuranceCompanyId,
+                        principalTable: "InsuranceCompanies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -275,6 +260,54 @@ namespace CarTrade.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Vehicles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Model = table.Column<string>(maxLength: 50, nullable: false),
+                    PlateNumber = table.Column<string>(maxLength: 12, nullable: false),
+                    Description = table.Column<string>(maxLength: 200, nullable: true),
+                    YearОfМanufacture = table.Column<DateTime>(nullable: false),
+                    TravelledDistance = table.Column<int>(nullable: false),
+                    EndOilChange = table.Column<int>(nullable: false),
+                    Vin = table.Column<string>(maxLength: 17, nullable: false),
+                    Status = table.Column<int>(nullable: false),
+                    BranchId = table.Column<int>(nullable: false),
+                    BrandId = table.Column<int>(nullable: false),
+                    OwnerId = table.Column<int>(nullable: false),
+                    InsurancePolicyId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Vehicles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Vehicles_Branches_BranchId",
+                        column: x => x.BranchId,
+                        principalTable: "Branches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Vehicles_Brands_BrandId",
+                        column: x => x.BrandId,
+                        principalTable: "Brands",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Vehicles_InsurancePolicies_InsurancePolicyId",
+                        column: x => x.InsurancePolicyId,
+                        principalTable: "InsurancePolicies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Vehicles_Companies_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "Companies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Rentals",
                 columns: table => new
                 {
@@ -319,6 +352,30 @@ namespace CarTrade.Data.Migrations
                     table.PrimaryKey("PK_VehiclePictures", x => x.Id);
                     table.ForeignKey(
                         name: "FK_VehiclePictures_Vehicles_VehicleId",
+                        column: x => x.VehicleId,
+                        principalTable: "Vehicles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "VehiclesSpareParts",
+                columns: table => new
+                {
+                    VehicleId = table.Column<int>(nullable: false),
+                    SparePartId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VehiclesSpareParts", x => new { x.SparePartId, x.VehicleId });
+                    table.ForeignKey(
+                        name: "FK_VehiclesSpareParts_SpareParts_SparePartId",
+                        column: x => x.SparePartId,
+                        principalTable: "SpareParts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_VehiclesSpareParts_Vehicles_VehicleId",
                         column: x => x.VehicleId,
                         principalTable: "Vehicles",
                         principalColumn: "Id",
@@ -396,6 +453,11 @@ namespace CarTrade.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_InsurancePolicies_InsuranceCompanyId",
+                table: "InsurancePolicies",
+                column: "InsuranceCompanyId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Rentals_UserId",
                 table: "Rentals",
                 column: "UserId");
@@ -421,14 +483,19 @@ namespace CarTrade.Data.Migrations
                 column: "BrandId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Vehicles_InsuranceId",
+                name: "IX_Vehicles_InsurancePolicyId",
                 table: "Vehicles",
-                column: "InsuranceId");
+                column: "InsurancePolicyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Vehicles_OwnerId",
                 table: "Vehicles",
                 column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VehiclesSpareParts_VehicleId",
+                table: "VehiclesSpareParts",
+                column: "VehicleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_VehicleStuffs_VehicleId",
@@ -460,6 +527,9 @@ namespace CarTrade.Data.Migrations
                 name: "VehiclePictures");
 
             migrationBuilder.DropTable(
+                name: "VehiclesSpareParts");
+
+            migrationBuilder.DropTable(
                 name: "VehicleStuffs");
 
             migrationBuilder.DropTable(
@@ -467,6 +537,9 @@ namespace CarTrade.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "SpareParts");
 
             migrationBuilder.DropTable(
                 name: "Vehicles");
@@ -478,10 +551,13 @@ namespace CarTrade.Data.Migrations
                 name: "Brands");
 
             migrationBuilder.DropTable(
-                name: "Insurances");
+                name: "InsurancePolicies");
 
             migrationBuilder.DropTable(
                 name: "Companies");
+
+            migrationBuilder.DropTable(
+                name: "InsuranceCompanies");
         }
     }
 }

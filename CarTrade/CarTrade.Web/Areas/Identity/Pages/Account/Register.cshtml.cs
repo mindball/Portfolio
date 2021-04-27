@@ -1,5 +1,6 @@
 ﻿using CarTrade.Data.Models;
 using CarTrade.Services.Branches;
+using CarTrade.Services.Companies;
 using CarTrade.Services.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -24,13 +25,15 @@ namespace CarTrade.Web.Areas.Identity.Pages.Account
         private readonly UserManager<User> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IBranchesService brancService;
+        private readonly ICompaniesService companyService;
 
 
         public RegisterModel(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             ILogger<RegisterModel> logger,
-            IBranchesService brancService
+            IBranchesService brancService,
+            ICompaniesService companyService
            )
         {
             _userManager = userManager;
@@ -47,6 +50,17 @@ namespace CarTrade.Web.Areas.Identity.Pages.Account
                     Value = b.Id.ToString()
                 })
                 .ToList();
+
+            this.companyService = companyService;
+            var allCompanies = this.companyService.AllAsync().Result.AsEnumerable();
+
+            this.Companies = (List<SelectListItem>)allCompanies
+               .Select(b => new SelectListItem
+               {
+                   Text = b.Name,
+                   Value = b.Id.ToString()
+               })
+               .ToList();
         }
 
         [BindProperty]
@@ -57,6 +71,8 @@ namespace CarTrade.Web.Areas.Identity.Pages.Account
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
         public List<SelectListItem> Branches { get; }
+
+        public List<SelectListItem> Companies { get; }
 
         public class InputModel
         {
@@ -101,6 +117,9 @@ namespace CarTrade.Web.Areas.Identity.Pages.Account
 
             [Required]
             public string Branch { get; set; }
+
+            [Required]
+            public string Employeer { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -122,7 +141,8 @@ namespace CarTrade.Web.Areas.Identity.Pages.Account
                     SecondName = Input.SecondName,
                     LastName = Input.LastName,
                     Email = Input.Email,
-                    BranchId = int.Parse(Input.Branch)
+                    BranchId = int.Parse(Input.Branch),
+                    EmployerId = int.Parse(Input.Employeer)
                 };
                 var result = await _userManager.CreateAsync(user, Input.Password);
 

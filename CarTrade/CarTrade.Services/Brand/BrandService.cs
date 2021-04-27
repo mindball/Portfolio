@@ -18,7 +18,7 @@ namespace CarTrade.Services.Brand
         }
         public async Task AddBrandAsync(string name)
         {
-            if (!this.db.Brands.Any(b => b.Name == name) || 
+            if (this.db.Brands.Any(b => b.Name == name) || 
                 name == null) return;
 
             var newBrand = new Data.Models.Brand { Name = name };

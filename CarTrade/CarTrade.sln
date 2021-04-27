@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarTrade.Data", "CarTrade.D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarTrade.Common", "CarTrade.Common\CarTrade.Common.csproj", "{4486153A-65D3-410D-994F-BF651E67BBD0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarTrade.Web", "CarTrade.Web\CarTrade.Web.csproj", "{59BC2001-A111-4F21-ADF1-D218B7C2559D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarTrade.Web", "CarTrade.Web\CarTrade.Web.csproj", "{59BC2001-A111-4F21-ADF1-D218B7C2559D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarTrade.Services", "CarTrade.Services\CarTrade.Services.csproj", "{0B08C8BC-E4C8-4B57-84A1-718D89D3637B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarTrade.Services", "CarTrade.Services\CarTrade.Services.csproj", "{0B08C8BC-E4C8-4B57-84A1-718D89D3637B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

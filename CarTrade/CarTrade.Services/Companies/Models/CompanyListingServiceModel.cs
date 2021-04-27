@@ -2,7 +2,7 @@
 
 namespace CarTrade.Services.Companies.Models
 {
-    public class CompanyListingServiceModel : IMapFrom<Data.Models.Company>
+    public class CompanyListingServiceModel : IMapFrom<Data.Models.Employer>
     {
         public int Id { get; set; }
                 

@@ -20,9 +20,12 @@ namespace CarTrade.Services.Companies
         }
         public async Task AddCompanyAsync(string name)
         {
-            if (name == null || !this.db.Companies.Any(b => b.Name == name)) return;
+            var a = this.db.Companies.Any(b => b.Name == name);
 
-            await this.db.AddAsync(new Data.Models.Company { Name = name });
+            if (name == null || 
+                this.db.Companies.Any(b => b.Name == name)) return;
+
+            await this.db.AddAsync(new Data.Models.Employer { Name = name });
             await this.db.SaveChangesAsync();
         }
 
@@ -35,7 +38,7 @@ namespace CarTrade.Services.Companies
         {
             var company = await this.db
                 .Companies
-                .FirstOrDefaultAsync(c => c.Id == id && c.Name == name);
+                .FirstOrDefaultAsync(c => c.Id == id);
 
             if (company == null || name == null) return;
 

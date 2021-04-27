@@ -43,7 +43,7 @@ namespace CarTrade.Services.Branches
             var branchToEdit = await this.db.Branches.FirstOrDefaultAsync(b => b.Id == id);
 
             if (branchToEdit == null || 
-                !(town == null && address == null))
+                (town == null && address == null))
             {
                 return;
             }

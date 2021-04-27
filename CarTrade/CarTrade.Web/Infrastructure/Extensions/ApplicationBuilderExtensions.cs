@@ -52,6 +52,8 @@ namespace CarTrade.Web.Infrastructure.Extensions
 
                        if (adminUser == null)
                        {
+                           var headOffice = new Branch { Town = "Стара Загора", Address = "бул. \"Никола Петков 55\"" };
+                           var employer = new Employer { Name = "Автохит Трейд ООД" };
                            adminUser = new User
                            {
                                Email = adminEmail,
@@ -59,7 +61,8 @@ namespace CarTrade.Web.Infrastructure.Extensions
                                FirstName = adminName,
                                SecondName = adminName,
                                LastName = adminName,
-                               BranchId = 1
+                               Branch = headOffice,
+                               Employer = employer
                            };
 
                            await userManager.CreateAsync(adminUser, "1q2w3e4rAA");

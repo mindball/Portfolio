@@ -56,7 +56,7 @@ namespace CarTrade.Data.Models
 
         public int OwnerId { get; set; }
 
-        public virtual Company Owner  { get; set; }
+        public virtual Employer Owner  { get; set; }
 
         public virtual IList<VehiclePicture> Pictures { get; set; } = new List<VehiclePicture>();
 
@@ -65,6 +65,6 @@ namespace CarTrade.Data.Models
         public virtual IList<Rental> Rentals { get; set; } = new List<Rental>();
 
         //TODO: apply migration when car status is total damage;
-        public virtual IList<SpareParts> Parts { get; set; } = new List<SpareParts>();
+        public virtual IList<VehiclesSpareParts> Parts { get; set; } = new List<VehiclesSpareParts>();
     }
 }

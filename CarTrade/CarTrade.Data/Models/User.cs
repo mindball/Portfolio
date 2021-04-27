@@ -23,9 +23,9 @@ namespace CarTrade.Data.Models
         [MaxLength(MaxNameLength)]
         public string LastName { get; set; }
 
-        public int OwnerId { get; set; }
+        public int EmployerId { get; set; }
 
-        public virtual Company Employer { get; set; }
+        public virtual Employer Employer { get; set; }
 
         public int BranchId { get; set; }
 
