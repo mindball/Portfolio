@@ -8,6 +8,9 @@ namespace CarTrade.Services.Users
     {
         Task<IEnumerable<UserListingServiceModel>> AllAsync();
 
-        Task<UserListingServiceModel> GetByIdAsync(string userId);
+        Task<TModel> GetByIdAsync<TModel>(string userId) where TModel : class;
+
+        //TODO: reverse map
+        Task EditUserAsync(string userId, UserEditServiceModel model);
     }
 }

@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 
 using static CarTrade.Web.WebConstants;
 
@@ -28,6 +29,7 @@ namespace CarTrade.Web.Controllers
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IBranchesService brancService;
         private readonly ICompaniesService employerService;
+        private readonly IMapper mapper;
 
         private readonly CarDbContext dbContext;
 
@@ -36,13 +38,15 @@ namespace CarTrade.Web.Controllers
             RoleManager<IdentityRole> roleManager,
             CarDbContext dbContext,
             IBranchesService brancService,
-            ICompaniesService employerService)
+            ICompaniesService employerService,
+            IMapper mapper)
         {
             this.usersService = usersService;
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.brancService = brancService;
             this.employerService = employerService;
+            this.mapper = mapper;
 
             this.dbContext = dbContext;
         }
@@ -59,33 +63,32 @@ namespace CarTrade.Web.Controllers
 
         public async Task<IActionResult> Edit([FromRoute(Name = "id")] string userId)
         {
-            var userDetail = await this.usersService.GetByIdAsync(userId);
-            //var allBranches = this.brancService.AllAsync().Result.AsEnumerable();
-            //this.Branches = (List<SelectListItem>)allBranches
-            //   .Select(b => new SelectListItem
-            //   {
-            //       Text = b.FullAddress,
-            //       Value = b.Id.ToString()
-            //   })
-            //   .ToList();
-
-            //var test = GetEmployers(this.brancService);
-            //var test2 = GetEmployers(this.employerService);
-
-
+            var userDetail = await this.usersService.GetByIdAsync<UserEditServiceModel>(userId);
             if (userDetail == null)
             {
                 return this.NotFound();
             }
 
-
             return this.View(userDetail);
         }
-
+        
         [HttpPost]
-        public async Task<IActionResult> Edit(UserListingServiceModel userModel)
+        public async Task<IActionResult> Edit(UserEditServiceModel userModel)
         {
-            return this.View();
+            if (!ModelState.IsValid)
+            {
+                return this.View(userModel);
+            }
+
+            var userDetail = await this.usersService.GetByIdAsync<UserEditServiceModel>(userModel.Id);
+            if (userDetail == null)
+            {
+                return this.NotFound();
+            }
+
+            await this.usersService.EditUserAsync(userModel.Id, userModel);
+
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> UserRoles(string id)
@@ -231,6 +234,7 @@ namespace CarTrade.Web.Controllers
             {
                 this.ModelState.AddModelError(string.Empty, error.Description);
             }
-        }       
+        }
+               
     }
 }

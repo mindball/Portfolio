@@ -1,7 +1,7 @@
-﻿namespace CarTrade.Web.Models.Users
-{
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
+namespace CarTrade.Web.Models.Users
+{
     public class ListUserRolesViewModel
     {
         public string UserId { get; set; }
