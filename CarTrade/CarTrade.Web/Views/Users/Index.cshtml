@@ -35,11 +35,9 @@
             <th>@user.BranchAddress</th>
             <th>
                 <a href="/users/changepassword/@user.Id" class="btn btn-secondary">Change Password</a>
-                <a href="/users/userroles/@user.Id" class="btn btn-info">Edit</a>
-                @*<a href="/users/userroles/@user.Id" class="btn btn-info">Roles</a>*@
-                <a href="/users/delete/@user.Id" class="btn btn-danger">Remove</a>
-                @*<a href="/users/company/@user.Id" class="btn btn-info">Companies</a>*@
-                @*<a href="/users/branches/@user.Id" class="btn btn-info">Branches</a>*@
+                <a href="/users/edit/@user.Id" class="btn btn-info">Edit</a>                
+                <a href="/users/userroles/@user.Id" class="btn btn-info">Roles</a>
+                <a href="/users/delete/@user.Id" class="btn btn-danger">Remove</a>                
             </th>
         </tr>
     }
