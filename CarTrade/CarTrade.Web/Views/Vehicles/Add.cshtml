@@ -1,13 +1,14 @@
-﻿@model AddVehicleServiceModel
-@inject IBranchesService branchService
+﻿@model AddVehicleViewModel
+
+@*@inject IBranchesService branchService
 @inject ICompaniesService employeerService
-@inject IBrandService brandService
+@inject IBrandService brandService*@
 @{
     ViewData["Title"] = "Add vehicle";
     var status = Html.GetEnumSelectList<VehicleStatus>();
-    var branches =  await branchService.AllAsync();
-    var employers = await employeerService.AllAsync();
-    var brands = await brandService.AllAsync();
+    //var branches =  await branchService.AllAsync();
+    //var employers = await employeerService.AllAsync();
+    //var brands = await brandService.AllAsync();
 }
 
 <div class="container">
@@ -20,7 +21,7 @@
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label asp-for="BrandId"></label>
-                                <select asp-for="BrandId" asp-items="@(new SelectList(brands, "Id", "Name"))" class="form-control" aria-label="Default select example">
+                                <select asp-for="BrandId" asp-items="@Model.Brands" class="form-control" aria-label="Default select example">
                                     <option selected>Choose brand</option>
                                 </select>                           
                             <span asp-validation-for="BrandId" class="text-danger"></span>
@@ -65,13 +66,13 @@
                             </select>
                         </div>
                         <div class="form-group col-md-6">
-                            <select asp-for="BranchId" asp-items="@(new SelectList(branches, "Id", "FullAddress"))" class="form-control" aria-label="Default select example">
+                            <select asp-for="BranchId" asp-items="@Model.Branches" class="form-control" aria-label="Default select example">
                                 <option selected>Choose branch</option>
                             </select>
                             <span asp-validation-for="BranchId" class="text-danger"></span>
                         </div>
                         <div class="form-group col-md-6">
-                            <select asp-for="OwnerId" asp-items="@(new SelectList(employers, "Id", "Name"))" class="form-control" aria-label="Default select example">
+                            <select asp-for="OwnerId" asp-items="@Model.Employers" class="form-control" aria-label="Default select example">
                                 <option selected>Choose employee</option>
                             </select>
                             <span asp-validation-for="OwnerId" class="text-danger"></span>
