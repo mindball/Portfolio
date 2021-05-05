@@ -1,0 +1,8 @@
+﻿@*@model 
+@inject ICompaniesService emplService
+@inject IBranchesService branchService
+@{
+    ViewData["Title"] = "User details";
+    var employers = await emplService.AllAsync();
+    var branches = await branchService.AllAsync();
+}*@

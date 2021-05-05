@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CarTrade.Web.Controllers
 {
-    public class CompaniesController : Controller
+    public class CompaniesController : BaseController
     {
         private readonly ICompaniesService companiesServices;
 

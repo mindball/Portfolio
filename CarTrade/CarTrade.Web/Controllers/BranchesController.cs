@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CarTrade.Web.Controllers
 {
-    public class BranchesController : Controller
+    public class BranchesController : BaseController
     {
         private readonly IBranchesService branchesService;
         public BranchesController(IBranchesService branchesService)

@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using CarTrade.Common.Mapping;
+using CarTrade.Data.Enums;
+using System;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 using static CarTrade.Common.DataConstants;
 
 namespace CarTrade.Services.Vehicle.Models
 {
-    public class AddVehicleServiceModel
+    public class AddVehicleServiceModel : IMapTo<Data.Models.Vehicle>
     {
         [Required]
         [MinLength(VehicleModelTypeMinLength)]
@@ -17,20 +17,24 @@ namespace CarTrade.Services.Vehicle.Models
         [Required]
         [MinLength(PlateNumberMinLength)]
         [MaxLength(PlateNumberМaxLength)]
+        [Display(Name = "Plate Number")]
         public string PlateNumber { get; set; }
 
         [MaxLength(DescriptionLength)]
         public string Description { get; set; }
 
         [Required]
+        [Display(Name = "Year of Manufacture")]
         public DateTime YearОfМanufacture { get; set; }
        
         [Required]
         [Range(1, int.MaxValue)]
+        [Display(Name = "Travelled Distance")]
         public int TravelledDistance { get; set; }
 
         [Required]
         [Range(1, int.MaxValue)]
+        [Display(Name = "Oil change date")]
         public int EndOilChange { get; set; }
 
         [Required]
@@ -39,7 +43,7 @@ namespace CarTrade.Services.Vehicle.Models
         public string Vin { get; set; }
 
         [Required]
-        public string Status { get; set; }
+        public VehicleStatus Status { get; set; }
 
         [Required]
         public int BranchId { get; set; }

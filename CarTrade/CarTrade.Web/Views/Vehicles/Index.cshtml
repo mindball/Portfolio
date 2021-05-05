@@ -1,0 +1,47 @@
+﻿@model IEnumerable<VehicleListingServiceModel>
+@{
+    ViewData["Title"] = "All vehicle";
+}
+<h2>@ViewData["Title"]</h2>
+
+@*това може да се направи на глобално ниво не само за този контролер*@
+@if (TempData["SuccessMessage"] != null)
+{
+    <h2 class="text-success">@TempData["SuccessMessage"]</h2>
+}
+
+<div>
+    <a href="/vehicles/add" class="btn btn-primary">Add car</a>
+</div>
+<br />
+
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>Model</th>
+        <th>Vin</th>
+        <th>Plate number</th>
+        <th>Description</th>        
+        <th>Year of manufacture</th>
+        <th>Travelled distance</th>
+        <th>Oil change</th>
+        <th>Status</th>
+        <th></th>
+    </tr>
+    @foreach (var vehicle in Model)
+    {
+        <tr>
+            <th>@vehicle.Model</th>           
+            <th>@vehicle.Vin</th>           
+            <th>@vehicle.PlateNumber</th>           
+            <th>@vehicle.Description</th>           
+            <th>@vehicle.YearОfМanufacture</th>           
+            <th>@vehicle.TravelledDistance</th>           
+            <th>@vehicle.EndOilChange</th>           
+            <th>@vehicle.Status</th>           
+            <th>                
+                <a href="/vehicles/edit/@vehicle.Id" class="btn btn-info small">Edit</a> 
+                <a href="/vehicles/delete/@vehicle.Id" class="btn btn-danger small">Remove</a>                
+            </th>
+        </tr>
+    }
+</table>

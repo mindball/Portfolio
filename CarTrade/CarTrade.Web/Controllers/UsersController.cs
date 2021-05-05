@@ -29,7 +29,7 @@ namespace CarTrade.Web.Controllers
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IBranchesService brancService;
         private readonly ICompaniesService employerService;
-        private readonly IMapper mapper;
+        
 
         private readonly CarDbContext dbContext;
 
@@ -45,8 +45,7 @@ namespace CarTrade.Web.Controllers
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.brancService = brancService;
-            this.employerService = employerService;
-            this.mapper = mapper;
+            this.employerService = employerService;           
 
             this.dbContext = dbContext;
         }

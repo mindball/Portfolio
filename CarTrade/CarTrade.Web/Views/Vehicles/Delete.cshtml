@@ -1,0 +1,11 @@
+﻿@*@model 
+    ViewData["Title"] = "Remove car";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<h3>@Model.Name</h3>
+
+<div>
+    <a href="/vehicles/destroy/@Model.vehicleId" onclick="return confirm('Are you sure you want to delete this item?');" class="btn btn-danger">Remove car</a>
+</div>*@

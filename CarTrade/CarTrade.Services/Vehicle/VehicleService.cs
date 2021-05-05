@@ -1,9 +1,12 @@
-﻿using AutoMapper.QueryableExtensions;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using CarTrade.Data;
 using CarTrade.Data.Enums;
 using CarTrade.Services.Vehicle.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CarTrade.Services.Vehicle
@@ -11,15 +14,22 @@ namespace CarTrade.Services.Vehicle
     public class VehicleService : IVehicleService
     {
         private readonly CarDbContext db;
+        private readonly IMapper mapper;
 
-        public VehicleService(CarDbContext db)
+        public VehicleService(CarDbContext db, IMapper mapper)
         {
             this.db = db;
+            this.mapper = mapper;
         }
+
+        public async Task<IEnumerable<VehicleListingServiceModel>> AllAsync()
+            => await this.db.Vehicles
+            .ProjectTo<VehicleListingServiceModel>()
+            .ToListAsync();
 
         public async Task AddVehicleAsync(AddVehicleServiceModel vehicleModel)
         {
-            var vehicleStatus = VehicleStatus(vehicleModel.Status);
+            //var vehicleStatus = VehicleStatus(vehicleModel.Status);
 
             if (!await this.ValidateVehicleServiceModelAsync(
                 vehicleModel.PlateNumber, 
@@ -27,12 +37,15 @@ namespace CarTrade.Services.Vehicle
                 vehicleModel.BranchId, 
                 vehicleModel.BrandId, 
                 vehicleModel.OwnerId)
-                || vehicleStatus == Data.Enums.VehicleStatus.None)
+                || (vehicleModel.Status == Data.Enums.VehicleStatus.None 
+                    || vehicleModel.Status == null))
             {
                 throw new ArgumentException();
             }
 
-                var newVehicle = this.FillVehicleModel(vehicleModel, vehicleStatus);
+            //var newVehicle = this.FillVehicleModel(vehicleModel, vehicleStatus);
+            var newVehicle = this.mapper.Map<Data.Models.Vehicle>(vehicleModel);
+
                 await this.db.Vehicles.AddAsync(newVehicle);
                 await this.db.SaveChangesAsync();           
                     
@@ -79,10 +92,12 @@ namespace CarTrade.Services.Vehicle
             await this.db.SaveChangesAsync();
         }
 
-        public async Task<VehicleListingServiceModel> GetByIdAsync(int vehicleId)
+        public async Task<TModel> GetByIdAsync<TModel>(int vehicleId)
+            where TModel : class
         {
             var vehicle = await this.db.Vehicles
-                .ProjectTo<VehicleListingServiceModel>()
+                .Where(u => u.Id == vehicleId)
+                .ProjectTo<TModel>()
                 .FirstOrDefaultAsync();
 
             if (vehicle == null)
@@ -93,7 +108,8 @@ namespace CarTrade.Services.Vehicle
             return vehicle;
         }
 
-        private Data.Models.Vehicle FillVehicleModel(AddVehicleServiceModel vehicleModel, VehicleStatus vehicleStatus)
+        private Data.Models.Vehicle FillVehicleModel(AddVehicleServiceModel vehicleModel, 
+            VehicleStatus vehicleStatus)
             => new Data.Models.Vehicle
                 {
                     Model = vehicleModel.Model,
@@ -181,6 +197,6 @@ namespace CarTrade.Services.Vehicle
             }
 
             return vehicleStatus;
-        }
+        }       
     }
 }
