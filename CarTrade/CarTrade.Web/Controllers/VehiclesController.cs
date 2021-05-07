@@ -5,6 +5,7 @@ using CarTrade.Services.Brand;
 using CarTrade.Services.Companies;
 using CarTrade.Services.Vehicle;
 using CarTrade.Services.Vehicle.Models;
+using CarTrade.Web.Infrastructure.Extensions;
 using CarTrade.Web.Models.Vehicles;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -43,11 +44,20 @@ namespace CarTrade.Web.Controllers
 
         public async Task<IActionResult> Add()
         {
+            var brandsEnumerable = await brandService.AllAsync();
+            var brands = brandsEnumerable.ToSelectListItems(b => b.Name, b => b.Id.ToString());
+
+            var employersEnumerable = await employeerService.AllAsync();
+            var employers = employersEnumerable.ToSelectListItems(b => b.Name, b => b.Id.ToString());
+
+            var branchesEnumerable = await branchService.AllAsync();
+            var branches = branchesEnumerable.ToSelectListItems(b => b.FullAddress, b => b.Id.ToString());
+
             var newVehicle = new AddVehicleViewModel()
             {
-                Branches = await GetBranches(),
-                Employers = await GetEmployers(),
-                Brands = await GetBrands()
+                Branches = branches,
+                Employers = employers,
+                Brands = brands
             };            
 
             return this.View(newVehicle);
@@ -61,59 +71,12 @@ namespace CarTrade.Web.Controllers
                 return this.View(vehicleModel);
             }
 
+            //TODO: make automatically collect from profile
             var newCar = this.mapper.Map<AddVehicleServiceModel>(vehicleModel);
 
             await this.vehicleService.AddVehicleAsync(newCar);
 
             return this.RedirectToAction(nameof(Index));
-        }
-
-        //[HttpPost]
-        //public async Task<IActionResult> Add(AddVehicleServiceModel vehicleModel)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return this.View(vehicleModel); 
-        //    }            
-
-        //    await this.vehicleService.AddVehicleAsync(vehicleModel);
-
-        //    return this.RedirectToAction(nameof(Index));
-        //}
-
-        private async Task<IEnumerable<SelectListItem>> GetBranches()
-        {
-            var branches = await branchService.AllAsync();
-
-            return branches.Select(t => new SelectListItem
-            {
-                Text = t.FullAddress,
-                Value = t.Id.ToString()
-            }).ToList();
-        }
-
-        private async Task<IEnumerable<SelectListItem>> GetEmployers()
-        {
-            var employers = await employeerService.AllAsync();
-
-            return employers.Select(t => new SelectListItem
-            {
-                Text = t.Name,
-                Value = t.Id.ToString()
-            }).ToList();
-        }
-
-        private async Task<IEnumerable<SelectListItem>> GetBrands()
-        {
-            var brands = await brandService.AllAsync();
-
-            return brands.Select(t => new SelectListItem
-            {
-                Text = t.Name,
-                Value = t.Id.ToString()
-            }).ToList();
-        }
-
-
+        }     
     }
 }
