@@ -1,5 +1,4 @@
 ﻿@model AddVehicleViewModel
-
 @*@inject IBranchesService branchService
 @inject ICompaniesService employeerService
 @inject IBrandService brandService*@
@@ -18,12 +17,13 @@
             <div class="my-4">
                 <form method="post">
                     <hr class="my-4" />
+                    <div asp-validation-summary="All" class="text-danger"></div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label asp-for="BrandId"></label>
-                                <select asp-for="BrandId" asp-items="@Model.Brands" class="form-control" aria-label="Default select example">
-                                    <option selected>Choose brand</option>
-                                </select>                           
+                            <select asp-for="BrandId" asp-items="@Model.Brands" class="form-control" aria-label="Default select example">
+                                <option selected>Choose brand</option>
+                            </select>
                             <span asp-validation-for="BrandId" class="text-danger"></span>
                         </div>
                         <div class="form-group col-md-6">

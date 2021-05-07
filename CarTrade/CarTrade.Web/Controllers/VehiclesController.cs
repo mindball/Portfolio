@@ -24,8 +24,8 @@ namespace CarTrade.Web.Controllers
         private readonly IBrandService brandService;
 
         public VehiclesController(IVehicleService vehicleService,
-            IMapper mapper, IBranchesService branchService, 
-            ICompaniesService employeerService, 
+            IMapper mapper, IBranchesService branchService,
+            ICompaniesService employeerService,
             IBrandService brandService)
         {
             this.vehicleService = vehicleService;
@@ -43,32 +43,15 @@ namespace CarTrade.Web.Controllers
         }
 
         public async Task<IActionResult> Add()
-        {
-            var brandsEnumerable = await brandService.AllAsync();
-            var brands = brandsEnumerable.ToSelectListItems(b => b.Name, b => b.Id.ToString());
+            =>  this.View(await this.AddVehicleViewModelFillAsync());
 
-            var employersEnumerable = await employeerService.AllAsync();
-            var employers = employersEnumerable.ToSelectListItems(b => b.Name, b => b.Id.ToString());
-
-            var branchesEnumerable = await branchService.AllAsync();
-            var branches = branchesEnumerable.ToSelectListItems(b => b.FullAddress, b => b.Id.ToString());
-
-            var newVehicle = new AddVehicleViewModel()
-            {
-                Branches = branches,
-                Employers = employers,
-                Brands = brands
-            };            
-
-            return this.View(newVehicle);
-        }
 
         [HttpPost]
         public async Task<IActionResult> Add(AddVehicleViewModel vehicleModel)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                return this.View(vehicleModel);
+                return this.View(await this.AddVehicleViewModelFillAsync());
             }
 
             //TODO: make automatically collect from profile
@@ -77,6 +60,25 @@ namespace CarTrade.Web.Controllers
             await this.vehicleService.AddVehicleAsync(newCar);
 
             return this.RedirectToAction(nameof(Index));
-        }     
+        }
+
+        private async Task<AddVehicleViewModel> AddVehicleViewModelFillAsync()
+        {
+            var brandsEnumerable = await brandService.AllAsync();
+            var employersEnumerable = await employeerService.AllAsync();
+            var branchesEnumerable = await branchService.AllAsync();
+
+            var newVehicle = new AddVehicleViewModel()
+            {
+                Branches = branchesEnumerable
+                     .ToSelectListItems(b => b.FullAddress, b => b.Id.ToString()),
+                Employers = employersEnumerable
+                     .ToSelectListItems(b => b.Name, b => b.Id.ToString()),
+                Brands = brandsEnumerable
+                     .ToSelectListItems(b => b.Name, b => b.Id.ToString())
+            };
+
+            return newVehicle;
+        }
     }
 }
