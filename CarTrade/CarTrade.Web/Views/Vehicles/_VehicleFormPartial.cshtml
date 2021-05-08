@@ -1,0 +1,82 @@
+﻿@model VehicleFormViewModel
+
+@{
+        var status = Html.GetEnumSelectList<VehicleStatus>();
+ }
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10 col-xl-8 mx-auto">
+            <h2 class="h3 mb-4 page-title">@ViewData["Title"]</h2>
+            <div class="my-4">
+                <form method="post">
+                    <hr class="my-4" />
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <select asp-for="BranchId" asp-items="@Model.CollectCompanyDetails.Branches" class="form-control" aria-label="Default select example">
+                                <option selected>Choose branch</option>
+                            </select>
+                            <span asp-validation-for="BranchId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <select asp-for="OwnerId" asp-items="@Model.CollectCompanyDetails.Employers" class="form-control" aria-label="Default select example">
+                                <option selected>Choose employee</option>
+                            </select>
+                            <span asp-validation-for="OwnerId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="BrandId"></label>
+                            <select asp-for="BrandId" asp-items="@Model.CollectCompanyDetails.Brands" class="form-control" aria-label="Default select example">
+                                <option selected>Choose brand</option>
+                            </select>
+                            <span asp-validation-for="BrandId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="Model"></label>
+                            <input asp-for="Model" class="form-control" placeholder="Up" />
+                            <span asp-validation-for="Model" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="Vin"></label>
+                            <input asp-for="Vin" class="form-control" placeholder="WVWZZZ......" />
+                            <span asp-validation-for="Vin" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="PlateNumber"></label>
+                            <input asp-for="PlateNumber" class="form-control" placeholder="CT0000CT" />
+                            <span asp-validation-for="PlateNumber" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="Description"></label>
+                            <input asp-for="Description" class="form-control" />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="YearОfМanufacture"></label>
+                            <input asp-for="YearОfМanufacture" class="form-control" />
+                            <span asp-validation-for="YearОfМanufacture" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="TravelledDistance"></label>
+                            <input asp-for="TravelledDistance" class="form-control" />
+                            <span asp-validation-for="TravelledDistance" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="EndOilChange"></label>
+                            <input asp-for="EndOilChange" class="form-control" />
+                            <span asp-validation-for="EndOilChange" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <select asp-for="Status" asp-items="@status" class="form-control" aria-label="Default select example">
+                                <option selected>Choose status</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save vehicle</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

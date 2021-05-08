@@ -1,4 +1,6 @@
-﻿using CarTrade.Data.Enums;
+﻿using CarTrade.Common.Mapping;
+using CarTrade.Data.Enums;
+using CarTrade.Services.Vehicle.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
@@ -8,7 +10,7 @@ using static CarTrade.Common.DataConstants;
 
 namespace CarTrade.Web.Models.Vehicles
 {
-    public class AddVehicleViewModel : IValidatableObject
+    public class VehicleFormViewModel : IValidatableObject
     {
         [Required]
         [MinLength(VehicleModelTypeMinLength)]
@@ -48,18 +50,17 @@ namespace CarTrade.Web.Models.Vehicles
 
         [Required]
         [Display(Name = "Branch")]
-        public int BranchId { get; set; }
-        public IEnumerable<SelectListItem> Branches { get; set; }
+        public int BranchId { get; set; }       
 
         [Required]
         [Display(Name = "Brand")]
-        public int BrandId { get; set; }
-        public IEnumerable<SelectListItem> Brands { get; set; }
+        public int BrandId { get; set; }       
 
         [Required]
         [Display(Name = "Yemployer")]
         public int OwnerId { get; set; }
-        public IEnumerable<SelectListItem> Employers { get; set; }
+
+        public CollectCompanyDetailsViewModel CollectCompanyDetails { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

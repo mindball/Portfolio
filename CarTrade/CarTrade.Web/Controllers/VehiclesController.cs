@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using CarTrade.Data.Enums;
 using CarTrade.Services.Branches;
 using CarTrade.Services.Brand;
 using CarTrade.Services.Companies;
@@ -8,9 +7,6 @@ using CarTrade.Services.Vehicle.Models;
 using CarTrade.Web.Infrastructure.Extensions;
 using CarTrade.Web.Models.Vehicles;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CarTrade.Web.Controllers
@@ -43,18 +39,34 @@ namespace CarTrade.Web.Controllers
         }
 
         public async Task<IActionResult> Add()
-            =>  this.View(await this.AddVehicleViewModelFillAsync());
+        {
+            var collectCompanyDetails = await this.FillCollectCompanyDetails();
 
+            var newVehicle = new VehicleFormViewModel();
+            newVehicle.CollectCompanyDetails = collectCompanyDetails;
+            //{
+            //    CollectCompanyDetails. = collectCompanyDetails.Branches,
+            //    CollectCompanyDetails.Brands = collectCompanyDetails.Brands,
+            //    CollectCompanyDetails.Employers = collectCompanyDetails.Employers
+            //};
+
+            return this.View(newVehicle);
+        }
 
         [HttpPost]
-        public async Task<IActionResult> Add(AddVehicleViewModel vehicleModel)
+        public async Task<IActionResult> Add(VehicleFormViewModel vehicleModel)
         {
-            if (!ModelState.IsValid)
+            if (vehicleModel == null || !ModelState.IsValid)
             {
-                return this.View(await this.AddVehicleViewModelFillAsync());
+                var collectCompanyDetails = await this.FillCollectCompanyDetails();
+                vehicleModel.CollectCompanyDetails.Branches = collectCompanyDetails.Branches;
+                vehicleModel.CollectCompanyDetails.Brands = collectCompanyDetails.Brands;
+                vehicleModel.CollectCompanyDetails.Employers = collectCompanyDetails.Employers;
+
+                return this.View(vehicleModel);
             }
 
-            //TODO: make automatically collect from profile
+            //TODO: make automatically collect from profile with reflection
             var newCar = this.mapper.Map<AddVehicleServiceModel>(vehicleModel);
 
             await this.vehicleService.AddVehicleAsync(newCar);
@@ -62,13 +74,48 @@ namespace CarTrade.Web.Controllers
             return this.RedirectToAction(nameof(Index));
         }
 
-        private async Task<AddVehicleViewModel> AddVehicleViewModelFillAsync()
+        public async Task<IActionResult> Edit([FromRoute(Name = "id")]int vehicleId)
+        {
+            var vehicle = 
+                await this.vehicleService.GetByIdAsync<AddVehicleServiceModel>(vehicleId);
+
+            if(vehicle == null)
+            {
+                return this.NotFound("Vehicle not found");
+            }   
+
+            var editVehicle = this.mapper
+                .Map<AddVehicleServiceModel, VehicleFormViewModel>(vehicle, opts => 
+                    opts.ConfigureMap()
+                    .ForMember(a => a.CollectCompanyDetails, opt => 
+                        opt.Ignore()));
+
+            var collectCompanyDetails = await this.FillCollectCompanyDetails();
+            editVehicle.CollectCompanyDetails = collectCompanyDetails;           
+
+            return this.View(editVehicle);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(VehicleFormViewModel vehicleModel)
+        {
+            if (vehicleModel != null || ModelState.IsValid)
+            {
+                //this.customerService.Edit(customer.Id, customer.Name, customer.Birthday, customer.IsYoungDriver);
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            return this.RedirectToAction(nameof(Index));
+        }
+
+        private async Task<CollectCompanyDetailsViewModel> FillCollectCompanyDetails()
         {
             var brandsEnumerable = await brandService.AllAsync();
             var employersEnumerable = await employeerService.AllAsync();
             var branchesEnumerable = await branchService.AllAsync();
 
-            var newVehicle = new AddVehicleViewModel()
+            var newVehicle = new CollectCompanyDetailsViewModel()
             {
                 Branches = branchesEnumerable
                      .ToSelectListItems(b => b.FullAddress, b => b.Id.ToString()),

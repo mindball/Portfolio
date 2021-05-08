@@ -1,8 +1,12 @@
-﻿@*@model 
-@inject ICompaniesService emplService
-@inject IBranchesService branchService
+﻿@model VehicleFormViewModel
 @{
-    ViewData["Title"] = "User details";
-    var employers = await emplService.AllAsync();
-    var branches = await branchService.AllAsync();
-}*@
+    ViewData["Title"] = "Edit vehicle";
+
+}
+
+
+<div class="row">
+    <div class="col-md-4">
+        <partial name="_VehicleFormPartial" model="Model" view-data="ViewData" />
+    </div>
+</div>
