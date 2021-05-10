@@ -1,7 +1,10 @@
 ﻿using CarTrade.Services.Companies;
+using CarTrade.Web.Infrastructure.Extensions;
 using CarTrade.Web.Models.Companies;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+
+using static CarTrade.Web.WebConstants;
 
 namespace CarTrade.Web.Controllers
 {
@@ -29,13 +32,17 @@ namespace CarTrade.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(AddCompanyViewModel company)
         {
+            //TODO: make company add friendly error page
             if (!ModelState.IsValid)
             {
-                return this.BadRequest();
+                this.TempData.AddFailureMessage(string.Format(FailureAddItemMessage, company.Name));
+                return this.RedirectToAction(nameof(Index));
+                //return this.BadRequest();
             }
 
             await companiesServices.AddCompanyAsync(company.Name);
 
+            this.TempData.AddSuccessMessage(string.Format(SuccessAddItemMessage, company.Name));
             return this.RedirectToAction(nameof(Index));
         }
 
@@ -56,13 +63,16 @@ namespace CarTrade.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(CompanyDetailViewModel companyModel)
         {
+            //TODO: make company edit friendly error page
             if (!ModelState.IsValid)
             {
-                return this.BadRequest();
+                this.TempData.AddFailureMessage(string.Format(FailureEditItemMessage, companyModel.Name));
+                return this.RedirectToAction(nameof(Index));
+                //return this.BadRequest();
             }
 
             await this.companiesServices.EditAsync(companyModel.Id, companyModel.Name);
-
+            this.TempData.AddSuccessMessage(string.Format(SuccessEditItemMessage, companyModel.Name));
             return this.RedirectToAction(nameof(Index));
         }
     }

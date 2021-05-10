@@ -2,14 +2,8 @@
 @{
     ViewData["Title"] = "All vehicle";
 }
+
 <h2>@ViewData["Title"]</h2>
-
-@*това може да се направи на глобално ниво не само за този контролер*@
-@if (TempData["SuccessMessage"] != null)
-{
-    <h2 class="text-success">@TempData["SuccessMessage"]</h2>
-}
-
 <div>
     <a href="/vehicles/add" class="btn btn-primary">Add car</a>
 </div>

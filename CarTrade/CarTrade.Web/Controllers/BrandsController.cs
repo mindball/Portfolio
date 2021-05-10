@@ -1,7 +1,10 @@
 ﻿using CarTrade.Services.Brand;
+using CarTrade.Web.Infrastructure.Extensions;
 using CarTrade.Web.Models.Brands;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+
+using static CarTrade.Web.WebConstants;
 
 namespace CarTrade.Web.Controllers
 {
@@ -26,15 +29,19 @@ namespace CarTrade.Web.Controllers
             => this.View();
 
         [HttpPost]
-        public async Task<IActionResult> Add(AddBrandViewModel brand)
+        public async Task<IActionResult> Add(AddBrandViewModel brandModel)
         {
+            //TODO: make brand add friendly error page
             if (!ModelState.IsValid)
             {
-                return this.BadRequest();
+                this.TempData.AddFailureMessage(string.Format(FailureAddItemMessage, brandModel.Name));
+                return this.RedirectToAction(nameof(Index));
+                //return this.BadRequest();
             }
 
-            await brandService.AddBrandAsync(brand.Name);
+            await brandService.AddBrandAsync(brandModel.Name);
 
+            this.TempData.AddSuccessMessage(string.Format(SuccessAddItemMessage, brandModel.Name));
             return this.RedirectToAction(nameof(Index));
         }
 
@@ -55,13 +62,17 @@ namespace CarTrade.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(BrandDetailViewModel brandModel)
         {
+            //TODO: make brand edit friendly error page
             if (!ModelState.IsValid)
             {
-                return this.BadRequest();
+                this.TempData.AddFailureMessage(string.Format(FailureEditItemMessage, brandModel.Name));
+                return this.RedirectToAction(nameof(Index));
+                //return this.BadRequest();
             }
 
             await this.brandService.EditAsync(brandModel.Id, brandModel.Name);
 
+            this.TempData.AddSuccessMessage(string.Format(SuccessEditItemMessage, brandModel.Name));
             return this.RedirectToAction(nameof(Index));
         }
     }

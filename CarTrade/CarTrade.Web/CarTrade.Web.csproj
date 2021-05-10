@@ -23,8 +23,4 @@
     <ProjectReference Include="..\CarTrade.Services\CarTrade.Services.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\Vehicles\" />
-  </ItemGroup>
-
 </Project>

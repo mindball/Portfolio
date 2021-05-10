@@ -14,5 +14,10 @@ namespace CarTrade.Web.Infrastructure.Extensions
         {
             tempData[TempDataSuccessMessageKey] = message;
         }
+
+        public static void AddFailureMessage(this ITempDataDictionary tempData, string message)
+        {
+            tempData[TempDataErrorMessageKey] = message;
+        }
     }
 }

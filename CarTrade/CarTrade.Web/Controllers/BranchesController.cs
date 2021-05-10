@@ -1,10 +1,13 @@
 ﻿using CarTrade.Services.Branches;
+using CarTrade.Web.Infrastructure.Extensions;
 using CarTrade.Web.Models.Branches;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
+using static CarTrade.Web.WebConstants;
 
 namespace CarTrade.Web.Controllers
 {
@@ -29,15 +32,20 @@ namespace CarTrade.Web.Controllers
             => this.View();
 
         [HttpPost]
-        public async Task<IActionResult> Add(AddBranchViewModel branch)
+        public async Task<IActionResult> Add(AddBranchViewModel branchModel)
         {
-            if(!ModelState.IsValid)
+            string fullAddress = branchModel.Address + " " + branchModel.Town;
+            //TODO: make branch add friendly error page
+            if (!ModelState.IsValid)            
             {
-                return this.BadRequest();
+                this.TempData.AddFailureMessage(string.Format(FailureAddItemMessage, fullAddress));
+                return this.RedirectToAction(nameof(Index));
+                //return this.BadRequest();
             }
 
-            await branchesService.AddBranchAsync(branch.Town, branch.Address);
+            await branchesService.AddBranchAsync(branchModel.Town, branchModel.Address);            
 
+            this.TempData.AddSuccessMessage(string.Format(SuccessAddItemMessage, fullAddress));
             return this.RedirectToAction(nameof(Index));
         }
 
@@ -56,15 +64,20 @@ namespace CarTrade.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(BranchDetailViewModel brancModel)
+        public async Task<IActionResult> Edit(BranchDetailViewModel branchModel)
         {
+            string fullAddress = branchModel.Address + " " + branchModel.Town;
+            //TODO: make branch edit friendly error page
             if (!ModelState.IsValid)
             {
-                return this.BadRequest();
+                this.TempData.AddFailureMessage(string.Format(FailureEditItemMessage, fullAddress));
+                return this.RedirectToAction(nameof(Index));
+                //return this.BadRequest();
             }
 
-            await this.branchesService.EditAsync(brancModel.Id, brancModel.Town, brancModel.Address);
+            await this.branchesService.EditAsync(branchModel.Id, branchModel.Town, branchModel.Address);
 
+            this.TempData.AddSuccessMessage(string.Format(SuccessEditItemMessage, fullAddress));
             return this.RedirectToAction(nameof(Index));
         }
     }

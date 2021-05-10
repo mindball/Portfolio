@@ -9,6 +9,8 @@ using CarTrade.Web.Models.Vehicles;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
+using static CarTrade.Web.WebConstants;
+
 namespace CarTrade.Web.Controllers
 {
     public class VehiclesController : BaseController
@@ -58,6 +60,7 @@ namespace CarTrade.Web.Controllers
         {
             if (vehicleModel == null || !ModelState.IsValid)
             {
+                this.TempData.AddFailureMessage(string.Format(FailureAddItemMessage, vehicleModel.PlateNumber));
                 var collectCompanyDetails = await this.FillCollectCompanyDetails();
                 vehicleModel.CollectCompanyDetails.Branches = collectCompanyDetails.Branches;
                 vehicleModel.CollectCompanyDetails.Brands = collectCompanyDetails.Brands;
@@ -70,6 +73,8 @@ namespace CarTrade.Web.Controllers
             var newCar = this.mapper.Map<AddVehicleServiceModel>(vehicleModel);
 
             await this.vehicleService.AddVehicleAsync(newCar);
+
+            this.TempData.AddSuccessMessage(string.Format(SuccessAddItemMessage, vehicleModel.PlateNumber));
 
             return this.RedirectToAction(nameof(Index));
         }
@@ -102,9 +107,11 @@ namespace CarTrade.Web.Controllers
             if (vehicleModel != null || ModelState.IsValid)
             {
                 //this.customerService.Edit(customer.Id, customer.Name, customer.Birthday, customer.IsYoungDriver);
-
+                this.TempData.AddFailureMessage(string.Format(FailureEditItemMessage, vehicleModel.PlateNumber));
                 return RedirectToAction(nameof(Index));
             }
+
+            this.TempData.AddSuccessMessage(string.Format(SuccessEditItemMessage, vehicleModel.PlateNumber));
 
             return this.RedirectToAction(nameof(Index));
         }

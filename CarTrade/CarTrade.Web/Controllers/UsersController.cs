@@ -76,7 +76,9 @@ namespace CarTrade.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return this.View(userModel);
+                this.TempData.AddFailureMessage(string.Format(FailureAddItemMessage, userModel.UserName));
+                return this.RedirectToAction(nameof(Index));
+                //return this.View(userModel);
             }
 
             var userDetail = await this.usersService.GetByIdAsync<UserEditServiceModel>(userModel.Id);
@@ -87,6 +89,7 @@ namespace CarTrade.Web.Controllers
 
             await this.usersService.EditUserAsync(userModel.Id, userModel);
 
+            this.TempData.AddSuccessMessage(string.Format(SuccessEditItemMessage, userModel.UserName));
             return RedirectToAction(nameof(Index));
         }
 
@@ -131,6 +134,7 @@ namespace CarTrade.Web.Controllers
 
             if (user == null || roleName == null)
             {
+                this.TempData.AddFailureMessage(string.Format(FailureAddItemMessage, role));
                 return this.NotFound();
             }
 
@@ -138,6 +142,7 @@ namespace CarTrade.Web.Controllers
             if (!result.Succeeded)
             {
                 this.AddModelError(result);
+                this.TempData.AddFailureMessage(string.Format(FailureAddItemMessage, role));
                 return BadRequest(this.ModelState);
             }
 
@@ -145,6 +150,8 @@ namespace CarTrade.Web.Controllers
 
             return this.RedirectToAction(nameof(Index));
         }
+
+        //Add custom temp msg to this action ChangePassword, Destroy
 
         public async Task<IActionResult> ChangePassword([FromRoute(Name = "id")] string userId)
         {
@@ -220,9 +227,7 @@ namespace CarTrade.Web.Controllers
             if (user == null)
             {
                 return this.NotFound();
-            }
-
-           
+            }           
 
             return this.View();
         }
@@ -233,7 +238,6 @@ namespace CarTrade.Web.Controllers
             {
                 this.ModelState.AddModelError(string.Empty, error.Description);
             }
-        }
-               
+        }               
     }
 }
