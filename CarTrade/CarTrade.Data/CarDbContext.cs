@@ -7,9 +7,9 @@ namespace CarTrade.Data
     public class CarDbContext : IdentityDbContext<User>
     {
         ////when manual initial migration
-        //public CarDbContext()
-        //{
-        //}
+        public CarDbContext()
+        {
+        }
 
         public CarDbContext(DbContextOptions<CarDbContext> options)
            : base(options)
@@ -17,14 +17,14 @@ namespace CarTrade.Data
         }
 
         //when manual initial migration
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    //Specify that we will use sqlite and the path of the database here
-        //    var options = optionsBuilder
-        //        .UseSqlServer("DefaultConnectionString");
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            //Specify that we will use sqlite and the path of the database here
+            var options = optionsBuilder
+                .UseSqlServer("DefaultConnectionString");
 
-        //    base.OnConfiguring(options);
-        //}
+            base.OnConfiguring(options);
+        }
 
         public DbSet<VehicleStuff> VehicleStuffs { get; set; }
 
