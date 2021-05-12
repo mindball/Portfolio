@@ -1,4 +1,5 @@
 ﻿using CarTrade.Services.InsuranceCompany;
+using CarTrade.Services.InsuranceCompany.Models;
 using CarTrade.Web.Infrastructure.Extensions;
 using CarTrade.Web.Models.InsuranceCompanies;
 using Microsoft.AspNetCore.Mvc;
@@ -48,7 +49,9 @@ namespace CarTrade.Web.Controllers
 
         public async Task<IActionResult> Edit([FromRoute(Name = "id")] int insuranceCompanyId)
         {
-            var insuranceCompany = await this.insuranceCompaniesService.GetByIdAsync(insuranceCompanyId);
+            var insuranceCompany = 
+                await this.insuranceCompaniesService
+                .GetByIdAsync<InsuranceCompanyListingServiceModel>(insuranceCompanyId);
             if (insuranceCompany == null) return this.BadRequest();
 
             var editinsuranceCompany = new InsuranceCompanyDetailViewModel

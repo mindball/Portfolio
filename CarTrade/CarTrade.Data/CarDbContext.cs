@@ -20,8 +20,8 @@ namespace CarTrade.Data
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
         //    //Specify that we will use sqlite and the path of the database here
-        //   var options = optionsBuilder
-        //       .UseSqlServer("DefaultConnectionString");
+        //    var options = optionsBuilder
+        //        .UseSqlServer("DefaultConnectionString");
 
         //    base.OnConfiguring(options);
         //}

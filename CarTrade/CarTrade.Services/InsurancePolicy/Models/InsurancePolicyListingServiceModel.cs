@@ -1,4 +1,5 @@
-﻿using CarTrade.Data.Enums;
+﻿using CarTrade.Common.Mapping;
+using CarTrade.Data.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -6,19 +7,20 @@ using System.Text;
 
 namespace CarTrade.Services.InsurancePolicy.Models
 {
-    public class InsurancePolicyListingServiceModel
+    public class InsurancePolicyListingServiceModel : IMapFrom<CarTrade.Data.Models.InsurancePolicy>
     {
         public int Id { get; set; }
-
-        [Required]
+        
         public TypeInsurance TypeInsurance { get; set; }
-
-        [Required]
+        
         public DateTime StartDate { get; set; }
 
-        [Required]
+        public bool? Expired { get; set; }
+
         public DateTime EndDate { get; set; }
 
-        public int InsuranceCompanyId { get; set; }
+        public int InsuranceCompanyId { get; set; }        
+
+        public int VehicleId { get; set; }       
     }
 }

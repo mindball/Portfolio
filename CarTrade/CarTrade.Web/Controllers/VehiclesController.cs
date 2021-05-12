@@ -102,17 +102,21 @@ namespace CarTrade.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(VehicleFormViewModel vehicleModel)
+        public async Task<IActionResult> Edit([FromRoute(Name = "id")] int vehicleId,
+            VehicleFormViewModel vehicleModel)
         {
-            if (vehicleModel != null || ModelState.IsValid)
-            {
-                //this.customerService.Edit(customer.Id, customer.Name, customer.Birthday, customer.IsYoungDriver);
+            if (vehicleModel == null || !ModelState.IsValid)
+            {                
                 this.TempData.AddFailureMessage(string.Format(FailureEditItemMessage, vehicleModel.PlateNumber));
                 return RedirectToAction(nameof(Index));
             }
 
-            this.TempData.AddSuccessMessage(string.Format(SuccessEditItemMessage, vehicleModel.PlateNumber));
+            var vehicleAddServiceModel =
+                this.mapper.Map<AddVehicleServiceModel>(vehicleModel);
 
+            await this.vehicleService.EditVehicleAsync(vehicleId, vehicleAddServiceModel);          
+
+            this.TempData.AddSuccessMessage(string.Format(SuccessEditItemMessage, vehicleModel.PlateNumber));
             return this.RedirectToAction(nameof(Index));
         }
 

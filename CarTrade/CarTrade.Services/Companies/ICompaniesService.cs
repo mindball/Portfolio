@@ -10,7 +10,7 @@ namespace CarTrade.Services.Companies
 
         Task<IEnumerable<CompanyListingServiceModel>> AllAsync();
 
-        Task<CompanyListingServiceModel> GetByIdAsync(int id);
+        Task<TModel> GetByIdAsync<TModel>(int insuranceCompanyId) where TModel : class;
 
         Task EditAsync(int id, string name);
     }

@@ -37,8 +37,7 @@ namespace CarTrade.Services.Vehicle
                 vehicleModel.BranchId, 
                 vehicleModel.BrandId, 
                 vehicleModel.OwnerId)
-                || (vehicleModel.Status == Data.Enums.VehicleStatus.None 
-                    || vehicleModel.Status == null))
+                || vehicleModel.Status == Data.Enums.VehicleStatus.None)
             {
                 throw new ArgumentException();
             }
@@ -51,43 +50,17 @@ namespace CarTrade.Services.Vehicle
                     
         }
 
-        public async Task EditVehicleAsync(VehicleListingServiceModel vehicleModel)
-        {            
-            //TODO: implement reverse mapping 
-
+        public async Task EditVehicleAsync(int vehicleId, AddVehicleServiceModel vehicleModel)
+        {
             var vehicle = await this.db.Vehicles
-                .FirstOrDefaultAsync(v => v.Id == vehicleModel.Id);
-
+                .FirstOrDefaultAsync(v => v.Id == vehicleId);
+            //TODO: Catch custom exception
             if (vehicle == null)
             {
-                throw new ArgumentException($"No such vehicle id:{vehicleModel.Id}");
+                throw new ArgumentException($"No such vehicle id:{vehicleId}");
             }
 
-            var vehicleStatus = VehicleStatus(vehicleModel.Status.ToString());
-
-            if (!await this.ValidateVehicleServiceModelAsync(
-                vehicleModel.PlateNumber,
-                vehicleModel.Vin,
-                vehicleModel.BranchId,
-                vehicleModel.BrandId,
-                vehicleModel.OwnerId
-                )
-                || vehicleStatus == Data.Enums.VehicleStatus.None)
-            {
-                throw new ArgumentException();
-            }
-
-            vehicle.Model = vehicleModel.Model;
-            vehicle.PlateNumber = vehicleModel.PlateNumber;
-            vehicle.Description = vehicleModel.Description;
-            vehicle.YearОfМanufacture = vehicleModel.YearОfМanufacture;
-            vehicle.TravelledDistance = vehicleModel.TravelledDistance;
-            vehicle.EndOilChange = vehicleModel.EndOilChange;
-            vehicle.Vin = vehicleModel.Vin;
-            vehicle.Status = vehicleStatus;
-            vehicle.BranchId = vehicleModel.BranchId;
-            vehicle.BrandId = vehicleModel.BrandId;
-            vehicle.OwnerId = vehicleModel.OwnerId;
+            this.mapper.Map(vehicleModel, vehicle);           
 
             await this.db.SaveChangesAsync();
         }
@@ -106,24 +79,7 @@ namespace CarTrade.Services.Vehicle
             }
 
             return vehicle;
-        }
-
-        private Data.Models.Vehicle FillVehicleModel(AddVehicleServiceModel vehicleModel, 
-            VehicleStatus vehicleStatus)
-            => new Data.Models.Vehicle
-                {
-                    Model = vehicleModel.Model,
-                    PlateNumber = vehicleModel.PlateNumber,
-                    Description = vehicleModel.Description,
-                    YearОfМanufacture = vehicleModel.YearОfМanufacture,
-                    TravelledDistance = vehicleModel.TravelledDistance,
-                    EndOilChange = vehicleModel.EndOilChange,
-                    Vin = vehicleModel.Vin,
-                    Status = vehicleStatus,
-                    BranchId = vehicleModel.BranchId,
-                    BrandId = vehicleModel.BrandId,
-                    OwnerId = vehicleModel.OwnerId
-                };
+        }        
 
         private async Task<bool> ValidateVehicleServiceModelAsync(string plateNumber, 
             string vin, 
@@ -167,26 +123,6 @@ namespace CarTrade.Services.Vehicle
 
             return true;
         }
-
-        private Data.Models.Vehicle FillVehicleModel(string model, string plateNumber,
-            string description, DateTime yearОfМanufacture,
-            int travelledDistance, int endOilChange,
-            string vin, VehicleStatus vehicleStatus,
-            int branchId, int brandId, int ownerId)
-            => new Data.Models.Vehicle
-            {
-                Model = model,
-                PlateNumber = plateNumber,
-                Description = description,
-                YearОfМanufacture = yearОfМanufacture,
-                TravelledDistance = travelledDistance,
-                EndOilChange = endOilChange,
-                Vin = vin,
-                Status = vehicleStatus,
-                BranchId = branchId,
-                BrandId = brandId,
-                OwnerId = ownerId
-            };
 
         private VehicleStatus VehicleStatus(string status)
         {

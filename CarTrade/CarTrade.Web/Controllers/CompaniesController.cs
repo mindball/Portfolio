@@ -1,4 +1,5 @@
 ﻿using CarTrade.Services.Companies;
+using CarTrade.Services.Companies.Models;
 using CarTrade.Web.Infrastructure.Extensions;
 using CarTrade.Web.Models.Companies;
 using Microsoft.AspNetCore.Mvc;
@@ -48,7 +49,7 @@ namespace CarTrade.Web.Controllers
 
         public async Task<IActionResult> Edit([FromRoute(Name = "id")] int companyId)
         {
-            var company = await this.companiesServices.GetByIdAsync(companyId);
+            var company = await this.companiesServices.GetByIdAsync<CompanyListingServiceModel>(companyId);
 
             if (company == null) return this.BadRequest();
 

@@ -16,25 +16,21 @@ namespace CarTrade.Services.Vehicle.Models
 
         [Required]
         [MinLength(PlateNumberMinLength)]
-        [MaxLength(PlateNumberМaxLength)]
-        [Display(Name = "Plate Number")]
+        [MaxLength(PlateNumberМaxLength)]       
         public string PlateNumber { get; set; }
 
         [MaxLength(DescriptionLength)]
         public string Description { get; set; }
 
         [Required]
-        [Display(Name = "Year of Manufacture")]
         public DateTime YearОfМanufacture { get; set; }
        
         [Required]
-        [Range(1, int.MaxValue)]
-        [Display(Name = "Travelled Distance")]
+        [Range(1, int.MaxValue)]        
         public int TravelledDistance { get; set; }
 
         [Required]
-        [Range(1, int.MaxValue)]
-        [Display(Name = "Oil change date")]
+        [Range(1, int.MaxValue)]        
         public int EndOilChange { get; set; }
 
         [Required]

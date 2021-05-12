@@ -10,7 +10,7 @@ namespace CarTrade.Services.Vehicle
 
         Task AddVehicleAsync(AddVehicleServiceModel vehicleModel);
 
-        Task EditVehicleAsync(VehicleListingServiceModel vehicleModel);
+        Task EditVehicleAsync(int vehicleId, AddVehicleServiceModel vehicleModel);
 
         Task<TModel> GetByIdAsync<TModel>(int vehicleId) where TModel : class;
     }

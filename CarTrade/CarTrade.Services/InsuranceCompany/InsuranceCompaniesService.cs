@@ -48,9 +48,19 @@ namespace CarTrade.Services.InsuranceCompany
             await this.db.SaveChangesAsync();
         }
 
-        public async Task<InsuranceCompanyListingServiceModel> GetByIdAsync(int id)
-         => await this.db.InsuranceCompanies
-                .ProjectTo<InsuranceCompanyListingServiceModel>()
-                .FirstOrDefaultAsync(b => b.Id == id);
+        public async Task<TModel> GetByIdAsync<TModel>(int insuranceId) where TModel : class
+        {
+            var policy = await this.db.InsurancePolicies
+               .Where(u => u.Id == insuranceId)
+               .ProjectTo<TModel>()
+               .FirstOrDefaultAsync();
+
+            if (policy == null)
+            {
+                throw new ArgumentException($"policy with such {insuranceId} does not exist");
+            }
+
+            return policy;           
+        }
     }
 }
