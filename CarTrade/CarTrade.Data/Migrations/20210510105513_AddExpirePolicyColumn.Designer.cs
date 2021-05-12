@@ -4,14 +4,16 @@ using CarTrade.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CarTrade.Data.Migrations
 {
     [DbContext(typeof(CarDbContext))]
-    partial class CarDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210510105513_AddExpirePolicyColumn")]
+    partial class AddExpirePolicyColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,8 +102,7 @@ namespace CarTrade.Data.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool?>("Expired")
-                        .IsRequired()
+                    b.Property<bool>("Expired")
                         .HasColumnType("bit");
 
                     b.Property<int>("InsuranceCompanyId")
@@ -113,14 +114,9 @@ namespace CarTrade.Data.Migrations
                     b.Property<int>("TypeInsurance")
                         .HasColumnType("int");
 
-                    b.Property<int>("VehicleId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("InsuranceCompanyId");
-
-                    b.HasIndex("VehicleId");
 
                     b.ToTable("InsurancePolicies");
                 });
@@ -295,6 +291,9 @@ namespace CarTrade.Data.Migrations
                     b.Property<int>("EndOilChange")
                         .HasColumnType("int");
 
+                    b.Property<int?>("InsurancePolicyId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Model")
                         .IsRequired()
                         .HasColumnType("nvarchar(50)")
@@ -327,6 +326,8 @@ namespace CarTrade.Data.Migrations
                     b.HasIndex("BranchId");
 
                     b.HasIndex("BrandId");
+
+                    b.HasIndex("InsurancePolicyId");
 
                     b.HasIndex("OwnerId");
 
@@ -531,12 +532,6 @@ namespace CarTrade.Data.Migrations
                         .HasForeignKey("InsuranceCompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("CarTrade.Data.Models.Vehicle", "Vehicle")
-                        .WithMany("InsurancePolicies")
-                        .HasForeignKey("VehicleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("CarTrade.Data.Models.Rental", b =>
@@ -580,6 +575,10 @@ namespace CarTrade.Data.Migrations
                         .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("CarTrade.Data.Models.InsurancePolicy", null)
+                        .WithMany("Vehicles")
+                        .HasForeignKey("InsurancePolicyId");
 
                     b.HasOne("CarTrade.Data.Models.Employer", "Owner")
                         .WithMany("Vehicles")
