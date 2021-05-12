@@ -4,15 +4,17 @@ using CarTrade.Data.Enums;
 using CarTrade.Services.InsurancePolicy.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CarTrade.Services.InsurancePolicy
 {
-    public class InsurencesPoliciesService : IInsurencesPoliciesService
+    public class InsurancesPoliciesService : IInsurancesPoliciesService
     {
         private readonly CarDbContext db;
 
-        public InsurencesPoliciesService(CarDbContext db)
+        public InsurancesPoliciesService(CarDbContext db)
         {
             this.db = db;
         }
@@ -74,14 +76,27 @@ namespace CarTrade.Services.InsurancePolicy
             await this.db.SaveChangesAsync();
         }
 
-        public async Task<InsurancePolicyListingServiceModel> GetByIdAsync(int insuranceId)
-        {
-            var existInsurancePolicy = 
-                await this.db.InsurancePolicies
-                .ProjectTo<InsurancePolicyListingServiceModel>()
-                .FirstOrDefaultAsync(p => p.Id == insuranceId);
+        public async Task<IEnumerable<InsurancePolicyListingServiceModel>> GetAllInsuranceByVehicleId(int vehicleId)
+            => await this.db.InsurancePolicies
+            .Where(v => v.VehicleId == vehicleId)
+            .ProjectTo<InsurancePolicyListingServiceModel>()
+            .ToListAsync();
 
-            if (existInsurancePolicy == null) throw new ArgumentException("Missing policy");
+        public async Task<TModel> GetByIdAsync<TModel>(int insuranceId) where TModel : class
+        {
+            var existInsurancePolicy =
+                await this.db.InsurancePolicies
+                .Where(ip => ip.Id == insuranceId)
+                .ProjectTo<TModel>()
+                .FirstOrDefaultAsync();
+                
+
+            //TODO: make custom exception handler on controllers
+            if (existInsurancePolicy == null)
+            {
+                return null;
+                throw new ArgumentException("Missing policy");
+            } 
 
             return existInsurancePolicy;
         }

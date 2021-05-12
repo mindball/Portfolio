@@ -1,0 +1,48 @@
+﻿@model ListDetailsInsurancePoliceViewModel
+@{
+    ViewData["Title"] = "All insurance policies";
+}
+<h2>@ViewData["Title"]</h2>
+
+@if (Model.PolicyDetails.Count() == 0)
+{
+    <h4>No insurance</h4>
+    <div>
+        <a href="/InsurancesPolices/add/@Model" class="btn btn-primary">Add insurance policy</a>
+    </div>
+    <br />
+}
+else
+{
+    @*<div class="row">
+        <div class="col-8">*@
+    <h5>@Model.BrandName @Model.Vin @Model.PlateNumber @Model.Vin</h5>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Type Insurance</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Expired</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var insurance in Model.PolicyDetails)
+            {
+                <tr>
+                    <th>@insurance.TypeInsurance</th>
+                    <th>@insurance.StartDate</th>
+                    <th>@insurance.EndDate</th>
+                    <th>@insurance.Expired</th>
+                    <th>
+                        <a href="/insurancecompanies/edit/@insurance.Id" class="btn btn-secondary">Edit company</a>
+                    </th>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    @*</div>
+        </div>*@
+}
