@@ -4,12 +4,11 @@
 }
 <h2>@ViewData["Title"]</h2>
 
+<a href="/InsurancesPolices/add/@Model.VehicleId" class="btn btn-primary">Add insurance policy</a>
+
 @if (Model.PolicyDetails.Count() == 0)
 {
-    <h4>No insurance</h4>
-    <div>
-        <a href="/InsurancesPolices/add/@Model" class="btn btn-primary">Add insurance policy</a>
-    </div>
+    <h4>No insurance</h4>    
     <br />
 }
 else

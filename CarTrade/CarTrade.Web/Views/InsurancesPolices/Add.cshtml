@@ -1,0 +1,46 @@
+﻿@model InsurancePolicyFormViewModel
+
+@{
+    ViewData["Title"] = "Create policy";
+    var typeOfInsurance = Html.GetEnumSelectList<TypeInsurance>();
+}
+
+<h4>@ViewData["Title"]</h4>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10 col-xl-8 mx-auto">
+            <div class="my-4">
+                <form method="post">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <select asp-for="TypeInsurance" asp-items="@typeOfInsurance" class="form-control" aria-label="Default select example">
+                            <option selected>Insurance type</option>
+                        </select>
+                        <span asp-validation-for="TypeInsurance" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="StartDate"></label>
+                        <input asp-for="StartDate" class="form-control">
+                        <span asp-validation-for="StartDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="EndDate"></label>
+                        <input asp-for="EndDate" class="form-control" />
+                        <span asp-validation-for="EndDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <select asp-for="InsuranceCompanyId" asp-items="@Model.InsuranceCompanies" class="form-control" aria-label="Default select example">
+                            <option selected>Insurance companies</option>
+                        </select>
+                    </div>                    
+                    <button type="submit" class="btn btn-info">Add Course</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

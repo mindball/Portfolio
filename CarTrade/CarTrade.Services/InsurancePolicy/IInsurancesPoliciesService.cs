@@ -8,7 +8,7 @@ namespace CarTrade.Services.InsurancePolicy
 {
     public interface IInsurancesPoliciesService
     {
-        Task AddPolicyAsync(TypeInsurance type, DateTime startDate, DateTime endDate, int insuanceCompanyId);
+        Task AddPolicyAsync(int vehicleId, InsurancePolicyFormServiceModel newPolicy);
 
         Task EditPolicyAsync(InsurancePolicyListingServiceModel insurancePoliceModel);
 

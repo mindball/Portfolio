@@ -3,7 +3,7 @@ using CarTrade.Data.Enums;
 using CarTrade.Services.InsurancePolicy.Models;
 using System;
 
-namespace CarTrade.Web.Models.InsurancePolice
+namespace CarTrade.Web.Models.InsurancePolicy
 {
     public class DetailInsurancePolicyViewModel : IMapFrom<InsurancePolicyListingServiceModel>
     {

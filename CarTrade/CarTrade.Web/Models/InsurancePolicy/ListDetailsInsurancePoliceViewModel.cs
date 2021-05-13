@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CarTrade.Web.Models.InsurancePolice
+namespace CarTrade.Web.Models.InsurancePolicy
 {
     public class ListDetailsInsurancePoliceViewModel
     {

@@ -1,4 +1,5 @@
-﻿using AutoMapper.QueryableExtensions;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using CarTrade.Data;
 using CarTrade.Data.Enums;
 using CarTrade.Services.InsurancePolicy.Models;
@@ -13,43 +14,45 @@ namespace CarTrade.Services.InsurancePolicy
     public class InsurancesPoliciesService : IInsurancesPoliciesService
     {
         private readonly CarDbContext db;
+        private IMapper mapper;
 
-        public InsurancesPoliciesService(CarDbContext db)
+        public InsurancesPoliciesService(CarDbContext db, IMapper mapper)
         {
             this.db = db;
+            this.mapper = mapper;
         }
 
-        public async Task AddPolicyAsync(TypeInsurance type, 
-            DateTime startDate, 
-            DateTime endDate, 
-            int insuanceCompanyId)
-        {
-            Type enumType = type.GetType();
-            bool isEnumValid = Enum.IsDefined(enumType, type);
-
-            if (!isEnumValid)
+        public async Task AddPolicyAsync(int vehicleId, InsurancePolicyFormServiceModel newPolicy)
+        { 
+            if (!this.CompareStartEndDate(newPolicy.StartDate, newPolicy.EndDate))
             {
-                throw new Exception("Wrong policy type");
+                throw new ArgumentException("Start date must be small than end date" +
+                    "or the date must not be less than one year back");
             }
-
-            if (!this.CompareStartEndDate(startDate, endDate))
-            {
-                throw new ArgumentException("Start date must be small than end date");
-            }
-
-            var insuranceCompany = await db.InsuranceCompanies.FindAsync(insuanceCompanyId);
-            if(insuranceCompany == null)
+            
+            if(!await ExistInsuranceCompany(newPolicy.InsuranceCompanyId))
             {
                 throw new ArgumentException("Missing Insurance company");
             }
 
-            var newInsurancePolicy = new Data.Models.InsurancePolicy
+            if(await ExistTypeOfInsurancePolicyOnVehicle(
+                vehicleId, 
+                newPolicy.TypeInsurance, 
+                newPolicy.Expired))
             {
-                TypeInsurance = type,
-                StartDate = startDate,
-                EndDate = endDate,
-                InsuranceCompanyId = insuranceCompany.Id
-            };
+                throw new ArgumentException("This policy exist and it is active");
+            }
+
+            var newInsurancePolicy =
+                this.mapper
+                .Map<InsurancePolicyFormServiceModel, Data.Models.InsurancePolicy>(newPolicy, opt =>
+                        opt.ConfigureMap()
+                        .ForMember(p => p.Id, opt => opt.Ignore())
+                        .ForMember(p => p.InsuanceCompany, opt => opt.Ignore())
+                        .ForMember(p => p.Vehicle, opt => opt.Ignore())
+                        .ForMember(p => p.VehicleId, opt => opt.Ignore()));
+
+            newInsurancePolicy.VehicleId = vehicleId;
 
             await this.db.InsurancePolicies.AddAsync(newInsurancePolicy);
             await this.db.SaveChangesAsync();
@@ -108,7 +111,30 @@ namespace CarTrade.Services.InsurancePolicy
                 return false;
             }
 
+            if(startDate <= DateTime.UtcNow.AddYears(-1))
+            {
+                return false;
+            }
+
             return true;
         }
+
+        private async Task<bool> ExistInsuranceCompany(int insuranceCompanyId)
+        {
+            var insuranceCompany = await db.InsuranceCompanies.FindAsync(insuranceCompanyId);
+            if (insuranceCompany == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private async Task<bool> ExistTypeOfInsurancePolicyOnVehicle(int vehicleId, TypeInsurance insuranceType, bool? expire)
+            => await this.db.InsurancePolicies
+            .AnyAsync(i => 
+            i.VehicleId == vehicleId 
+            && i.TypeInsurance == insuranceType 
+            && i.Expired == false);
     }
 }

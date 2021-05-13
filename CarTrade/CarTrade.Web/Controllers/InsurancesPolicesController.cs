@@ -1,13 +1,19 @@
 ﻿using AutoMapper;
 using CarTrade.Services.InsuranceCompany;
 using CarTrade.Services.InsurancePolicy;
+using CarTrade.Services.InsurancePolicy.Models;
 using CarTrade.Services.Vehicle;
 using CarTrade.Services.Vehicle.Models;
-using CarTrade.Web.Models.InsurancePolice;
+using CarTrade.Web.Infrastructure.Extensions;
+using CarTrade.Web.Models.InsurancePolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
+
+using static CarTrade.Web.WebConstants;
 
 namespace CarTrade.Web.Controllers
 {
@@ -27,6 +33,44 @@ namespace CarTrade.Web.Controllers
             this.vehicleService = vehicleService;
             this.insuranceCompany = insuranceCompany;
             this.mapper = mapper;
+        }
+
+        public async Task<IActionResult> Add([FromRoute(Name = "id")] int vehicleId)
+             => this.View(new InsurancePolicyFormViewModel
+             {
+                 InsuranceCompanies = await GetInsuranceCompanies()
+             });
+
+        [HttpPost]
+        public async Task<IActionResult> Add(
+            [FromRoute(Name = "id")] int vehicleId,
+            InsurancePolicyFormViewModel policyModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                policyModel.InsuranceCompanies = await GetInsuranceCompanies();
+                return this.View(policyModel);
+            }
+
+            var newPolicy = this.mapper.Map<InsurancePolicyFormServiceModel>(policyModel);
+
+            await this.policyService.AddPolicyAsync(vehicleId, newPolicy);
+
+            var currentVehiclePolicyAsigned =
+                (await this.vehicleService.AllAsync()).Where(v => v.Id == vehicleId).FirstOrDefault();
+            
+
+            string policyInfo =
+                string.Join(' ',
+                policyModel.TypeInsurance.ToString(),                
+                "to",
+                currentVehiclePolicyAsigned.PlateNumber
+                );
+
+            TempData.AddSuccessMessage(string.Format(SuccessAddItemMessage, policyInfo));
+
+            return this.RedirectToRoute("default",
+                new { controller = "Vehicles", action = "Index" });
         }
 
         public async Task<IActionResult> Details([FromRoute(Name = "id")] int vehicleId)
@@ -65,6 +109,17 @@ namespace CarTrade.Web.Controllers
                             .ForMember(l => l.PolicyDetails, opt
                                 => opt.Ignore())
                     );
-        
+
+        private async Task<IEnumerable<SelectListItem>> GetInsuranceCompanies()
+        {
+            var companies = await this.insuranceCompany.AllAsync();
+
+            return companies.Select(t => new SelectListItem
+                        {
+                            Text = t.Name,
+                            Value = t.Id.ToString()
+                        })
+                    .ToList();
+        }
     }
 }

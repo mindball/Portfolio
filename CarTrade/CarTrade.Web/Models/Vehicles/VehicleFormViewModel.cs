@@ -28,6 +28,7 @@ namespace CarTrade.Web.Models.Vehicles
 
         [Required]
         [Display(Name = "Year of Manufacture")]
+        [DataType(DataType.Date)]
         public DateTime YearОfМanufacture { get; set; }
 
         [Required]
