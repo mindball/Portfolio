@@ -58,9 +58,10 @@ namespace CarTrade.Services.InsurancePolicy
             await this.db.SaveChangesAsync();
         }
 
-        public async Task EditPolicyAsync(InsurancePolicyListingServiceModel insurancePolicyModel)
+        public async Task EditPolicyAsync(int insuranceId, InsurancePolicyFormServiceModel insurancePolicyModel)
         {
-            var existInsurancePolicy = await this.db.InsurancePolicies.FindAsync(insurancePolicyModel.Id);
+            var existInsurancePolicy = await this.db.InsurancePolicies.FindAsync(insuranceId);
+           
             if(existInsurancePolicy == null)
             {
                 throw new ArgumentException("Missing policy");
@@ -71,12 +72,28 @@ namespace CarTrade.Services.InsurancePolicy
                 throw new ArgumentException("Start date must be small than end date");
             }
 
+
+            //TODO: This map doesnt work db return 0 row affected
+            //var vehicleId = existInsurancePolicy.VehicleId;
+            //existInsurancePolicy =
+            //      this.mapper
+            //      .Map<InsurancePolicyFormServiceModel, Data.Models.InsurancePolicy>(insurancePolicyModel, opt =>
+            //              opt.ConfigureMap()
+            //              .ForMember(p => p.Id, opt => opt.Ignore())
+            //              .ForMember(p => p.InsuanceCompany, opt => opt.Ignore())
+            //              .ForMember(p => p.Vehicle, opt => opt.Ignore())
+            //              .ForMember(p => p.VehicleId, opt => opt.Ignore())
+            //              );
+
+            // existInsurancePolicy.VehicleId = vehicleId;
+
+            existInsurancePolicy.TypeInsurance = insurancePolicyModel.TypeInsurance;
             existInsurancePolicy.StartDate = insurancePolicyModel.StartDate;
             existInsurancePolicy.EndDate = insurancePolicyModel.EndDate;
+            existInsurancePolicy.Expired = insurancePolicyModel.Expired;
             existInsurancePolicy.InsuranceCompanyId = insurancePolicyModel.InsuranceCompanyId;
-            existInsurancePolicy.TypeInsurance = insurancePolicyModel.TypeInsurance;
 
-            await this.db.SaveChangesAsync();
+            var result = await this.db.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<InsurancePolicyListingServiceModel>> GetAllInsuranceByVehicleId(int vehicleId)

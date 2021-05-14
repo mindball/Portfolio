@@ -10,7 +10,7 @@ namespace CarTrade.Services.InsurancePolicy
     {
         Task AddPolicyAsync(int vehicleId, InsurancePolicyFormServiceModel newPolicy);
 
-        Task EditPolicyAsync(InsurancePolicyListingServiceModel insurancePoliceModel);
+        Task EditPolicyAsync(int insuranceId, InsurancePolicyFormServiceModel insurancePoliceModel);
 
         Task<TModel> GetByIdAsync<TModel>(int insuranceId) where TModel : class;
 

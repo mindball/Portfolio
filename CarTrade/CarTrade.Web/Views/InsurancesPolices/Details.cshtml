@@ -1,4 +1,4 @@
-﻿@model ListDetailsInsurancePoliceViewModel
+﻿@model ListDetailsInsurancePolicyViewModel
 @{
     ViewData["Title"] = "All insurance policies";
 }
@@ -35,7 +35,7 @@ else
                     <th>@insurance.EndDate</th>
                     <th>@insurance.Expired</th>
                     <th>
-                        <a href="/insurancecompanies/edit/@insurance.Id" class="btn btn-secondary">Edit company</a>
+                        <a href="/InsurancesPolices/edit/@insurance.Id" class="btn btn-secondary">Edit insurance</a>
                     </th>
                 </tr>
             }

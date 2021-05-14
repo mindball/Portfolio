@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CarTrade.Web.Models.InsurancePolicy
 {
-    public class ListInsuranceCompanyViewModel
+    public class ListInsurancePolicyCompanyViewModel
     {
         public InsurancePolicyFormViewModel InsurancePolicy { get; set; }
 

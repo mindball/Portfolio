@@ -2,7 +2,7 @@
 
 namespace CarTrade.Web.Models.InsurancePolicy
 {
-    public class ListDetailsInsurancePoliceViewModel
+    public class ListDetailsInsurancePolicyViewModel
     {
         public int VehicleId { get; set; }
 

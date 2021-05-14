@@ -59,7 +59,6 @@ namespace CarTrade.Web.Controllers
             var currentVehiclePolicyAsigned =
                 (await this.vehicleService.AllAsync()).Where(v => v.Id == vehicleId).FirstOrDefault();
             
-
             string policyInfo =
                 string.Join(' ',
                 policyModel.TypeInsurance.ToString(),                
@@ -87,7 +86,7 @@ namespace CarTrade.Web.Controllers
             //Case new vehicle 
             if (insurancePolicies != null || insurancePolicies.Count() != 0)
             {
-                ListDetailsInsurancePoliceViewModel vehicleInsurances = FillCustomVehicle(vehicle);
+                ListDetailsInsurancePolicyViewModel vehicleInsurances = FillCustomVehicle(vehicle);
 
                 vehicleInsurances.PolicyDetails = this.mapper
                             .Map<IEnumerable<DetailInsurancePolicyViewModel>>(insurancePolicies);
@@ -100,9 +99,43 @@ namespace CarTrade.Web.Controllers
             return View();
         }
 
-        private ListDetailsInsurancePoliceViewModel FillCustomVehicle(VehicleListingServiceModel vehicle)
+        public async Task<IActionResult> Edit([FromRoute(Name = "id")] int policyId)
+        {
+            var policy = (await this.policyService
+                .GetByIdAsync<InsurancePolicyFormViewModel>(policyId));                
+
+            if (policy == null)
+            {
+                return this.BadRequest();
+            }
+
+            policy.InsuranceCompanies = await GetInsuranceCompanies();
+
+            return this.View(policy);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit([FromRoute(Name = "id")] int policyId, 
+            InsurancePolicyFormViewModel policyModel)
+        {
+            if(!ModelState.IsValid)
+            {
+                policyModel.InsuranceCompanies = await GetInsuranceCompanies();
+                return this.View(policyModel);
+            }
+
+            var editPolicy = this.mapper.Map<InsurancePolicyFormServiceModel>(policyModel);
+            await this.policyService.EditPolicyAsync(policyId, editPolicy);
+
+            TempData.AddSuccessMessage(string.Format(SuccessEditItemMessage, "policy"));
+
+            return this.RedirectToRoute("default",
+                new { controller = "Vehicles", action = "Index" });
+        }
+
+        private ListDetailsInsurancePolicyViewModel FillCustomVehicle(VehicleListingServiceModel vehicle)
             => this.mapper
-                .Map<VehicleListingServiceModel, ListDetailsInsurancePoliceViewModel>(vehicle, opt =>
+                .Map<VehicleListingServiceModel, ListDetailsInsurancePolicyViewModel>(vehicle, opt =>
                             opt.ConfigureMap()
                             .ForMember(l => l.VehicleId, cfg => cfg.MapFrom(x => x.Id))
                             .ForMember(l => l.VehicleModel, cfg => cfg.MapFrom(x => x.Model))
