@@ -58,6 +58,10 @@ namespace CarTrade.Data.Models
 
         public virtual Employer Owner  { get; set; }
 
+        public int VignetteId { get; set; }
+
+        public virtual Vignette Vignette { get; set; }
+
         public virtual IList<VehiclePicture> Pictures { get; set; } = new List<VehiclePicture>();
 
         public virtual IList<VehicleStuff> Stuff { get; set; } = new List<VehicleStuff>();
