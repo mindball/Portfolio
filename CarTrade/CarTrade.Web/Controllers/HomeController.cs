@@ -3,6 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
+using CarTrade.Services.Branches;
+using System.Threading.Tasks;
+using CarTrade.Web.Models.Home;
+using System.Collections.Generic;
+using System.Linq;
+using CarTrade.Services.InsurancePolicy;
+using CarTrade.Services.Vehicle;
 
 namespace CarTrade.Web.Controllers
 {
@@ -10,17 +17,48 @@ namespace CarTrade.Web.Controllers
     public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IBranchesService branchesService;
+        private IInsurancesPoliciesService policyService;
+        private IVehicleService vehicleService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger,
+            IBranchesService branchesService,
+            IInsurancesPoliciesService policyService,
+            IVehicleService vehicleService)
         {
+            this.branchesService = branchesService;
+            this.policyService = policyService;
+            this.vehicleService = vehicleService;
+
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }             
-        
+            var allBranchesWithCriticalVehicleData = await this.branchesService.AllAsync();
+            var expireViewModel = new List<ListExpireDataForAllBranchesViewModel>();
+
+            foreach (var branch in allBranchesWithCriticalVehicleData)
+            {
+                expireViewModel.Add
+                (
+                    new ListExpireDataForAllBranchesViewModel
+                    {
+                        FullAddress = branch.FullAddress,
+                        VehiclesWithExpirePolicy =
+                            await this.vehicleService.GetInsuranceExpireDataAsync(branch.Id),
+                        VehiclesWithExpireVignettes =
+                            await this.vehicleService.GetVignetteExpireDataAsync(branch.Id),
+                        VehiclesWithOilChangeDistance =
+                           await this.vehicleService.GetOilChangeExpireDataAsync(branch.Id)
+                    }
+                );
+            }
+
+            ViewData["NavMenuPage"] = "Index";
+            return View(expireViewModel);
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

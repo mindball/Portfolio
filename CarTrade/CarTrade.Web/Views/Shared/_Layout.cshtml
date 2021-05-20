@@ -36,7 +36,8 @@
                                     <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="InsuranceCompanies" asp-action="Index">Insurance company</a>
                                     <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Vehicles" asp-action="Index">Vehicles</a>
                                 </div>
-                            </div>                           
+                            </div>
+
                         }
 
                     </ul>
@@ -58,10 +59,15 @@
             </div>
         }
         <main role="main" class="pb-3">
-            @RenderBody()
+            @*@if (ViewData["NavMenuPage"] != null)
+                {
+                    // ASP.NET Core will search for a component named NavMenu,
+                    // and invoke it with the provided data (here, the NavMenuPage set in the controller)
+                    @await Component.InvokeAsync("NavMenu", ViewData["NavMenuPage"])
+                }*@
+            @RenderBody()            
         </main>
     </div>
-
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2021 - CarTrade.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>

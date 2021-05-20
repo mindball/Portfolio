@@ -1,4 +1,20 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<ListExpireDataForAllBranchesViewModel>
+@foreach (var branch in Model)
+{
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col-3">
+                <div class="list-group">
+                    <a href="#" class="list-group-item active bg-danger">
+                        @branch.FullAddress
+                    </a>
+                    <a href="#" class="list-group-item">Изтичащи винетки (@branch.VehiclesWithExpireVignettes.Count())</a>
+                    <a href="#" class="list-group-item">Изтичащи застраховки (@branch.VehiclesWithExpirePolicy.Count())</a>
+                    <a href="#" class="list-group-item">Смяна масло (@branch.VehiclesWithOilChangeDistance.Count())</a>
+                </div>
+            </div>
+        </div>
+        <br />
+    </div>
 }
 

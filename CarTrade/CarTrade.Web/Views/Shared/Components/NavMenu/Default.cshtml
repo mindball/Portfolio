@@ -1,0 +1,9 @@
+﻿// type of the object passed to View() call in NavMenuComponent.InvokeAsync
+@model Dictionary<string, string>
+
+<nav>
+    @foreach (var link in Model)
+    {
+        <div><a href="@link.Value">@link.Key</a></div>
+    }
+</nav>
