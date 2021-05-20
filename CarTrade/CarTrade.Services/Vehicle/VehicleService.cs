@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using static CarTrade.Common.DataConstants;
+
 namespace CarTrade.Services.Vehicle
 {
     public class VehicleService : IVehicleService
@@ -79,7 +81,50 @@ namespace CarTrade.Services.Vehicle
             }
 
             return vehicle;
-        }        
+        }
+
+        public async Task<IEnumerable<VehicleListExpireInsurancePolicyServiceModel>> GetInsuranceExpireDataAsync(int branchId)
+            => await this.db.Vehicles
+                 .Where(b => b.BranchId == branchId &&
+                        b.InsurancePolicies
+                        .Any(i => i.EndDate > DateTime.UtcNow.AddYears(-DaysBeforeItExpires)))
+                 .Select(v => new VehicleListExpireInsurancePolicyServiceModel
+                 {
+                     Id = v.Id,
+                     PlateNumber = v.PlateNumber,
+                     Vin = v.Vin,
+                     //InsuranceId = v.InsurancePolicies.Select(i => i.Id)
+                     InsurancePolicies = v.InsurancePolicies
+                                .Where(i => i.EndDate > DateTime.UtcNow.AddYears(-30))
+                                .Select(i => i)
+                 })
+                 .ToListAsync();            
+        
+        public async Task<IEnumerable<VehicleListExpireVignetteServiceModel>> GetVignetteExpireDataAsync(int branchId)
+        => await this.db.Vehicles
+                 .Where(b => b.BranchId == branchId &&
+                        b.Vignette.EndDate > DateTime.UtcNow.AddYears(-DaysBeforeItExpires))                        
+                 .Select(v => new VehicleListExpireVignetteServiceModel
+                 {
+                     Id = v.Id,
+                     PlateNumber = v.PlateNumber,
+                     Vin = v.Vin,                     
+                     ExpireDate = v.Vignette.EndDate
+                 })
+                 .ToListAsync();
+
+        public async Task<IEnumerable<VehicleListingChangeOilServiceModel>> GetOilChangeExpireDataAsync(int branchId)
+            => await this.db.Vehicles
+                .Where(v => v.BranchId == branchId
+                        && (v.TravelledDistance + RemainDistanceOilChange) >= v.EndOilChange)
+                .Select(v => new VehicleListingChangeOilServiceModel
+                {
+                    Id = v.Id,
+                    PlateNumber = v.PlateNumber,
+                    Vin = v.Vin,
+                    EndOilChange = v.EndOilChange
+                })
+                .ToListAsync();
 
         private async Task<bool> ValidateVehicleServiceModelAsync(string plateNumber, 
             string vin, 
@@ -133,6 +178,6 @@ namespace CarTrade.Services.Vehicle
             }
 
             return vehicleStatus;
-        }       
+        } 
     }
 }

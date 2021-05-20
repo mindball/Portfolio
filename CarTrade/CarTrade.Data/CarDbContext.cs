@@ -48,6 +48,8 @@ namespace CarTrade.Data
 
         public DbSet<SparePart> SpareParts { get; set; }
 
+        public DbSet<Vignette> Vignettes { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Rental>()

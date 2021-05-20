@@ -12,7 +12,7 @@ namespace CarTrade.Services.Branches
 
         Task<BranchListingServiceModel> GetByIdAsync(int id);
 
-        Task EditAsync(int id, string town, string address);
+        Task EditAsync(int id, string town, string address);        
 
         //TODO: Check if Branch exist by name adress.
     }

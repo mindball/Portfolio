@@ -5,13 +5,9 @@ using System;
 
 namespace CarTrade.Services.Vehicle.Models
 {
-    public class VehicleListingServiceModel : IMapFrom<Data.Models.Vehicle>, IHaveCustomMappings
-    {
-        public int Id { get; set; }
-               
+    public class VehicleListingServiceModel : VehicleBasicListingServiceModel, IMapFrom<Data.Models.Vehicle>, IHaveCustomMappings
+    {        
         public string Model { get; set; }
-               
-        public string PlateNumber { get; set; }
         
         public string Description { get; set; }
                
@@ -20,8 +16,6 @@ namespace CarTrade.Services.Vehicle.Models
         public int TravelledDistance { get; set; }
                
         public int EndOilChange { get; set; }
-               
-        public string Vin { get; set; }
 
         public VehicleStatus Status { get; set; }
 
@@ -37,7 +31,7 @@ namespace CarTrade.Services.Vehicle.Models
 
         public string OwnerName { get; set; }
 
-        public int InsurancePolicyId { get; set; }
+        //public int InsurancePolicyId { get; set; }
 
         public void ConfigureMapping(Profile mapper)
         {

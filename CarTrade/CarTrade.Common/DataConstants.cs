@@ -20,5 +20,8 @@
         public const int DescriptionLength = 200;
 
         public const int PicUrlLength = 300;
+
+        public const int DaysBeforeItExpires = 30;
+        public const int RemainDistanceOilChange = 1000;
     }
 }

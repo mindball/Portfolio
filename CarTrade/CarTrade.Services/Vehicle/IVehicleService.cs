@@ -12,6 +12,12 @@ namespace CarTrade.Services.Vehicle
 
         Task EditVehicleAsync(int vehicleId, AddVehicleServiceModel vehicleModel);
 
+        Task<IEnumerable<VehicleListExpireInsurancePolicyServiceModel>> GetInsuranceExpireDataAsync(int branchId);
+
+        Task<IEnumerable<VehicleListExpireVignetteServiceModel>> GetVignetteExpireDataAsync(int branchId);
+
+        Task<IEnumerable<VehicleListingChangeOilServiceModel>> GetOilChangeExpireDataAsync(int branchId);  
+
         Task<TModel> GetByIdAsync<TModel>(int vehicleId) where TModel : class;
     }
 }
