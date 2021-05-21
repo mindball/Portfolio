@@ -147,11 +147,22 @@ namespace CarTrade.Services.InsurancePolicy
             return true;
         }
 
+        //TODO: test logic maybe is wrong to asign multiple insurance
+        /* Check vehicleId
+         * Expired
+         * TypeOfInsurance
+         * maybe and compare date with type insurance
+         */
         private async Task<bool> ExistTypeOfInsurancePolicyOnVehicle(int vehicleId, TypeInsurance insuranceType, bool? expire)
-            => await this.db.InsurancePolicies
-            .AnyAsync(i => 
-            i.VehicleId == vehicleId 
-            && i.TypeInsurance == insuranceType 
-            && i.Expired == false);
+        {
+            var result = await this.db.InsurancePolicies
+            .AnyAsync(i =>
+            i.VehicleId == vehicleId
+            && i.Expired == false
+            && i.TypeInsurance == insuranceType);
+            //&& (i.TypeInsurance == insuranceType || i.StartDate <= i.EndDate));
+
+            return result;
+        }
     }
 }

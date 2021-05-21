@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CarTrade.Services.Vehicle.Models
 {
-    public class VehicleListExpireVignetteServiceModel : VehicleBasicListingServiceModel
+    public class VehicleListExpireVignetteServiceModel : VehicleExpireBasicListingServiceModel
     {
         public DateTime ExpireDate { get; set; }
     }

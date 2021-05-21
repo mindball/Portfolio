@@ -2,7 +2,7 @@
 
 namespace CarTrade.Services.Vehicle.Models
 {
-    public class VehicleListingChangeOilServiceModel : VehicleBasicListingServiceModel
+    public class VehicleListingChangeOilServiceModel : VehicleExpireBasicListingServiceModel
     {   
         public int EndOilChange { get; set; }         
     }

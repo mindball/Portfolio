@@ -5,8 +5,14 @@ using System;
 
 namespace CarTrade.Services.Vehicle.Models
 {
-    public class VehicleListingServiceModel : VehicleBasicListingServiceModel, IMapFrom<Data.Models.Vehicle>, IHaveCustomMappings
-    {        
+    public class VehicleListingServiceModel : IMapFrom<Data.Models.Vehicle>, IHaveCustomMappings
+    {
+        public int Id { get; set; }
+
+        public string PlateNumber { get; set; }
+
+        public string Vin { get; set; }
+
         public string Model { get; set; }
         
         public string Description { get; set; }

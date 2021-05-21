@@ -1,11 +1,10 @@
-﻿using System;
+﻿using CarTrade.Services.InsurancePolicy.Models;
 using System.Collections.Generic;
-using System.Text;
 
 namespace CarTrade.Services.Vehicle.Models
 {
-    public class VehicleListExpireInsurancePolicyServiceModel : VehicleBasicListingServiceModel
+    public class VehicleListExpireInsurancePolicyServiceModel : VehicleExpireBasicListingServiceModel
     {
-        public IEnumerable<Data.Models.InsurancePolicy> InsurancePolicies { get; set; }
+        public IList<Data.Models.InsurancePolicy> InsurancePolicies { get; set; }
     }
 }

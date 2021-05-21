@@ -7,7 +7,7 @@ namespace CarTrade.Data.Models
 {
     public class Vignette
     {
-        [Required]
+        [Required]        
         public int Id { get; set; }
 
         [Required]

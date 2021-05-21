@@ -89,14 +89,14 @@ namespace CarTrade.Services.Vehicle
                         b.InsurancePolicies
                         .Any(i => i.EndDate > DateTime.UtcNow.AddYears(-DaysBeforeItExpires)))
                  .Select(v => new VehicleListExpireInsurancePolicyServiceModel
-                 {
-                     Id = v.Id,
+                 {                     
+                     VehicleId = v.Id,
                      PlateNumber = v.PlateNumber,
-                     Vin = v.Vin,
-                     //InsuranceId = v.InsurancePolicies.Select(i => i.Id)
+                     Vin = v.Vin,                     
                      InsurancePolicies = v.InsurancePolicies
-                                .Where(i => i.EndDate > DateTime.UtcNow.AddYears(-30))
+                                .Where(i => i.EndDate > DateTime.UtcNow.AddYears(-30))                                
                                 .Select(i => i)
+                                .ToList()
                  })
                  .ToListAsync();            
         
@@ -105,8 +105,8 @@ namespace CarTrade.Services.Vehicle
                  .Where(b => b.BranchId == branchId &&
                         b.Vignette.EndDate > DateTime.UtcNow.AddYears(-DaysBeforeItExpires))                        
                  .Select(v => new VehicleListExpireVignetteServiceModel
-                 {
-                     Id = v.Id,
+                 {                     
+                     VehicleId = v.Id,
                      PlateNumber = v.PlateNumber,
                      Vin = v.Vin,                     
                      ExpireDate = v.Vignette.EndDate
@@ -118,8 +118,8 @@ namespace CarTrade.Services.Vehicle
                 .Where(v => v.BranchId == branchId
                         && (v.TravelledDistance + RemainDistanceOilChange) >= v.EndOilChange)
                 .Select(v => new VehicleListingChangeOilServiceModel
-                {
-                    Id = v.Id,
+                {                    
+                    VehicleId = v.Id,
                     PlateNumber = v.PlateNumber,
                     Vin = v.Vin,
                     EndOilChange = v.EndOilChange

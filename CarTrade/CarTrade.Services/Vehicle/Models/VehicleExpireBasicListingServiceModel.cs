@@ -1,9 +1,10 @@
 ﻿
 namespace CarTrade.Services.Vehicle.Models
 {
-    public class VehicleBasicListingServiceModel
-    {
-        public int Id { get; set; }
+    public class VehicleExpireBasicListingServiceModel
+    {     
+        
+        public int VehicleId { get; set; }
 
         public string PlateNumber { get; set; }
 
