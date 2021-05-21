@@ -5,8 +5,10 @@ using CarTrade.Services.Companies;
 using CarTrade.Services.Vehicle;
 using CarTrade.Services.Vehicle.Models;
 using CarTrade.Web.Infrastructure.Extensions;
+using CarTrade.Web.Models.Home;
 using CarTrade.Web.Models.Vehicles;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using static CarTrade.Web.WebConstants;
@@ -117,6 +119,25 @@ namespace CarTrade.Web.Controllers
             await this.vehicleService.EditVehicleAsync(vehicleId, vehicleAddServiceModel);          
 
             this.TempData.AddSuccessMessage(string.Format(SuccessEditItemMessage, vehicleModel.PlateNumber));
+            return this.RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ListVehicles(IList<VehicleListExpireInsurancePolicyServiceModel> vehicles)
+        {
+            return this.RedirectToAction(nameof(Index));
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> ExpireVignettes(int branchId, IList<VehicleListExpireVignetteServiceModel> vehicles)
+        {
+            return this.RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ExpireOilChangeDistance(int branchId, IList<VehicleListingChangeOilServiceModel> vehicles)
+        {
             return this.RedirectToAction(nameof(Index));
         }
 

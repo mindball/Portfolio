@@ -1,20 +1,67 @@
-﻿@model IEnumerable<ListExpireDataForAllBranchesViewModel>
+﻿@model List<ListExpireDataForAllBranchesViewModel>
 @foreach (var branch in Model)
 {
     <div class="container">
         <div class="row justify-content-md-center">
             <div class="col-3">
                 <div class="list-group">
-                    <a href="#" class="list-group-item active bg-danger">
+                    <a asp-controller="Branches" asp-action="ListVehicles" asp-route-id="@branch.BranchId" class="list-group-item active bg-danger">
                         @branch.FullAddress
                     </a>
-                    <a href="#" class="list-group-item">Изтичащи винетки (@branch.VehiclesWithExpireVignettes.Count())</a>
-                    <a href="#" class="list-group-item">Изтичащи застраховки (@branch.VehiclesWithExpirePolicy.Count())</a>
-                    <a href="#" class="list-group-item">Смяна масло (@branch.VehiclesWithOilChangeDistance.Count())</a>
+                    <form asp-controller="Vehicles" asp-action="ListVehicles" class="list-group-item text-center" method="post">
+                        <div>
+                            <span class="categoryname">Изтичащи застраховки (@branch.VehiclesWithExpirePolicy.Count())</span>
+                            <input name="branchId" value="@branch.BranchId" type="hidden" />
+                            @for (int i = 0; i < branch.VehiclesWithExpirePolicy.Count(); i++)
+                            {
+                                <input name="[@i].PlateNumber" value="@branch.VehiclesWithExpirePolicy[i].PlateNumber" type="hidden" />
+                                <input name="[@i].Vin" value="@branch.VehiclesWithExpirePolicy[i].Vin" type="hidden" />
+                                <input name="[@i].VehicleId" value="@branch.VehiclesWithExpirePolicy[i].VehicleId" type="hidden" />
+                                @for (int j = 0; j < branch.VehiclesWithExpirePolicy[i].InsurancePolicies.Count(); j++)
+                                {
+                                    <input name="[@i].InsurancePolicies[@j].Id" value="@branch.VehiclesWithExpirePolicy[i].InsurancePolicies[j].Id" type="hidden" />
+                                    <input name="[@i].InsurancePolicies[@j].TypeInsurance" value="@branch.VehiclesWithExpirePolicy[i].InsurancePolicies[j].TypeInsurance" type="hidden" />
+                                    <input name="[@i].InsurancePolicies[@j].Expired" value="@branch.VehiclesWithExpirePolicy[i].InsurancePolicies[j].Expired" type="hidden" />
+                                    <input name="[@i].InsurancePolicies[@j].StartDate" value="@branch.VehiclesWithExpirePolicy[i].InsurancePolicies[j].StartDate" type="hidden" />
+                                    <input name="[@i].InsurancePolicies[@j].EndDate" value="@branch.VehiclesWithExpirePolicy[i].InsurancePolicies[j].EndDate" type="hidden" />
+                                    <input name="[@i].InsurancePolicies[@j].VehicleId" value="@branch.VehiclesWithExpirePolicy[i].InsurancePolicies[j].VehicleId" type="hidden" />
+                                    <input name="[@i].InsurancePolicies[@j].InsuranceCompanyId" value="@branch.VehiclesWithExpirePolicy[i].InsurancePolicies[j].InsuranceCompanyId" type="hidden" />
+                                }
+                            }
+                            <input type="submit" class="btn btn-info btn-sm" value="View">
+                        </div>
+                    </form>
+                    <form asp-controller="Vehicles" asp-action="ExpireVignettes" class="list-group-item text-center" method="post">
+                        <div>
+                            <span class="categoryname">Изтичащи Винетки (@branch.VehiclesWithExpireVignettes.Count())</span>
+                            <input name="branchId" value="@branch.BranchId" type="hidden" />
+                            @for (int i = 0; i < branch.VehiclesWithExpireVignettes.Count(); i++)
+                            {
+                                <input name="[@i].PlateNumber" value="@branch.VehiclesWithExpireVignettes[i].PlateNumber" type="hidden" />
+                                <input name="[@i].Vin" value="@branch.VehiclesWithExpireVignettes[i].Vin" type="hidden" />
+                                <input name="[@i].VehicleId" value="@branch.VehiclesWithExpireVignettes[i].VehicleId" type="hidden" />
+                                <input name="[@i].ExpireDate" value="@branch.VehiclesWithExpireVignettes[i].ExpireDate" type="hidden" />
+                            }
+                            <input type="submit" class="btn btn-info btn-sm" value="View">
+                        </div>
+                    </form>
+                    <form asp-controller="Vehicles" asp-action="ExpireOilChangeDistance" class="list-group-item text-center" method="post">
+                        <div>
+                            <span class="categoryname">Брой авт. смяна масло(@branch.VehiclesWithOilChangeDistance.Count())</span>
+                            <input name="branchId" value="@branch.BranchId" type="hidden" />
+                            @for (int i = 0; i < branch.VehiclesWithOilChangeDistance.Count(); i++)
+                            {
+                                <input name="[@i].PlateNumber" value="@branch.VehiclesWithOilChangeDistance[i].PlateNumber" type="hidden" />
+                                <input name="[@i].Vin" value="@branch.VehiclesWithOilChangeDistance[i].Vin" type="hidden" />
+                                <input name="[@i].VehicleId" value="@branch.VehiclesWithOilChangeDistance[i].VehicleId" type="hidden" />
+                                <input name="[@i].EndOilChange" value="@branch.VehiclesWithOilChangeDistance[i].EndOilChange" type="hidden" />                               
+                            }
+                            <input type="submit" class="btn btn-info btn-sm" value="View">
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
         <br />
     </div>
 }
-

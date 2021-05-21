@@ -44,20 +44,37 @@ namespace CarTrade.Web.Controllers
                 (
                     new ListExpireDataForAllBranchesViewModel
                     {
+                        BranchId = branch.Id,
                         FullAddress = branch.FullAddress,
                         VehiclesWithExpirePolicy =
-                            await this.vehicleService.GetInsuranceExpireDataAsync(branch.Id),
+                            (await this.vehicleService.GetInsuranceExpireDataAsync(branch.Id)).ToList(),
                         VehiclesWithExpireVignettes =
-                            await this.vehicleService.GetVignetteExpireDataAsync(branch.Id),
+                            (await this.vehicleService.GetVignetteExpireDataAsync(branch.Id)).ToList(),
                         VehiclesWithOilChangeDistance =
-                           await this.vehicleService.GetOilChangeExpireDataAsync(branch.Id)
+                           (await this.vehicleService.GetOilChangeExpireDataAsync(branch.Id)).ToList()
                     }
                 );
             }
 
             ViewData["NavMenuPage"] = "Index";
+            //var a = new List<VehicleExpireBasicListingViewModel>()
+            //{
+            //    new VehicleExpireBasicListingViewModel
+            //    {
+            //        PlateNumber = "1",
+            //        VehicleId = 1,
+            //        Vin = "1",
+            //    },
+            //    new VehicleExpireBasicListingViewModel
+            //    {
+            //        PlateNumber = "2",
+            //        VehicleId = 2,
+            //        Vin = "2",
+            //    }
+            //};
+
             return View(expireViewModel);
-        }
+        }        
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

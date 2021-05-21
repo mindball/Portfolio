@@ -28,6 +28,11 @@ namespace CarTrade.Web.Controllers
             });
         }
 
+        public async Task<IActionResult> ListVehicles([FromRoute(Name = "id")] int branchId)
+        {
+            return this.View();
+        }        
+
         public IActionResult Add()
             => this.View();
 
