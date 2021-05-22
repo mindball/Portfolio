@@ -29,6 +29,8 @@ namespace CarTrade.Data.Models
         [Required]
         public DateTime YearОfМanufacture { get; set; }
 
+       
+
         //Todo: Calculate  when Rent record (pickup + dropoff) miliageDistance has changed
         [Required]
         [Range(1, int.MaxValue)]
@@ -45,7 +47,10 @@ namespace CarTrade.Data.Models
 
         [Required]
         public VehicleStatus Status { get; set; }
-                
+
+        [Required]
+        public DateTime InspectionSafetyCheck { get; set; }
+
         public int BranchId { get; set; }
                
         public virtual Branch Branch { get; set; }
