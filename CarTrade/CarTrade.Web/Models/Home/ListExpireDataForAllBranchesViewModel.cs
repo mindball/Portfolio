@@ -15,5 +15,6 @@ namespace CarTrade.Web.Models.Home
         public IList<VehicleListExpireVignetteServiceModel> VehiclesWithExpireVignettes { get; set; }
 
         public IList<VehicleListingChangeOilServiceModel> VehiclesWithOilChangeDistance { get; set; }
+        public IList<VehicleListingInspectionSafetyCheckServiceModel> VehiclesWithInspectionExpire{ get; set; }
     }
 }

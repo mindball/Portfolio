@@ -51,27 +51,14 @@ namespace CarTrade.Web.Controllers
                         VehiclesWithExpireVignettes =
                             (await this.vehicleService.GetVignetteExpireDataAsync(branch.Id)).ToList(),
                         VehiclesWithOilChangeDistance =
-                           (await this.vehicleService.GetOilChangeExpireDataAsync(branch.Id)).ToList()
+                           (await this.vehicleService.GetOilChangeExpireDataAsync(branch.Id)).ToList(),
+                        VehiclesWithInspectionExpire = 
+                            (await this.vehicleService.GetInspectionSafetyCheckExpireDataAsync(branch.Id)).ToList()
                     }
                 );
             }
 
-            ViewData["NavMenuPage"] = "Index";
-            //var a = new List<VehicleExpireBasicListingViewModel>()
-            //{
-            //    new VehicleExpireBasicListingViewModel
-            //    {
-            //        PlateNumber = "1",
-            //        VehicleId = 1,
-            //        Vin = "1",
-            //    },
-            //    new VehicleExpireBasicListingViewModel
-            //    {
-            //        PlateNumber = "2",
-            //        VehicleId = 2,
-            //        Vin = "2",
-            //    }
-            //};
+            //ViewData["NavMenuPage"] = "Index";            
 
             return View(expireViewModel);
         }        

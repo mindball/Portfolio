@@ -47,6 +47,12 @@ namespace CarTrade.Web.Models.Vehicles
         public string Vin { get; set; }
 
         [Required]
+        [Display(Name = "Inspection safety check")]
+        [DataType(DataType.Date)]
+        public DateTime InspectionSafetyCheck { get; set; }
+
+        [Required]
+        [Display(Name = "Status")]
         public VehicleStatus Status { get; set; }
 
         [Required]

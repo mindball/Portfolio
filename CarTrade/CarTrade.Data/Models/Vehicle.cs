@@ -27,9 +27,7 @@ namespace CarTrade.Data.Models
         public string Description { get; set; }
 
         [Required]
-        public DateTime YearОfМanufacture { get; set; }
-
-       
+        public DateTime YearОfМanufacture { get; set; }       
 
         //Todo: Calculate  when Rent record (pickup + dropoff) miliageDistance has changed
         [Required]

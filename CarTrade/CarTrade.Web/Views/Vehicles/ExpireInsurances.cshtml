@@ -1,0 +1,30 @@
+﻿@model IList<VehicleListExpireInsurancePolicyServiceModel>
+
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Vin</th>
+            <th>Plate number</th>
+            <th>Type Insurance</th>
+            <th>Expire date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var vehicle in Model)
+        {
+            @foreach (var insurance in vehicle.InsurancePolicies)
+            {
+                <tr>
+                    <td>@vehicle.Vin</td>
+                    <td>@vehicle.PlateNumber</td>
+                    <td>@insurance.TypeInsurance</td>
+                    <td>@insurance.EndDate</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+

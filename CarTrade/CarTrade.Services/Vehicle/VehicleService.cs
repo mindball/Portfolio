@@ -86,14 +86,14 @@ namespace CarTrade.Services.Vehicle
             => await this.db.Vehicles
                  .Where(b => b.BranchId == branchId &&
                         b.InsurancePolicies
-                        .Any(i => i.EndDate > DateTime.UtcNow.AddYears(-DaysBeforeItExpires)))
+                        .Any(i => i.EndDate <= DateTime.UtcNow.AddDays(DaysBeforeItExpires)))
                  .Select(v => new VehicleListExpireInsurancePolicyServiceModel
                  {                     
                      VehicleId = v.Id,
                      PlateNumber = v.PlateNumber,
                      Vin = v.Vin,                     
                      InsurancePolicies = v.InsurancePolicies
-                                .Where(i => i.EndDate > DateTime.UtcNow.AddYears(-30))                                
+                                .Where(i => i.EndDate <= DateTime.UtcNow.AddDays(DaysBeforeItExpires))                                
                                 .Select(i => i)
                                 .ToList()
                  })
@@ -102,7 +102,7 @@ namespace CarTrade.Services.Vehicle
         public async Task<IEnumerable<VehicleListExpireVignetteServiceModel>> GetVignetteExpireDataAsync(int branchId)
         => await this.db.Vehicles
                  .Where(b => b.BranchId == branchId &&
-                        b.Vignette.EndDate > DateTime.UtcNow.AddYears(-DaysBeforeItExpires))                        
+                        b.Vignette.EndDate <= DateTime.UtcNow.AddDays(DaysBeforeItExpires))                        
                  .Select(v => new VehicleListExpireVignetteServiceModel
                  {                     
                      VehicleId = v.Id,
@@ -126,17 +126,17 @@ namespace CarTrade.Services.Vehicle
                 .ToListAsync();
 
         public async Task<IEnumerable<VehicleListingInspectionSafetyCheckServiceModel>> GetInspectionSafetyCheckExpireDataAsync(int branchId)
-            => await this.db.Vehicles
-                .Where(v => v.BranchId == branchId
-                        && (v.InspectionSafetyCheck >= DateTime.UtcNow.AddDays(DaysBeforeItExpires)))
-                .Select(v => new VehicleListingInspectionSafetyCheckServiceModel
-                {
-                    VehicleId = v.Id,
-                    PlateNumber = v.PlateNumber,
-                    Vin = v.Vin,
-                    InspectionSafetyCheck = v.InspectionSafetyCheck
-                })
-                .ToListAsync();
+        => await this.db.Vehicles
+            .Where(v => v.BranchId == branchId
+                    && (v.InspectionSafetyCheck <= DateTime.UtcNow.AddDays(DaysBeforeItExpires)))
+            .Select(v => new VehicleListingInspectionSafetyCheckServiceModel
+            {
+                VehicleId = v.Id,
+                PlateNumber = v.PlateNumber,
+                Vin = v.Vin,
+                InspectionSafetyCheck = v.InspectionSafetyCheck
+            })
+            .ToListAsync();
 
         private async Task<bool> ValidateVehicleServiceModelAsync(string plateNumber, 
             string vin, 

@@ -63,6 +63,12 @@
                 <span asp-validation-for="EndOilChange" class="text-danger"></span>
             </div>
             <div class="form-group col-md-6">
+                <label asp-for="InspectionSafetyCheck"></label>
+                <input asp-for="InspectionSafetyCheck" class="form-control" />
+                <span asp-validation-for="InspectionSafetyCheck" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="Status"></label>
                 <select asp-for="Status" asp-items="@status" class="form-control" aria-label="Default select example">
                     <option selected>Choose status</option>
                 </select>

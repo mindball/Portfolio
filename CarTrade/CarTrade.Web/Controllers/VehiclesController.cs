@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CarTrade.Services.Branches;
+using CarTrade.Services.Branches.Models;
 using CarTrade.Services.Brand;
 using CarTrade.Services.Companies;
 using CarTrade.Services.Vehicle;
@@ -123,9 +124,22 @@ namespace CarTrade.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ListVehicles(IList<VehicleListExpireInsurancePolicyServiceModel> vehicles)
+        public IActionResult ExpireInsurances(string branchFullAddress, IList<VehicleListExpireInsurancePolicyServiceModel> vehicles)
         {
-            return this.RedirectToAction(nameof(Index));
+            if(branchFullAddress == null || vehicles == null)
+            {
+                return this.BadRequest();
+            }
+
+            var vehiclesWithExprireData = new ListExpireDataForAllBranchesViewModel
+            {
+                FullAddress = branchFullAddress,
+                VehiclesWithExpirePolicy = vehicles
+            };
+
+            this.ViewData["Title"] = branchFullAddress;
+
+            return this.View(vehiclesWithExprireData.VehiclesWithExpirePolicy);
         }
 
 
@@ -137,6 +151,12 @@ namespace CarTrade.Web.Controllers
 
         [HttpPost]
         public async Task<IActionResult> ExpireOilChangeDistance(int branchId, IList<VehicleListingChangeOilServiceModel> vehicles)
+        {
+            return this.RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ExpireInspectionSafetyCheck(int branchId, IList<VehicleListingInspectionSafetyCheckServiceModel> vehicles)
         {
             return this.RedirectToAction(nameof(Index));
         }
