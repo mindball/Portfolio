@@ -48,8 +48,7 @@ namespace CarTrade.Services.Vehicle
             var newVehicle = this.mapper.Map<Data.Models.Vehicle>(vehicleModel);
 
                 await this.db.Vehicles.AddAsync(newVehicle);
-                await this.db.SaveChangesAsync();           
-                    
+                await this.db.SaveChangesAsync();                    
         }
 
         public async Task EditVehicleAsync(int vehicleId, AddVehicleServiceModel vehicleModel)
@@ -123,6 +122,19 @@ namespace CarTrade.Services.Vehicle
                     PlateNumber = v.PlateNumber,
                     Vin = v.Vin,
                     EndOilChange = v.EndOilChange
+                })
+                .ToListAsync();
+
+        public async Task<IEnumerable<VehicleListingInspectionSafetyCheckServiceModel>> GetInspectionSafetyCheckExpireDataAsync(int branchId)
+            => await this.db.Vehicles
+                .Where(v => v.BranchId == branchId
+                        && (v.InspectionSafetyCheck >= DateTime.UtcNow.AddDays(DaysBeforeItExpires)))
+                .Select(v => new VehicleListingInspectionSafetyCheckServiceModel
+                {
+                    VehicleId = v.Id,
+                    PlateNumber = v.PlateNumber,
+                    Vin = v.Vin,
+                    InspectionSafetyCheck = v.InspectionSafetyCheck
                 })
                 .ToListAsync();
 

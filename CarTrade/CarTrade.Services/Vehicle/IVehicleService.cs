@@ -16,7 +16,9 @@ namespace CarTrade.Services.Vehicle
 
         Task<IEnumerable<VehicleListExpireVignetteServiceModel>> GetVignetteExpireDataAsync(int branchId);
 
-        Task<IEnumerable<VehicleListingChangeOilServiceModel>> GetOilChangeExpireDataAsync(int branchId);  
+        Task<IEnumerable<VehicleListingChangeOilServiceModel>> GetOilChangeExpireDataAsync(int branchId);
+
+        Task<IEnumerable<VehicleListingInspectionSafetyCheckServiceModel>> GetInspectionSafetyCheckExpireDataAsync(int branchId);
 
         Task<TModel> GetByIdAsync<TModel>(int vehicleId) where TModel : class;
     }

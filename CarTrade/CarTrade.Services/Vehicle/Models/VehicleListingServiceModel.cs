@@ -23,6 +23,8 @@ namespace CarTrade.Services.Vehicle.Models
                
         public int EndOilChange { get; set; }
 
+        public DateTime InspectionSafetyCheck { get; set; }
+
         public VehicleStatus Status { get; set; }
 
         public int BranchId { get; set; }        

@@ -39,6 +39,9 @@ namespace CarTrade.Services.Vehicle.Models
         public string Vin { get; set; }
 
         [Required]
+        public DateTime InspectionSafetyCheck { get; set; }
+
+        [Required]
         public VehicleStatus Status { get; set; }
 
         [Required]
