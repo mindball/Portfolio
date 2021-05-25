@@ -1,5 +1,7 @@
-﻿@model IList<VehicleListExpireInsurancePolicyServiceModel>
-
+﻿@model ListExpireDataForAllBranchesViewModel
+@{
+    ViewData["Title"] = Model.FullAddress + " " + Model.TypeOfExpire;
+}
 
 <h2>@ViewData["Title"]</h2>
 
@@ -13,7 +15,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var vehicle in Model)
+        @foreach (var vehicle in Model.VehiclesWithExpirePolicy)
         {
             @foreach (var insurance in vehicle.InsurancePolicies)
             {
@@ -27,4 +29,3 @@
         }
     </tbody>
 </table>
-

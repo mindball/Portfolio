@@ -1,0 +1,27 @@
+﻿@model ListExpireDataForAllBranchesViewModel
+
+@{
+    ViewData["Title"] = Model.FullAddress + " " + Model.TypeOfExpire;
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Vin</th>
+            <th>Plate number</th>
+            <th>Expire date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var vehicle in Model.VehiclesWithExpireVignettes)
+        {
+            <tr>
+                <td>@vehicle.Vin</td>
+                <td>@vehicle.PlateNumber</td>
+                <td>@vehicle.ExpireDate</td>
+            </tr>
+        }
+    </tbody>
+</table>

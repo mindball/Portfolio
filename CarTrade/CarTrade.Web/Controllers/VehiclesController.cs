@@ -23,6 +23,10 @@ namespace CarTrade.Web.Controllers
         private readonly IBranchesService branchService;
         private readonly ICompaniesService employeerService;
         private readonly IBrandService brandService;
+        private const string InsuranceType = "expire insurances";
+        private const string VignetteType = "expire vignettes";
+        private const string InspectionCheck = "expire inspection check";
+        private const string OilCheck = "expire oil distance";
 
         public VehiclesController(IVehicleService vehicleService,
             IMapper mapper, IBranchesService branchService,
@@ -48,12 +52,7 @@ namespace CarTrade.Web.Controllers
             var collectCompanyDetails = await this.FillCollectCompanyDetails();
 
             var newVehicle = new VehicleFormViewModel();
-            newVehicle.CollectCompanyDetails = collectCompanyDetails;
-            //{
-            //    CollectCompanyDetails. = collectCompanyDetails.Branches,
-            //    CollectCompanyDetails.Brands = collectCompanyDetails.Brands,
-            //    CollectCompanyDetails.Employers = collectCompanyDetails.Employers
-            //};
+            newVehicle.CollectCompanyDetails = collectCompanyDetails;            
 
             return this.View(newVehicle);
         }
@@ -134,31 +133,67 @@ namespace CarTrade.Web.Controllers
             var vehiclesWithExprireData = new ListExpireDataForAllBranchesViewModel
             {
                 FullAddress = branchFullAddress,
-                VehiclesWithExpirePolicy = vehicles
+                VehiclesWithExpirePolicy = vehicles,      
+                TypeOfExpire = InsuranceType
+            };           
+
+            return this.View(vehiclesWithExprireData);
+        }
+
+        [HttpPost]
+        public IActionResult ExpireVignettes(string branchFullAddress, IList<VehicleListExpireVignetteServiceModel> vehicles)
+        {
+
+            if (branchFullAddress == null || vehicles == null)
+            {
+                return this.BadRequest();
+            }
+
+            var vehiclesWithExprireData = new ListExpireDataForAllBranchesViewModel
+            {
+                FullAddress = branchFullAddress,
+                VehiclesWithExpireVignettes = vehicles,
+                TypeOfExpire = VignetteType
+            };           
+
+            return this.View(vehiclesWithExprireData);
+        }
+
+        [HttpPost]
+        public IActionResult ExpireOilChangeDistance(string branchFullAddress, IList<VehicleListingChangeOilServiceModel> vehicles)
+        {
+            if (branchFullAddress == null || vehicles == null)
+            {
+                return this.BadRequest();
+            }
+
+            var vehiclesWithExprireData = new ListExpireDataForAllBranchesViewModel
+            {
+                FullAddress = branchFullAddress,
+                VehiclesWithOilChangeDistance = vehicles,
+                TypeOfExpire = OilCheck
             };
 
-            this.ViewData["Title"] = branchFullAddress;
-
-            return this.View(vehiclesWithExprireData.VehiclesWithExpirePolicy);
-        }
-
-
-        [HttpPost]
-        public async Task<IActionResult> ExpireVignettes(int branchId, IList<VehicleListExpireVignetteServiceModel> vehicles)
-        {
-            return this.RedirectToAction(nameof(Index));
+            return this.View(vehiclesWithExprireData);
         }
 
         [HttpPost]
-        public async Task<IActionResult> ExpireOilChangeDistance(int branchId, IList<VehicleListingChangeOilServiceModel> vehicles)
+        public IActionResult ExpireInspectionSafetyCheck(string branchFullAddress, IList<VehicleListingInspectionSafetyCheckServiceModel> vehicles)
         {
-            return this.RedirectToAction(nameof(Index));
-        }
 
-        [HttpPost]
-        public async Task<IActionResult> ExpireInspectionSafetyCheck(int branchId, IList<VehicleListingInspectionSafetyCheckServiceModel> vehicles)
-        {
-            return this.RedirectToAction(nameof(Index));
+            if (branchFullAddress == null || vehicles == null)
+            {
+                return this.BadRequest();
+            }
+
+            var vehiclesWithExprireData = new ListExpireDataForAllBranchesViewModel
+            {
+                FullAddress = branchFullAddress,
+                VehiclesWithInspectionExpire = vehicles,
+                TypeOfExpire = InspectionCheck
+            };
+
+            return this.View(vehiclesWithExprireData);
         }
 
         private async Task<CollectCompanyDetailsViewModel> FillCollectCompanyDetails()
