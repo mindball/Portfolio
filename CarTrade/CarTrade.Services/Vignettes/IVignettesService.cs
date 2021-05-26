@@ -13,5 +13,7 @@ namespace CarTrade.Services.Vignettes
         Task EditAsync(int vignetteId, VignetteFormServiceModel vignetteFormModel);
 
         Task<TModel> GetByIdAsync<TModel>(int vignetteId) where TModel : class;
+
+        Task<IEnumerable<TModel>> GetVignetteByVehicleIdAsync<TModel>(int vehicleId) where TModel : class;
     }
 }

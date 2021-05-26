@@ -7,6 +7,7 @@ namespace CarTrade.Data.Models
 {
     public class Vignette
     {
+        [Key]
         [Required]        
         public int Id { get; set; }
 
@@ -15,6 +16,8 @@ namespace CarTrade.Data.Models
 
         [Required]
         public DateTime EndDate { get; set; }
+
+        public bool? Expired { get; set; }
 
         public int VehicleId { get; set; }
 

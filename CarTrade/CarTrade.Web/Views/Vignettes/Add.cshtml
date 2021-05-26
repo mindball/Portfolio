@@ -1,0 +1,21 @@
+﻿@model VignetteFormViewModel
+
+<div class="my-4">
+    <form method="post">
+        <hr class="my-4" />
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-row">           
+            <div class="form-group col-md-6">
+                <label asp-for="StartDate"></label>
+                <input asp-for="StartDate" class="form-control" />
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="EndDate"></label>
+                <input asp-for="EndDate" class="form-control" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+            <input asp-for="VehicleId" type="hidden" />
+        </div>
+        <button type="submit" class="btn btn-primary">Save vignette</button>
+    </form>
+</div>

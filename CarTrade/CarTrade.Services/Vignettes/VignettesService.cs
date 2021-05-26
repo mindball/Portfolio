@@ -33,7 +33,7 @@ namespace CarTrade.Services.Vignettes
             //TODO: test exist vignette
             var existVignette = await this.db.Vignettes
                 .AnyAsync(v => v.VehicleId == vehicleId && !(v.EndDate >= DateTime.UtcNow));
-            if(!existVignette)
+            if(existVignette)
             {
                 throw new ArgumentException("vignette has not expire on this vehicle");
             }
@@ -43,7 +43,12 @@ namespace CarTrade.Services.Vignettes
                 throw new ArgumentException("start date must be equal or small than end date");
             }
 
-            var newVignette = this.mapper.Map<VignetteFormServiceModel, Data.Models.Vignette>(vignetteFormModel);
+            var newVignette = this.mapper
+                .Map<VignetteFormServiceModel, Data.Models.Vignette>(vignetteFormModel, opt => 
+                    opt.ConfigureMap()
+                    .ForMember(m => m.Id, opt => opt.Ignore())
+                    .ForMember(m => m.Vehicle, opt => opt.Ignore()));
+
             await this.db.Vignettes.AddAsync(newVignette);
             await this.db.SaveChangesAsync();
         }
@@ -76,8 +81,24 @@ namespace CarTrade.Services.Vignettes
                 throw new ArgumentException("not exist vignette");
             }
 
-            return await this.db.Vignettes.Where(v => v.Id == vignetteId).ProjectTo<TModel>().FirstOrDefaultAsync();
+            return await this.db.Vignettes
+                .Where(v => v.Id == vignetteId)
+                .ProjectTo<TModel>()
+                .FirstOrDefaultAsync();
         }
-                
+
+        public async Task<IEnumerable<TModel>> GetVignetteByVehicleIdAsync<TModel>(int vehicleId) where TModel : class
+        {
+            var vehicle = await this.db.Vignettes.AnyAsync(v => v.VehicleId == vehicleId);
+            if (!vehicle)
+            {
+                throw new ArgumentException("not exist vehicle");
+            }
+
+            return await this.db.Vignettes
+                .Where(v => v.VehicleId == vehicleId)
+                .ProjectTo<TModel>()
+                .ToListAsync();
+        }
     }
 }

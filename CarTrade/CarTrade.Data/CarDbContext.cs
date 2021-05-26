@@ -61,10 +61,10 @@ namespace CarTrade.Data
             builder.Entity<VehiclesSpareParts>()
                 .HasKey(c => new { c.SparePartId, c.VehicleId });
 
-            builder.Entity<Vehicle>()
-                .HasOne(v => v.Vignette)
-                .WithOne(v => v.Vehicle)
-                .HasForeignKey<Vignette>(v => v.VehicleId);
+            //builder.Entity<Vehicle>()
+            //    .HasOne(v => v.Vignette)
+            //    .WithOne(v => v.Vehicle)
+            //    .HasForeignKey<Vignette>(v => v.VehicleId);
 
             //    builder.Entity<Rental>()
             //       .HasOne(c => c.Driver)

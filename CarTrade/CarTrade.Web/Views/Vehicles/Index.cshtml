@@ -4,6 +4,7 @@
 }
 
 <h2>@ViewData["Title"]</h2>
+
 <div>
     <a href="/vehicles/add" class="btn btn-primary">Add car</a>
 </div>
@@ -34,10 +35,11 @@
             <th>@vehicle.EndOilChange</th>           
             <th>@vehicle.InspectionSafetyCheck</th>           
             <th>@vehicle.Status</th>           
-            <th>                
-                <a href="/vehicles/edit/@vehicle.Id" class="btn btn-info btn-sm">Edit</a> 
-                <a href="/vehicles/delete/@vehicle.Id" class="btn btn-danger btn-sm">Remove</a>                
-                <a href="/insurancespolices/details/@vehicle.Id" class="btn btn-info btn-sm">insurance</a>                
+            <th>
+                <a href="/vehicles/edit/@vehicle.Id" class="btn btn-info btn-sm">Edit</a>
+                <a href="/vehicles/delete/@vehicle.Id" class="btn btn-danger btn-sm">Remove</a>
+                <a href="/insurancespolices/details/@vehicle.Id" class="btn btn-info btn-sm">insurance</a>
+                <a href="/vignettes/ListVehicleVignetes/@vehicle.Id" class="btn btn-info btn-sm">add vignette</a>
             </th>
         </tr>
     }

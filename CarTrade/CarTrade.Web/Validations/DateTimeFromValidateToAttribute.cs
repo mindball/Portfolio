@@ -28,7 +28,6 @@ namespace CarTrade.Web.Validations
             }
 
             return new ValidationResult("Later date  is equal or less than Start date");
-
         }
     }
 }

@@ -97,18 +97,18 @@ namespace CarTrade.Services.Vehicle
                                 .Select(i => i)
                                 .ToList()
                  })
-                 .ToListAsync();            
-        
+                 .ToListAsync();
+
         public async Task<IEnumerable<VehicleListExpireVignetteServiceModel>> GetVignetteExpireDataAsync(int branchId)
         => await this.db.Vehicles
-                 .Where(b => b.BranchId == branchId &&
-                        b.Vignette.EndDate <= DateTime.UtcNow.AddDays(DaysBeforeItExpires))                        
+                 .Where(v => v.BranchId == branchId
+                    && v.Vignettes.Any(vg => vg.VehicleId == v.Id && vg.EndDate <= DateTime.UtcNow.AddDays(DaysBeforeItExpires)))                        
                  .Select(v => new VehicleListExpireVignetteServiceModel
-                 {                     
+                 {
                      VehicleId = v.Id,
                      PlateNumber = v.PlateNumber,
-                     Vin = v.Vin,                     
-                     ExpireDate = v.Vignette.EndDate
+                     Vin = v.Vin,
+                     ExpireDate = v.Vignettes.Where(vh => vh.VehicleId == v.Id).Select(vg => vg.EndDate).FirstOrDefault()
                  })
                  .ToListAsync();
 

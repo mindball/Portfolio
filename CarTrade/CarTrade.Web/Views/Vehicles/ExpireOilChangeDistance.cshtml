@@ -12,6 +12,7 @@
             <th>Vin</th>
             <th>Plate number</th>
             <th>Expire distance</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -21,6 +22,9 @@
                 <td>@vehicle.Vin</td>
                 <td>@vehicle.PlateNumber</td>
                 <td>@vehicle.EndOilChange</td>
+                <td>
+                    <a href="/vehicles/edit/@vehicle.VehicleId" class="btn btn-info btn-sm">Edit</a>
+                </td>
             </tr>
         }
     </tbody>
