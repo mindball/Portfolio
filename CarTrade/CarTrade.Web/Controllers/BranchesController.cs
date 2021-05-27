@@ -1,4 +1,5 @@
 ﻿using CarTrade.Services.Branches;
+using CarTrade.Services.Branches.Models;
 using CarTrade.Web.Infrastructure.Extensions;
 using CarTrade.Web.Models.Branches;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +31,15 @@ namespace CarTrade.Web.Controllers
 
         public async Task<IActionResult> ListVehicles([FromRoute(Name = "id")] int branchId)
         {
-            return this.View();
+            var branch = await this.branchesService.GetByIdAsync<BranchVehiclesListingServiceModel>(branchId);
+            if(branch == null)
+            {
+                return this.BadRequest();
+            }
+
+            var allVehicle = await this.branchesService.GetAllVehicleByBranchAsync(branchId);
+
+            return this.View(allVehicle);
         }        
 
         public IActionResult Add()
@@ -56,7 +65,7 @@ namespace CarTrade.Web.Controllers
 
         public async Task<IActionResult> Edit([FromRoute(Name = "id")] int branchId)
         {
-            var branch = await this.branchesService.GetByIdAsync(branchId);
+            var branch = await this.branchesService.GetByIdAsync<BranchDetailViewModel> (branchId);
             if (branch == null) return this.BadRequest();
 
             var editBranch = new BranchDetailViewModel

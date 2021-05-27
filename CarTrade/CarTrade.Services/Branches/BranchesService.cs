@@ -2,6 +2,7 @@
 using CarTrade.Data;
 using CarTrade.Data.Models;
 using CarTrade.Services.Branches.Models;
+using CarTrade.Services.Vehicle.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace CarTrade.Services.Branches
 
         public async Task AddBranchAsync(string town, string address)
         {
-            if (town == null && address == null) return;                   
+            if (town == null && address == null) return;
 
             var newBranch = new Branch
             {
@@ -42,22 +43,39 @@ namespace CarTrade.Services.Branches
         {
             var branchToEdit = await this.db.Branches.FirstOrDefaultAsync(b => b.Id == id);
 
-            if (branchToEdit == null || 
+            if (branchToEdit == null ||
                 (town == null && address == null))
             {
                 return;
             }
-           
+
             branchToEdit.Town = town;
             branchToEdit.Address = address;
 
             await this.db.SaveChangesAsync();
         }
 
-        public async Task<BranchListingServiceModel> GetByIdAsync(int id)
+        public async Task<TModel> GetByIdAsync<TModel>(int id)
             => await this.db.Branches
                 .Where(b => b.Id == id)
-                .ProjectTo<BranchListingServiceModel>()
+                .ProjectTo<TModel>()
                 .FirstOrDefaultAsync();
+
+        public async Task<BranchVehiclesListingServiceModel> GetAllVehicleByBranchAsync(int id)
+            => await this.db.Branches.Where(b => b.Id == id)
+                        .Select(b => new BranchVehiclesListingServiceModel
+                        {
+                            FullAddress = string.Join(' ', b.Town, b.Address),
+                            AllVehicles = b.Vehicles
+                                    .Where(v => v.BranchId == b.Id)
+                                    .Select(v => new VehicleBasicListingServiceModel
+                                    {
+                                        Id = v.Id,
+                                        Model = v.Model,
+                                        PlateNumber = v.PlateNumber,
+                                        Vin = v.Vin
+                                    }).ToList()
+                        }).FirstOrDefaultAsync();
+       
     }
 }

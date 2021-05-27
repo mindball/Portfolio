@@ -1,0 +1,26 @@
+﻿@model BranchVehiclesListingServiceModel
+@{ 
+    ViewData["Title"] = "Vehicles " + Model.FullAddress;
+} 
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>Model</th>
+        <th>Vin</th>
+        <th>Plate number</th>
+        <th></th>
+    </tr>
+    @foreach (var vehicle in Model.AllVehicles)
+    {
+        <tr>
+            <th>@vehicle.Model</th>
+            <th>@vehicle.Vin</th>
+            <th>@vehicle.PlateNumber</th>            
+            <th>
+                <a href="/vehicles/edit/@vehicle.Id" class="btn btn-secondary">Edit</a> 
+            </th>
+        </tr>
+    }
+</table>

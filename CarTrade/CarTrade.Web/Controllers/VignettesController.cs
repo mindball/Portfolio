@@ -38,6 +38,24 @@ namespace CarTrade.Web.Controllers
                         }
             );
 
+        public async Task<IActionResult> ListVehicleVignetes([FromRoute(Name = "id")] int vehicleId)
+        {
+            var vehicleVignettes = await this.vignettesService
+                    .GetVignetteByVehicleIdAsync<VignetteListingServiceModel>(vehicleId);
+
+            var vehicleVignettesModel = new VignetteListingViewModel
+            {
+                AllVignettes = vehicleVignettes.OrderByDescending(vg => vg.EndDate)
+            };
+
+            return this.View(vehicleVignettesModel);
+        }
+
+        public async Task<IActionResult> ListBranchVignetes([FromRoute(Name = "id")] int branchId)
+        {
+            return this.View();
+        }
+
         public async Task<IActionResult> Add([FromRoute(Name = "id")]int vehicleId)
         {
             //var vehicleVignette = (await this.vignettesService
@@ -102,19 +120,6 @@ namespace CarTrade.Web.Controllers
         public async Task<IActionResult> Edit([FromRoute(Name = "id")] int vignetteId)
         {
             return this.View();
-        }
-
-        public async Task<IActionResult> ListVehicleVignetes([FromRoute(Name = "id")] int vehicleId)
-        {
-            var vehicleVignettes = await this.vignettesService
-                    .GetVignetteByVehicleIdAsync<VignetteListingServiceModel>(vehicleId);
-
-            var vehicleVignettesModel = new VignetteListingViewModel
-            {
-                AllVignettes = vehicleVignettes.OrderByDescending(vg => vg.EndDate)
-            };
-
-            return this.View(vehicleVignettesModel);
         }
     }
 }

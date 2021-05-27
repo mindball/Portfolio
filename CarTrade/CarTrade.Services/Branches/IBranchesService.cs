@@ -10,10 +10,11 @@ namespace CarTrade.Services.Branches
 
         Task AddBranchAsync(string town, string address);
 
-        Task<BranchListingServiceModel> GetByIdAsync(int id);
+        Task<TModel> GetByIdAsync<TModel>(int id);
 
-        Task EditAsync(int id, string town, string address);        
+        Task EditAsync(int id, string town, string address);
 
         //TODO: Check if Branch exist by name adress.
+        Task<BranchVehiclesListingServiceModel> GetAllVehicleByBranchAsync(int id);
     }
 }
