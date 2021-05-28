@@ -15,7 +15,7 @@ namespace CarTrade.Services.InsurancePolicy.Models
         
         public DateTime StartDate { get; set; }
 
-        public bool? Expired { get; set; }
+        public bool Expired { get; set; }
 
         public DateTime EndDate { get; set; }
 

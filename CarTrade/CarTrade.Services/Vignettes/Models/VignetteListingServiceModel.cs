@@ -18,6 +18,8 @@ namespace CarTrade.Services.Vignettes.Models
        
         public DateTime EndDate { get; set; }
 
+        public bool Expired { get; set; }
+
         public void ConfigureMapping(Profile mapper)
         {
             mapper.CreateMap<Data.Models.Vignette, VignetteListingServiceModel>()

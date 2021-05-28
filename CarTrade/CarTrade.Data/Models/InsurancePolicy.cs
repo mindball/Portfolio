@@ -20,7 +20,7 @@ namespace CarTrade.Data.Models
         [Required]
         public DateTime EndDate { get; set; }
                 
-        public bool? Expired { get; set; }
+        public bool Expired { get; set; }
 
         public int InsuranceCompanyId { get; set; }
 

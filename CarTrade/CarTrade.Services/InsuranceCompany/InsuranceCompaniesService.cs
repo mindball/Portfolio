@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 
 namespace CarTrade.Services.InsuranceCompany
 {
+
+    //TODO: be consistently  - throw exceptions
     public class InsuranceCompaniesService : IInsuranceCompaniesService
     {
         private readonly CarDbContext db;
@@ -23,7 +25,7 @@ namespace CarTrade.Services.InsuranceCompany
         {
             if (name == null
                 || this.db.InsuranceCompanies
-                .Any(i => i.Name == name)) return;
+                .Any(i => i.Name == name)) throw new ArgumentException($"name must not empty or  exist company");           
 
             var newInsuranceCompany = new Data.Models.InsuranceCompany { Name = name };
             await this.db.InsuranceCompanies.AddAsync(newInsuranceCompany);
@@ -61,6 +63,13 @@ namespace CarTrade.Services.InsuranceCompany
             }
 
             return policy;           
+        }
+
+        private bool ExistInsurancePolicy()
+        {
+
+
+            return false;
         }
     }
 }

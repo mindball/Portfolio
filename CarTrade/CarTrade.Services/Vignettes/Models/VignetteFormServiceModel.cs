@@ -14,6 +14,8 @@ namespace CarTrade.Services.Vignettes.Models
         public DateTime EndDate { get; set; }
 
         [Required]
-        public int VehicleId { get; set; }       
+        public int VehicleId { get; set; }
+
+        public bool Expired { get; set; }
     }
 }

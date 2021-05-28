@@ -5,6 +5,8 @@ namespace CarTrade.Web.Models.Vignettes
 {
     public class VignetteListingViewModel
     {
+        public int VehicleId { get; set; }
+
         public IEnumerable<VignetteListingServiceModel> AllVignettes { get; set; }
     }
 }

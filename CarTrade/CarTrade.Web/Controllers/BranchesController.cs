@@ -3,9 +3,6 @@ using CarTrade.Services.Branches.Models;
 using CarTrade.Web.Infrastructure.Extensions;
 using CarTrade.Web.Models.Branches;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 using static CarTrade.Web.WebConstants;

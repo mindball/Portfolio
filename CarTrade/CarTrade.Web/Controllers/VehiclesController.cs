@@ -93,7 +93,7 @@ namespace CarTrade.Web.Controllers
 
             var editVehicle = this.mapper
                 .Map<AddVehicleServiceModel, VehicleFormViewModel>(vehicle, opts => 
-                    opts.ConfigureMap()
+                    opts.ConfigureMap()                    
                     .ForMember(a => a.CollectCompanyDetails, opt => 
                         opt.Ignore()));
 

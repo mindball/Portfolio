@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace CarTrade.Services.InsurancePolicy
 {
+    //TODO: be consistently  - throw exceptions
     public class InsurancesPoliciesService : IInsurancesPoliciesService
     {
         private readonly CarDbContext db;
@@ -37,8 +38,7 @@ namespace CarTrade.Services.InsurancePolicy
 
             if(await ExistTypeOfInsurancePolicyOnVehicle(
                 vehicleId, 
-                newPolicy.TypeInsurance, 
-                newPolicy.Expired))
+                newPolicy.TypeInsurance))
             {
                 throw new ArgumentException("This policy exist and it is active");
             }
@@ -71,21 +71,6 @@ namespace CarTrade.Services.InsurancePolicy
             {
                 throw new ArgumentException("Start date must be small than end date");
             }
-
-
-            //TODO: This map doesnt work db return 0 row affected
-            //var vehicleId = existInsurancePolicy.VehicleId;
-            //existInsurancePolicy =
-            //      this.mapper
-            //      .Map<InsurancePolicyFormServiceModel, Data.Models.InsurancePolicy>(insurancePolicyModel, opt =>
-            //              opt.ConfigureMap()
-            //              .ForMember(p => p.Id, opt => opt.Ignore())
-            //              .ForMember(p => p.InsuanceCompany, opt => opt.Ignore())
-            //              .ForMember(p => p.Vehicle, opt => opt.Ignore())
-            //              .ForMember(p => p.VehicleId, opt => opt.Ignore())
-            //              );
-
-            // existInsurancePolicy.VehicleId = vehicleId;
 
             existInsurancePolicy.TypeInsurance = insurancePolicyModel.TypeInsurance;
             existInsurancePolicy.StartDate = insurancePolicyModel.StartDate;
@@ -153,16 +138,36 @@ namespace CarTrade.Services.InsurancePolicy
          * TypeOfInsurance
          * maybe and compare date with type insurance
          */
-        private async Task<bool> ExistTypeOfInsurancePolicyOnVehicle(int vehicleId, TypeInsurance insuranceType, bool? expire)
+        private async Task<bool> ExistTypeOfInsurancePolicyOnVehicle(int vehicleId, TypeInsurance insuranceType)
         {
-            var result = await this.db.InsurancePolicies
-            .AnyAsync(i =>
-            i.VehicleId == vehicleId
-            && i.Expired == false
-            && i.TypeInsurance == insuranceType);
+            //var isExpire = await this.db.InsurancePolicies
+            //.AnyAsync(i =>
+            //i.VehicleId == vehicleId
+            //&& i.TypeInsurance == insuranceType
+            //&& ((i.Expired | i.Expired == null) ?? false | true));
             //&& (i.TypeInsurance == insuranceType || i.StartDate <= i.EndDate));
 
-            return result;
+            return false;
+        }
+
+        //TODO: refactor ExpireLogic
+        private void ExpireLogic()
+        {
+            var allInsurances = this.db.InsurancePolicies
+                .Where(i =>
+                i.EndDate <= DateTime.UtcNow
+                && i.StartDate >= DateTime.UtcNow.AddYears(-1) ).ToList(); 
+                //&& (i.Expired ?? true | false) 
+                //&& i.Expired.HasValue);.ToList();
+
+            foreach (var insurance in allInsurances)
+            {
+                insurance.Expired = true;
+            }
+
+            var resutl  = this.db.SaveChanges();
+           
+            //Task.Run(async () => await this.db.InsurancePolicies.Where(i => i.EndDate))
         }
     }
 }

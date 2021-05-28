@@ -1,17 +1,17 @@
-﻿using AutoMapper.QueryableExtensions;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using CarTrade.Data;
 using CarTrade.Services.Users.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System;
-using AutoMapper;
-using CarTrade.Data.Models;
 
 namespace CarTrade.Services.Users
 {
-    class UsersService : IUsersService
+    //TODO: be consistently  - throw exceptions
+    public class UsersService : IUsersService
     {
         private readonly CarDbContext db;
         private readonly IMapper mapper;

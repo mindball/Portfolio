@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace CarTrade.Services.Brand
 {
+    //TODO: be consistently  - throw exceptions
     public class BrandService : IBrandService
     {
         private readonly CarDbContext db;

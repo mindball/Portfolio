@@ -13,6 +13,7 @@ using static CarTrade.Common.DataConstants;
 
 namespace CarTrade.Services.Vehicle
 {
+    //TODO: be consistently  - throw exceptions
     public class VehicleService : IVehicleService
     {
         private readonly CarDbContext db;

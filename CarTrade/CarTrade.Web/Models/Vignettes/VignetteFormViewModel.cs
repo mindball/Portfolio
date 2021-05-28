@@ -15,5 +15,7 @@ namespace CarTrade.Web.Models.Vignettes
 
         [Required]
         public int VehicleId { get; set; }
+
+        public bool Expired { get; set; }
     }
 }

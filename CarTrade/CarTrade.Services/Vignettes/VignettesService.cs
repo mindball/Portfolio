@@ -10,6 +10,7 @@ using AutoMapper;
 
 namespace CarTrade.Services.Vignettes
 {
+    //TODO: be consistently  - throw exceptions
     public class VignettesService : IVignettesService
     {
         private readonly CarDbContext db;
@@ -17,10 +18,9 @@ namespace CarTrade.Services.Vignettes
 
         public VignettesService(CarDbContext db, IMapper mapper)
         {
-            this.db = db;
+            this.db = db;            
             this.mapper = mapper;
         }
-
         
         public async Task AddVignetteAsync(int vehicleId, VignetteFormServiceModel vignetteFormModel)
         {
@@ -31,9 +31,9 @@ namespace CarTrade.Services.Vignettes
             }
 
             //TODO: test exist vignette
-            var existVignette = await this.db.Vignettes
-                .AnyAsync(v => v.VehicleId == vehicleId && !(v.EndDate >= DateTime.UtcNow));
-            if(existVignette)
+            var existVignette = await this.DoesVehicleHaveActiveVignette(vehicleId);
+
+            if (existVignette)
             {
                 throw new ArgumentException("vignette has not expire on this vehicle");
             }
@@ -92,13 +92,40 @@ namespace CarTrade.Services.Vignettes
             var vehicle = await this.db.Vignettes.AnyAsync(v => v.VehicleId == vehicleId);
             if (!vehicle)
             {
-                throw new ArgumentException("not exist vehicle");
+                //enable this when implement custom exception and collect it at controllers
+                //throw new ArgumentException("not exist vignettes on this vehicle");
+                return null;
             }
 
             return await this.db.Vignettes
                 .Where(v => v.VehicleId == vehicleId)
                 .ProjectTo<TModel>()
                 .ToListAsync();
+        }
+
+        public async Task<bool> DoesVehicleHaveActiveVignette(int vehicleId)
+            => await this.db.Vignettes
+                .AnyAsync(vg =>
+                vg.VehicleId == vehicleId
+                && vg.Expired == false
+                && vg.EndDate > DateTime.UtcNow);               
+
+        //TODO: is better way to implement abstract class
+        public async Task ExpireLogic()
+        {
+            var vignettes = await this.db.Vignettes
+               .Where(vg =>
+               vg.Expired == false
+               && vg.EndDate <= DateTime.UtcNow)
+               .OrderByDescending(vg => vg.EndDate)
+               .ToListAsync();
+
+            foreach (var vignette in vignettes)
+            {
+                vignette.Expired = true;
+            }
+
+            await this.db.SaveChangesAsync();
         }
     }
 }

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace CarTrade.Services.Branches
 {
+    //TODO: be consistently  - throw exceptions
     public class BranchesService : IBranchesService
     {
         private readonly CarDbContext db;
