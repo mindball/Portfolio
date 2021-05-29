@@ -109,15 +109,13 @@ namespace CarTrade.Services.Vignettes
                 vg.VehicleId == vehicleId
                 && vg.Expired == false
                 && vg.EndDate > DateTime.UtcNow);               
-
-        //TODO: is better way to implement abstract class
-        public async Task ExpireLogic()
+               
+        public async Task SetVignetteExpireLogicAsync()
         {
             var vignettes = await this.db.Vignettes
                .Where(vg =>
                vg.Expired == false
                && vg.EndDate <= DateTime.UtcNow)
-               .OrderByDescending(vg => vg.EndDate)
                .ToListAsync();
 
             foreach (var vignette in vignettes)

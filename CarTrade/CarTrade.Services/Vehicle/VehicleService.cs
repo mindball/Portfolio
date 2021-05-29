@@ -191,6 +191,6 @@ namespace CarTrade.Services.Vehicle
             }
 
             return vehicleStatus;
-        } 
+        }        
     }
 }

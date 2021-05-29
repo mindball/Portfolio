@@ -151,23 +151,21 @@ namespace CarTrade.Services.InsurancePolicy
         }
 
         //TODO: refactor ExpireLogic
-        private void ExpireLogic()
-        {
-            var allInsurances = this.db.InsurancePolicies
-                .Where(i =>
-                i.EndDate <= DateTime.UtcNow
-                && i.StartDate >= DateTime.UtcNow.AddYears(-1) ).ToList(); 
-                //&& (i.Expired ?? true | false) 
-                //&& i.Expired.HasValue);.ToList();
 
-            foreach (var insurance in allInsurances)
+        public async Task SetExpiredInsurancePoliciesLogicAsync()
+        {
+            var insurances = await this.db.InsurancePolicies
+               .Where(vg =>
+                    vg.Expired == false
+                    && vg.EndDate <= DateTime.UtcNow)
+               .ToListAsync();
+
+            foreach (var insurance in insurances)
             {
                 insurance.Expired = true;
             }
 
-            var resutl  = this.db.SaveChanges();
-           
-            //Task.Run(async () => await this.db.InsurancePolicies.Where(i => i.EndDate))
+            await this.db.SaveChangesAsync();
         }
     }
 }

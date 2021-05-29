@@ -15,5 +15,7 @@ namespace CarTrade.Services.InsurancePolicy
         Task<TModel> GetByIdAsync<TModel>(int insuranceId) where TModel : class;
 
         Task<IEnumerable<InsurancePolicyListingServiceModel>> GetAllInsuranceByVehicleId(int vehicleId);
+
+        Task SetExpiredInsurancePoliciesLogicAsync();
     }
 }

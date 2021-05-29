@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace CarTrade.Services.Vignettes
 {
-    public interface IVignettesService : IService
+    public interface IVignettesService
     {
         Task AddVignetteAsync(int vehicleId, VignetteFormServiceModel vignetteFormModel);
 
@@ -17,5 +17,7 @@ namespace CarTrade.Services.Vignettes
         Task<IEnumerable<TModel>> GetVignetteByVehicleIdAsync<TModel>(int vehicleId) where TModel : class;
 
         Task<bool> DoesVehicleHaveActiveVignette(int vehicleId);
+
+        Task SetVignetteExpireLogicAsync();
     }
 }

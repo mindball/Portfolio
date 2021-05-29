@@ -3,7 +3,6 @@
 namespace CarTrade.Services
 {
     public interface IService
-    {
-        public Task ExpireLogic();
+    {      
     }
 }
