@@ -1,30 +1,9 @@
 ﻿@model VignetteListingViewModel
 
 @{
-    ViewData["Title"] = " vignettes";
+    ViewData["Title"] = $"{Model.VehicleId} vignettes";
 }
 
 <h2>@ViewData["Title"]</h2>
 
-<table class="table table-bordered table-hover">
-    <tr>
-        <th>VIN</th>
-        <th>Plate number</th>
-        <th>Start Date</th>
-        <th>End date</th>
-        <th></th>
-    </tr>
-    @foreach (var vignette in Model.AllVignettes)
-    {
-        <tr>
-            <th>@vignette.Vin</th>
-            <th>@vignette.PlateNumber</th>
-            <th>@vignette.StartDate</th>
-            <th>@vignette.EndDate</th>
-            <th>
-                <a href="/Vignettes/edit/@vignette.Id" class="btn btn-secondary">Edit</a>
-                @*<a href="/Vignettes/edit/@vignette.VehicleId" class="btn btn-secondary">Edit</a>*@
-            </th>
-        </tr>
-    }
-</table>
+<partial name="_VignetteListPartial" model="Model" view-data="ViewData" />

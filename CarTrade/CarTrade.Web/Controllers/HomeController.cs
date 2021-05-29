@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 using CarTrade.Services.InsurancePolicy;
 using CarTrade.Services.Vehicle;
+using Hangfire;
+using CarTrade.Services.Vignettes;
 
 namespace CarTrade.Web.Controllers
 {
@@ -20,21 +22,30 @@ namespace CarTrade.Web.Controllers
         private readonly IBranchesService branchesService;
         private IInsurancesPoliciesService policyService;
         private IVehicleService vehicleService;
+        private IVignettesService vignetteService;
 
         public HomeController(ILogger<HomeController> logger,
             IBranchesService branchesService,
             IInsurancesPoliciesService policyService,
-            IVehicleService vehicleService)
+            IVehicleService vehicleService,
+            IVignettesService vignetteService)
         {
             this.branchesService = branchesService;
             this.policyService = policyService;
             this.vehicleService = vehicleService;
+            this.vignetteService = vignetteService;
 
             _logger = logger;
         }
 
         public async Task<IActionResult> Index()
         {
+            //TODO: make expire logic
+            //RecurringJob.AddOrUpdate(() => this.policyService.CollectExpiredInsurancePoliciesLogicAsync(), Cron.Daily);
+            ////RecurringJob.AddOrUpdate(() => this.vehicleService.CollectInspectionSafetyCheckExpireLogicAsync(), Cron.Daily);
+            ////RecurringJob.AddOrUpdate(() => this.vehicleService.CollectOilChangeExpireLogicAsync(), Cron.Daily);
+            //RecurringJob.AddOrUpdate(() => this.vignetteService.CollectVignetteExpireLogicAsync(), Cron.Daily);
+
             var allBranchesWithCriticalVehicleData = await this.branchesService.AllAsync();
             var expireViewModel = new List<ListExpireDataForAllBranchesViewModel>();
 
@@ -61,7 +72,12 @@ namespace CarTrade.Web.Controllers
             //ViewData["NavMenuPage"] = "Index";            
 
             return View(expireViewModel);
-        }        
+        }
+
+        public IActionResult Privacy()
+        {
+            return View();
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

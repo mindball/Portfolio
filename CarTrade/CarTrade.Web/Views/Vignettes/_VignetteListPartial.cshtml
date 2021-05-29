@@ -1,0 +1,26 @@
+﻿@model VignetteListingViewModel 
+
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>VIN</th>
+        <th>Plate number</th>
+        <th>Start Date</th>
+        <th>End date</th>
+        <th></th>
+    </tr>
+    @foreach (var vignette in Model.AllVignettes)
+    {
+        <tr>
+            <th>@vignette.Vin</th>
+            <th>@vignette.PlateNumber</th>
+            <th>@vignette.StartDate</th>
+            <th>@vignette.EndDate</th>
+            <th>
+                @if (!vignette.Expired)
+                {
+                    <a href="/Vignettes/edit/@vignette.Id" class="btn btn-secondary">Edit</a>
+                }
+            </th>
+        </tr>
+    }
+</table>

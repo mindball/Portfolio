@@ -15,9 +15,9 @@ namespace CarTrade.Web.Infrastructure.Extensions
             using (var serviceScope =
                 app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                var dbContext = serviceScope.ServiceProvider.GetService<CarDbContext>();
+                var defaultDbContext = serviceScope.ServiceProvider.GetService<CarDbContext>();                
                 //dbContext.Database.EnsureCreated();
-                dbContext.Database.Migrate();
+                defaultDbContext.Database.Migrate();
 
                 
                 var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<User>>();
