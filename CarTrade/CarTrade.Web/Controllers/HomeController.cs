@@ -40,11 +40,8 @@ namespace CarTrade.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            //TODO: make expire logic
-            //RecurringJob.AddOrUpdate(() => this.policyService.CollectExpiredInsurancePoliciesLogicAsync(), Cron.Daily);
-            ////RecurringJob.AddOrUpdate(() => this.vehicleService.CollectInspectionSafetyCheckExpireLogicAsync(), Cron.Daily);
-            ////RecurringJob.AddOrUpdate(() => this.vehicleService.CollectOilChangeExpireLogicAsync(), Cron.Daily);
-            //RecurringJob.AddOrUpdate(() => this.vignetteService.CollectVignetteExpireLogicAsync(), Cron.Daily);
+            RecurringJob.AddOrUpdate(() => this.policyService.SetExpiredInsurancePoliciesLogicAsync(), Cron.Daily);           
+            RecurringJob.AddOrUpdate(() => this.vignetteService.SetVignetteExpireLogicAsync(), Cron.Daily);
 
             var allBranchesWithCriticalVehicleData = await this.branchesService.AllAsync();
             var expireViewModel = new List<ListExpireDataForAllBranchesViewModel>();

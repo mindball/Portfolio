@@ -11,17 +11,17 @@ namespace CarTrade.Web.Validations
     {
         public DateTimeFromValidateToAttribute(string dateToCompareToFieldName)
         {
-            this.DateToCompareToFieldName = dateToCompareToFieldName;
+            this.EndDate = dateToCompareToFieldName;
         }
 
-        private string DateToCompareToFieldName { get; set; }
+        private string EndDate { get; set; }
 
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        protected override ValidationResult IsValid(object startDate, ValidationContext validationContext)
         {
-            DateTime earlierDate = (DateTime)value;
+            DateTime earlierDate = (DateTime)startDate;
 
-            DateTime laterDate = (DateTime)validationContext.ObjectType.GetProperty(this.DateToCompareToFieldName).GetValue(validationContext.ObjectInstance, null);
-
+            DateTime laterDate = (DateTime)validationContext.ObjectType.GetProperty(this.EndDate).GetValue(validationContext.ObjectInstance, null);
+            
             if (laterDate > earlierDate)
             {
                 return ValidationResult.Success;
