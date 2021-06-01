@@ -2,7 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace CarTrade.Services.InsurancePolicy.Models
+namespace CarTrade.Services.InsurancePolicies.Models
 {
     public class InsurancePolicyFormServiceModel
     {

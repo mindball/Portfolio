@@ -1,9 +1,9 @@
 ﻿using CarTrade.Common.Mapping;
 using CarTrade.Data.Enums;
-using CarTrade.Services.InsurancePolicy.Models;
+using CarTrade.Services.InsurancePolicies.Models;
 using System;
 
-namespace CarTrade.Web.Models.InsurancePolicy
+namespace CarTrade.Web.Models.InsurancePolicies
 {
     public class DetailInsurancePolicyViewModel : IMapFrom<InsurancePolicyListingServiceModel>
     {

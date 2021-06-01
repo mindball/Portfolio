@@ -2,14 +2,14 @@
 using AutoMapper.QueryableExtensions;
 using CarTrade.Data;
 using CarTrade.Data.Enums;
-using CarTrade.Services.InsurancePolicy.Models;
+using CarTrade.Services.InsurancePolicies.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CarTrade.Services.InsurancePolicy
+namespace CarTrade.Services.InsurancePolicies
 {
     //TODO: be consistently  - throw exceptions
     public class InsurancesPoliciesService : IInsurancesPoliciesService

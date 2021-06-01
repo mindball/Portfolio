@@ -1,13 +1,13 @@
 ﻿using AutoMapper.QueryableExtensions;
 using CarTrade.Data;
-using CarTrade.Services.Brand.Models;
+using CarTrade.Services.Brands.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CarTrade.Services.Brand
+namespace CarTrade.Services.Brands
 {
     //TODO: be consistently  - throw exceptions
     public class BrandService : IBrandService

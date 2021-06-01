@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace CarTrade.Services.InsurancePolicy.Models
+namespace CarTrade.Services.InsurancePolicies.Models
 {
     public class InsurancePolicyListingServiceModel : IMapFrom<CarTrade.Data.Models.InsurancePolicy>
     {

@@ -1,8 +1,8 @@
-﻿using CarTrade.Services.Brand.Models;
+﻿using CarTrade.Services.Brands.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CarTrade.Services.Brand
+namespace CarTrade.Services.Brands
 {
     public interface IBrandService
     {

@@ -1,4 +1,5 @@
-﻿using CarTrade.Services.InsuranceCompany.Models;
+﻿using CarTrade.Services.InsuranceCompanies.Models;
+using CarTrade.Services.InsurancePolicies.Models;
 using System.Collections.Generic;
 
 namespace CarTrade.Web.Models.InsuranceCompanies

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 
-namespace CarTrade.Web.Models.InsurancePolicy
+namespace CarTrade.Web.Models.InsurancePolicies
 {
     public class ListInsurancePolicyCompanyViewModel
     {

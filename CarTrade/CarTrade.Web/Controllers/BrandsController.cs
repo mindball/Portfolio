@@ -1,4 +1,4 @@
-﻿using CarTrade.Services.Brand;
+﻿using CarTrade.Services.Brands;
 using CarTrade.Web.Infrastructure.Extensions;
 using CarTrade.Web.Models.Brands;
 using Microsoft.AspNetCore.Mvc;

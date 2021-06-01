@@ -1,10 +1,10 @@
 ﻿using CarTrade.Data.Enums;
-using CarTrade.Services.InsurancePolicy.Models;
+using CarTrade.Services.InsurancePolicies.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CarTrade.Services.InsurancePolicy
+namespace CarTrade.Services.InsurancePolicies
 {
     public interface IInsurancesPoliciesService
     {

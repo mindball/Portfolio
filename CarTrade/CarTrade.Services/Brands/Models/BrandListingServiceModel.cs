@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 using static CarTrade.Common.DataConstants;
 
-namespace CarTrade.Services.Brand.Models
+namespace CarTrade.Services.Brands.Models
 {
     public class BrandListingServiceModel : IMapFrom<CarTrade.Data.Models.Brand>
     {

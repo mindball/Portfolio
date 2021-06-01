@@ -1,6 +1,6 @@
 ﻿using CarTrade.Common.Mapping;
 
-namespace CarTrade.Services.InsuranceCompany.Models
+namespace CarTrade.Services.InsuranceCompanies.Models
 {
     public class InsuranceCompanyListingServiceModel : IMapFrom<Data.Models.InsuranceCompany>
     {

@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
-using CarTrade.Services.InsuranceCompany;
-using CarTrade.Services.InsurancePolicy;
-using CarTrade.Services.InsurancePolicy.Models;
+using CarTrade.Services.InsuranceCompanies;
+using CarTrade.Services.InsuranceCompanies.Models;
+using CarTrade.Services.InsurancePolicies;
+using CarTrade.Services.InsurancePolicies.Models;
 using CarTrade.Services.Vehicle;
 using CarTrade.Services.Vehicle.Models;
 using CarTrade.Web.Infrastructure.Extensions;
-using CarTrade.Web.Models.InsurancePolicy;
+using CarTrade.Web.Models.InsurancePolicies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace CarTrade.Web.Controllers
     {
         private IInsurancesPoliciesService policyService;
         private IVehicleService vehicleService;
-        private IInsuranceCompaniesService insuranceCompany;
+        private IInsuranceCompaniesService insuranceCompanyService;
         private IMapper mapper;
 
         public InsurancesPolicesController(IInsurancesPoliciesService policyService,
@@ -31,7 +32,7 @@ namespace CarTrade.Web.Controllers
         {
             this.policyService = policyService;
             this.vehicleService = vehicleService;
-            this.insuranceCompany = insuranceCompany;
+            this.insuranceCompanyService = insuranceCompany;
             this.mapper = mapper;
         }
 
@@ -145,7 +146,7 @@ namespace CarTrade.Web.Controllers
 
         private async Task<IEnumerable<SelectListItem>> GetInsuranceCompanies()
         {
-            var companies = await this.insuranceCompany.AllAsync();
+            var companies = await this.insuranceCompanyService.AllAsync();
 
             return companies.Select(t => new SelectListItem
                         {

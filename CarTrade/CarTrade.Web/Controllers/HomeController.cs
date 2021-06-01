@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using CarTrade.Web.Models.Home;
 using System.Collections.Generic;
 using System.Linq;
-using CarTrade.Services.InsurancePolicy;
+using CarTrade.Services.InsurancePolicies;
 using CarTrade.Services.Vehicle;
 using Hangfire;
 using CarTrade.Services.Vignettes;

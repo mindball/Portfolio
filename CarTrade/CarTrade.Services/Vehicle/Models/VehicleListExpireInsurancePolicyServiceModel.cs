@@ -1,4 +1,4 @@
-﻿using CarTrade.Services.InsurancePolicy.Models;
+﻿using CarTrade.Services.InsurancePolicies.Models;
 using System.Collections.Generic;
 
 namespace CarTrade.Services.Vehicle.Models

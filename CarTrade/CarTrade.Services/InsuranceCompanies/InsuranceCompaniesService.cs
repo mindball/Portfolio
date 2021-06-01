@@ -1,6 +1,6 @@
 ﻿using AutoMapper.QueryableExtensions;
 using CarTrade.Data;
-using CarTrade.Services.InsuranceCompany.Models;
+using CarTrade.Services.InsuranceCompanies.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CarTrade.Services.InsuranceCompany
+namespace CarTrade.Services.InsuranceCompanies
 {
 
     //TODO: be consistently  - throw exceptions

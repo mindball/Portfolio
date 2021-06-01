@@ -1,5 +1,5 @@
-﻿using CarTrade.Services.InsuranceCompany;
-using CarTrade.Services.InsuranceCompany.Models;
+﻿using CarTrade.Services.InsuranceCompanies;
+using CarTrade.Services.InsuranceCompanies.Models;
 using CarTrade.Web.Infrastructure.Extensions;
 using CarTrade.Web.Models.InsuranceCompanies;
 using Microsoft.AspNetCore.Mvc;

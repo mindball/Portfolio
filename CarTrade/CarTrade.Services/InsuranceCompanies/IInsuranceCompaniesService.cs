@@ -1,8 +1,8 @@
-﻿using CarTrade.Services.InsuranceCompany.Models;
+﻿using CarTrade.Services.InsuranceCompanies.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CarTrade.Services.InsuranceCompany
+namespace CarTrade.Services.InsuranceCompanies
 {
     public interface IInsuranceCompaniesService
     {

@@ -1,11 +1,10 @@
 ﻿using CarTrade.Data.Enums;
-using CarTrade.Web.Validations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace CarTrade.Web.Models.InsurancePolicy
+namespace CarTrade.Web.Models.InsurancePolicies
 {
     public class InsurancePolicyFormViewModel : IValidatableObject
     {

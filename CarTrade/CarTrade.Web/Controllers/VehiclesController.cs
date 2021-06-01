@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CarTrade.Services.Branches;
 using CarTrade.Services.Branches.Models;
-using CarTrade.Services.Brand;
+using CarTrade.Services.Brands;
 using CarTrade.Services.Companies;
 using CarTrade.Services.Vehicle;
 using CarTrade.Services.Vehicle.Models;
