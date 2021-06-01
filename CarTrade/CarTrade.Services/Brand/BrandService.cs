@@ -2,6 +2,7 @@
 using CarTrade.Data;
 using CarTrade.Services.Brand.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,8 +20,11 @@ namespace CarTrade.Services.Brand
         }
         public async Task AddBrandAsync(string name)
         {
-            if (this.db.Brands.Any(b => b.Name == name) || 
-                name == null) return;
+            if (this.db.Brands.Any(b => b.Name == name) ||
+                string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException("Name is null or exist brand");
+            }
 
             var newBrand = new Data.Models.Brand { Name = name };
 
@@ -37,9 +41,9 @@ namespace CarTrade.Services.Brand
         {
             var brandToEdit = await this.db.Brands.FirstOrDefaultAsync(b => b.Id == id);
 
-            if (brandToEdit == null || name == null)
+            if (brandToEdit == null || string.IsNullOrEmpty(name))
             {
-                return;
+                throw new ArgumentNullException("Name is null or brand is null or not exist");
             }
             
             brandToEdit.Name = name;            

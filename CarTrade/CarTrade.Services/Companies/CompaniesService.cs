@@ -23,9 +23,11 @@ namespace CarTrade.Services.Companies
         {
             var a = this.db.Companies.Any(b => b.Name == name);
 
-            if (name == null || 
-                this.db.Companies.Any(b => b.Name == name)) return;
-
+            if (string.IsNullOrEmpty(name) ||
+                this.db.Companies.Any(b => b.Name == name))
+            {
+                throw new ArgumentNullException("Name is null or exist company");
+            }
             await this.db.AddAsync(new Data.Models.Employer { Name = name });
             await this.db.SaveChangesAsync();
         }
@@ -41,7 +43,10 @@ namespace CarTrade.Services.Companies
                 .Companies
                 .FirstOrDefaultAsync(c => c.Id == id);
 
-            if (company == null || name == null) return;
+            if (company == null || string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException("Name is null or company not exist or null");
+            }
 
             company.Name = name;
             await this.db.SaveChangesAsync();

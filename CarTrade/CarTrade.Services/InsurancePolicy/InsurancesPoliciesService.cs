@@ -95,7 +95,6 @@ namespace CarTrade.Services.InsurancePolicy
                 .ProjectTo<TModel>()
                 .FirstOrDefaultAsync();
                 
-
             //TODO: make custom exception handler on controllers
             if (existInsurancePolicy == null)
             {
@@ -151,7 +150,6 @@ namespace CarTrade.Services.InsurancePolicy
         }
 
         //TODO: refactor ExpireLogic
-
         public async Task SetExpiredInsurancePoliciesLogicAsync()
         {
             var insurances = await this.db.InsurancePolicies

@@ -6,6 +6,7 @@ using CarTrade.Services.Vehicle.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 using System.Threading.Tasks;
 
 namespace CarTrade.Services.Branches
@@ -22,7 +23,10 @@ namespace CarTrade.Services.Branches
 
         public async Task AddBranchAsync(string town, string address)
         {
-            if (town == null && address == null) return;
+            if (town == null && address == null)
+            {
+                throw new ArgumentNullException("Neither the city nor the address should be null");
+            }
 
             var newBranch = new Branch
             {
@@ -47,7 +51,7 @@ namespace CarTrade.Services.Branches
             if (branchToEdit == null ||
                 (town == null && address == null))
             {
-                return;
+                throw new ArgumentNullException("Neither the city nor the address should be null");
             }
 
             branchToEdit.Town = town;
@@ -76,7 +80,6 @@ namespace CarTrade.Services.Branches
                                         PlateNumber = v.PlateNumber,
                                         Vin = v.Vin
                                     }).ToList()
-                        }).FirstOrDefaultAsync();
-       
+                        }).FirstOrDefaultAsync();       
     }
 }

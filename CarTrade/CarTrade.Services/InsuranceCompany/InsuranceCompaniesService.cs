@@ -23,7 +23,7 @@ namespace CarTrade.Services.InsuranceCompany
 
         public async Task AddInsuranceCompanyAsync(string name)
         {
-            if (name == null
+            if (string.IsNullOrEmpty(name)
                 || this.db.InsuranceCompanies
                 .Any(i => i.Name == name)) throw new ArgumentException($"name must not empty or  exist company");           
 
@@ -44,7 +44,7 @@ namespace CarTrade.Services.InsuranceCompany
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             if (insuranceCompany == null ||
-                name == null) return;
+                string.IsNullOrEmpty(name)) throw new ArgumentException($"name must not empty or exist insurance company is null or empty");
 
             insuranceCompany.Name = name;
             await this.db.SaveChangesAsync();
@@ -63,13 +63,6 @@ namespace CarTrade.Services.InsuranceCompany
             }
 
             return policy;           
-        }
-
-        private bool ExistInsurancePolicy()
-        {
-
-
-            return false;
         }
     }
 }
