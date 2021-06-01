@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
-using CarTrade.Services.Vehicle;
+using CarTrade.Services.Vehicles;
 using CarTrade.Services.Vignettes;
 using CarTrade.Services.Vignettes.Models;
 using CarTrade.Web.Infrastructure.Extensions;
 using CarTrade.Web.Models.Vignettes;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 

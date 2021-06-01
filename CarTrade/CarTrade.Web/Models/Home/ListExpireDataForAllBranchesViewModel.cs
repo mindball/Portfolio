@@ -1,4 +1,4 @@
-﻿using CarTrade.Services.Vehicle.Models;
+﻿using CarTrade.Services.Vehicles.Models;
 using System.Collections.Generic;
 
 namespace CarTrade.Web.Models.Home

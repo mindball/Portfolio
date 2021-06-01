@@ -2,7 +2,7 @@
 using CarTrade.Data;
 using CarTrade.Data.Models;
 using CarTrade.Services.Branches.Models;
-using CarTrade.Services.Vehicle.Models;
+using CarTrade.Services.Vehicles.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;

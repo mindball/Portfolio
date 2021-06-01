@@ -2,7 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using CarTrade.Data;
 using CarTrade.Data.Enums;
-using CarTrade.Services.Vehicle.Models;
+using CarTrade.Services.Vehicles.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 using static CarTrade.Common.DataConstants;
 
-namespace CarTrade.Services.Vehicle
+namespace CarTrade.Services.Vehicles
 {
     //TODO: be consistently  - throw exceptions
     public class VehicleService : IVehicleService

@@ -3,8 +3,8 @@ using CarTrade.Services.InsuranceCompanies;
 using CarTrade.Services.InsuranceCompanies.Models;
 using CarTrade.Services.InsurancePolicies;
 using CarTrade.Services.InsurancePolicies.Models;
-using CarTrade.Services.Vehicle;
-using CarTrade.Services.Vehicle.Models;
+using CarTrade.Services.Vehicles;
+using CarTrade.Services.Vehicles.Models;
 using CarTrade.Web.Infrastructure.Extensions;
 using CarTrade.Web.Models.InsurancePolicies;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 
 using static CarTrade.Web.WebConstants;
 

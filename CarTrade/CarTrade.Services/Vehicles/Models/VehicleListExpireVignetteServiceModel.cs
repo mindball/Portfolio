@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CarTrade.Services.Vehicle.Models
+namespace CarTrade.Services.Vehicles.Models
 {
     public class VehicleListExpireVignetteServiceModel : VehicleExpireBasicListingServiceModel
     {

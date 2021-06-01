@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 using static CarTrade.Common.DataConstants;
 
-namespace CarTrade.Services.Vehicle.Models
+namespace CarTrade.Services.Vehicles.Models
 {
     public class AddVehicleServiceModel : IMapTo<Data.Models.Vehicle>
     {

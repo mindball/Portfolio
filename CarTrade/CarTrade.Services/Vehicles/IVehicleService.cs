@@ -1,8 +1,8 @@
-﻿using CarTrade.Services.Vehicle.Models;
+﻿using CarTrade.Services.Vehicles.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CarTrade.Services.Vehicle
+namespace CarTrade.Services.Vehicles
 {
     public interface IVehicleService
     {

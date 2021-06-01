@@ -3,7 +3,7 @@ using CarTrade.Common.Mapping;
 using CarTrade.Data.Enums;
 using System;
 
-namespace CarTrade.Services.Vehicle.Models
+namespace CarTrade.Services.Vehicles.Models
 {
     public class VehicleListingServiceModel : VehicleBasicListingServiceModel, IMapFrom<Data.Models.Vehicle>, IHaveCustomMappings
     {   

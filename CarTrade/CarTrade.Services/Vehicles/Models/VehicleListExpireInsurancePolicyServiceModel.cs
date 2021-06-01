@@ -1,7 +1,7 @@
 ﻿using CarTrade.Services.InsurancePolicies.Models;
 using System.Collections.Generic;
 
-namespace CarTrade.Services.Vehicle.Models
+namespace CarTrade.Services.Vehicles.Models
 {
     public class VehicleListExpireInsurancePolicyServiceModel : VehicleExpireBasicListingServiceModel
     {   

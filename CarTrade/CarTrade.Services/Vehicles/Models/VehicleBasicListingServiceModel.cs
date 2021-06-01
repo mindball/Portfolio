@@ -1,4 +1,4 @@
-﻿namespace CarTrade.Services.Vehicle.Models
+﻿namespace CarTrade.Services.Vehicles.Models
 {
     public class VehicleBasicListingServiceModel
     {

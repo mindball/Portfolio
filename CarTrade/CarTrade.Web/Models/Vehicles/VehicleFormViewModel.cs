@@ -1,7 +1,4 @@
-﻿using CarTrade.Common.Mapping;
-using CarTrade.Data.Enums;
-using CarTrade.Services.Vehicle.Models;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using CarTrade.Data.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
