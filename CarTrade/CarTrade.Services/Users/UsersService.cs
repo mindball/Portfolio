@@ -44,8 +44,7 @@ namespace CarTrade.Services.Users
             var user = await this.db.Users
                 .Where(u => u.Id == userId)
                 .ProjectTo<TModel>()
-                .FirstOrDefaultAsync();
-                
+                .FirstOrDefaultAsync();                
 
             if (user == null)
             {

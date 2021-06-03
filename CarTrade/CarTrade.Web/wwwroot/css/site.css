@@ -119,7 +119,7 @@ img {
 
 /* Renaissance Image Grid
 -------------------------------------------------- */
-body {
+/*body {
     font-family: 'Montserrat';
     font-style: Italic;
     background-image: url("https://images.pexels.com/photos/255379/pexels-photo-255379.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
@@ -134,10 +134,10 @@ body {
     text-align: center;
     padding: 20px;
     font-size: 20px;
-}
+}*/
 
 /* Responsive layout - makes a two column-layout instead of four columns */
-@media (max-width: 800px) {
+/*@media (max-width: 800px) {
     .column {
         flex: 46%;
         max-width: 46%;
@@ -192,4 +192,4 @@ body {
 
 .sep {
     height: 25px;
-}
+}*/

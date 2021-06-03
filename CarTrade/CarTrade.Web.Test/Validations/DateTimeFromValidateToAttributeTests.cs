@@ -26,10 +26,10 @@ namespace CarTrade.Web.Test.Validations
             var context = new ValidationContext(target);
             var results = new List<ValidationResult>();
 
-            //Assert
+            //Act
             var result = Validator.TryValidateObject(target, context, results, true);
 
-
+            //Assert
             Assert.Equal(expected, result);
         }
     }

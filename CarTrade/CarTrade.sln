@@ -11,6 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarTrade.Web", "CarTrade.We
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarTrade.Services", "CarTrade.Services\CarTrade.Services.csproj", "{0B08C8BC-E4C8-4B57-84A1-718D89D3637B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarTrade.Services.Tests", "CarTrade.Services.Tests\CarTrade.Services.Tests.csproj", "{343DB351-9AD7-4A59-B9B5-3A1C647F2589}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarTrade.Web.Test", "CarTrade.Web.Test\CarTrade.Web.Test.csproj", "{F84C22D7-079F-4D8A-9011-8F855EAB0CA2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{0B08C8BC-E4C8-4B57-84A1-718D89D3637B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B08C8BC-E4C8-4B57-84A1-718D89D3637B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B08C8BC-E4C8-4B57-84A1-718D89D3637B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{343DB351-9AD7-4A59-B9B5-3A1C647F2589}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{343DB351-9AD7-4A59-B9B5-3A1C647F2589}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{343DB351-9AD7-4A59-B9B5-3A1C647F2589}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{343DB351-9AD7-4A59-B9B5-3A1C647F2589}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F84C22D7-079F-4D8A-9011-8F855EAB0CA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F84C22D7-079F-4D8A-9011-8F855EAB0CA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F84C22D7-079F-4D8A-9011-8F855EAB0CA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F84C22D7-079F-4D8A-9011-8F855EAB0CA2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

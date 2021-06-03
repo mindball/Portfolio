@@ -9,13 +9,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using static CarTrade.Common.DataConstants;
+
 namespace CarTrade.Services.InsurancePolicies
 {
     //TODO: be consistently  - throw exceptions
     public class InsurancesPoliciesService : IInsurancesPoliciesService
     {
         private readonly CarDbContext db;
-        private IMapper mapper;
+        private IMapper mapper;       
 
         public InsurancesPoliciesService(CarDbContext db, IMapper mapper)
         {
@@ -27,20 +29,19 @@ namespace CarTrade.Services.InsurancePolicies
         { 
             if (!this.CompareStartEndDate(newPolicy.StartDate, newPolicy.EndDate))
             {
-                throw new ArgumentException("Start date must be small than end date" +
-                    "or the date must not be less than one year back");
+                throw new ArgumentException(WrongDateExceptionMessage);
             }
             
             if(!await ExistInsuranceCompany(newPolicy.InsuranceCompanyId))
             {
-                throw new ArgumentException("Missing Insurance company");
+                throw new ArgumentException(NotExistItemExceptionMessage);
             }
 
             if(await ExistTypeOfInsurancePolicyOnVehicle(
                 vehicleId, 
                 newPolicy.TypeInsurance))
             {
-                throw new ArgumentException("This policy exist and it is active");
+                throw new ArgumentException(ExistItemExceptionMessage);
             }
 
             var newInsurancePolicy =
@@ -64,12 +65,12 @@ namespace CarTrade.Services.InsurancePolicies
            
             if(existInsurancePolicy == null)
             {
-                throw new ArgumentException("Missing policy");
+                throw new ArgumentException(NotExistItemExceptionMessage);
             }
 
             if (!this.CompareStartEndDate(insurancePolicyModel.StartDate, insurancePolicyModel.EndDate))
             {
-                throw new ArgumentException("Start date must be small than end date");
+                throw new ArgumentException(WrongDateExceptionMessage);
             }
 
             existInsurancePolicy.TypeInsurance = insurancePolicyModel.TypeInsurance;
@@ -99,7 +100,7 @@ namespace CarTrade.Services.InsurancePolicies
             if (existInsurancePolicy == null)
             {
                 return null;
-                throw new ArgumentException("Missing policy");
+                throw new ArgumentException(NotExistItemExceptionMessage);
             } 
 
             return existInsurancePolicy;
@@ -139,14 +140,15 @@ namespace CarTrade.Services.InsurancePolicies
          */
         private async Task<bool> ExistTypeOfInsurancePolicyOnVehicle(int vehicleId, TypeInsurance insuranceType)
         {
-            //var isExpire = await this.db.InsurancePolicies
-            //.AnyAsync(i =>
-            //i.VehicleId == vehicleId
-            //&& i.TypeInsurance == insuranceType
-            //&& ((i.Expired | i.Expired == null) ?? false | true));
-            //&& (i.TypeInsurance == insuranceType || i.StartDate <= i.EndDate));
+            var isExpire = await this.db.InsurancePolicies
+            .AnyAsync(i =>
+                i.VehicleId == vehicleId
+                && i.EndDate >= DateTime.UtcNow
+                && i.TypeInsurance == insuranceType
+                && !i.Expired
+                && i.TypeInsurance == insuranceType);
 
-            return false;
+            return isExpire;
         }
 
         //TODO: refactor ExpireLogic
