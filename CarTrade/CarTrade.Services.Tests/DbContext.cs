@@ -7,6 +7,8 @@ using CarTrade.Data.Enums;
 using Xunit;
 using System;
 using CarTrade.Services.Tests.Enums;
+using AutoMapper;
+using CarTrade.Web.Infrastructure.Mapping;
 
 namespace CarTrade.Services.Tests
 {
@@ -18,11 +20,20 @@ namespace CarTrade.Services.Tests
               .UseInMemoryDatabase("CarTradeParkingSystem").Options;
 
             this.Context = new CarDbContext(dbOptions);
+            //Mapper.Initialize(config => config.AddProfile<AutoMapperProfile>());
+            this.MapperConfig = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new AutoMapperProfile());
+            });
+
+          
         }
+
+        public MapperConfiguration MapperConfig { get; set; }
 
         public CarDbContext Context { get; set; }
 
-        public async Task FillBranches()
+        public async Task FillBranchesAsync()
         {
             var firstBranch = new Branch { Id = 1, Town = "Стара Загора", Address = "бул. Никола Петков 55" };
             var secondBranch = new Branch { Id = 2, Town = "София", Address = "бул. Христо Ботев 98" };
@@ -36,7 +47,7 @@ namespace CarTrade.Services.Tests
             await this.Context.SaveChangesAsync();
         }
 
-        public async Task FillBrands()
+        public async Task FillBrandsAsync()
         {
             var firstBrand = new Brand { Id = 1, Name = "Volkswagen" };
             var secondBrand = new Brand { Id = 2, Name = "Audi" };
@@ -46,7 +57,7 @@ namespace CarTrade.Services.Tests
             await this.Context.SaveChangesAsync();
         }
 
-        public async Task FillEmployeers()
+        public async Task FillEmployeersAsync()
         {
             var firstEmployeer = new Employer { Id = 1, Name = "Автохит Трейд ООД" };
             var secondEmployeer = new Employer { Id = 2, Name = "Автохит 2000" };
@@ -56,7 +67,7 @@ namespace CarTrade.Services.Tests
             await this.Context.SaveChangesAsync();
         }
 
-        public async Task FillInsuranceCompany()
+        public async Task FillInsuranceCompanyAsync()
         {
             List<InsuranceCompany> insuranceCompanies = new List<InsuranceCompany>()
             {
@@ -71,7 +82,7 @@ namespace CarTrade.Services.Tests
             await this.Context.SaveChangesAsync();
         }
 
-        public async Task FillVehicles()
+        public async Task FillVehiclesAsync()
         {
             List<Vehicle> vehicles = new List<Vehicle>()
             {
@@ -243,7 +254,7 @@ namespace CarTrade.Services.Tests
             await this.Context.SaveChangesAsync();
         }
 
-        public async Task FillInsurancepolicies()
+        public async Task FillInsurancePoliciesAsync()
         {
             List<InsurancePolicy> insurancePolicies = new List<InsurancePolicy>()
             {
@@ -342,7 +353,7 @@ namespace CarTrade.Services.Tests
             await this.Context.SaveChangesAsync();
         }
 
-        public async Task FillVignettes()
+        public async Task FillVignettesAsync()
         {
             List<Vignette> vignettes = new List<Vignette>()
             {

@@ -16,8 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CarTrade.Common\CarTrade.Common.csproj" />
     <ProjectReference Include="..\CarTrade.Data\CarTrade.Data.csproj" />
     <ProjectReference Include="..\CarTrade.Services\CarTrade.Services.csproj" />
+    <ProjectReference Include="..\CarTrade.Web\CarTrade.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>
