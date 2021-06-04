@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CarTrade.Data.Enums;
-using Xunit;
 using System;
 using CarTrade.Services.Tests.Enums;
 using AutoMapper;
@@ -13,7 +12,7 @@ using CarTrade.Web.Infrastructure.Mapping;
 namespace CarTrade.Services.Tests
 {
     public class DbContext
-    {
+    {     
         public DbContext()
         {
             var dbOptions = new DbContextOptionsBuilder<CarDbContext>()
@@ -25,13 +24,13 @@ namespace CarTrade.Services.Tests
             {
                 cfg.AddProfile(new AutoMapperProfile());
             });
-
-          
         }
+
+        public List<InsurancePolicy> AllInsurance { get; set; }
 
         public MapperConfiguration MapperConfig { get; set; }
 
-        public CarDbContext Context { get; set; }
+        public CarDbContext Context { get; set; }        
 
         public async Task FillBranchesAsync()
         {
@@ -259,7 +258,7 @@ namespace CarTrade.Services.Tests
             List<InsurancePolicy> insurancePolicies = new List<InsurancePolicy>()
             {
                 //ExpiredFullCascoInsurance
-                new InsurancePolicy { Id = 1, 
+                new InsurancePolicy { Id = 1,
                     TypeInsurance = TypeInsurance.FullCasco,
                     StartDate = DateTime.Parse("2020-03-21 00:00:00.0000000"),
                     EndDate = DateTime.Parse("2021-03-21 00:00:00.0000000"),
@@ -268,7 +267,7 @@ namespace CarTrade.Services.Tests
                     VehicleId = 1
                 },
                 //Active FullCasco insurance
-                new InsurancePolicy { Id = 2, 
+                new InsurancePolicy { Id = 2,
                     TypeInsurance = TypeInsurance.FullCasco,
                     StartDate = DateTime.Parse("2021-03-21 00:00:00.0000000"),
                     EndDate = DateTime.Parse("2022-03-21 00:00:00.0000000"),
@@ -277,7 +276,7 @@ namespace CarTrade.Services.Tests
                     VehicleId = 1
                 },
                 //Expired ThirdPartyLiability Insurance
-                 new InsurancePolicy { Id = 3, 
+                 new InsurancePolicy { Id = 3,
                      TypeInsurance = TypeInsurance.ThirdPartyLiability,
                     StartDate = DateTime.Parse("2020-01-01 00:00:00.0000000"),
                     EndDate = DateTime.Parse("2021-01-01 00:00:00.0000000"),
@@ -286,7 +285,7 @@ namespace CarTrade.Services.Tests
                     VehicleId = 1
                 },
                  //Active ThirdPartyLiability insurance
-                new InsurancePolicy { Id = 4, 
+                new InsurancePolicy { Id = 4,
                     TypeInsurance = TypeInsurance.ThirdPartyLiability,
                     StartDate = DateTime.Parse("2021-01-01 00:00:00.0000000"),
                     EndDate = DateTime.Parse("2022-01-01 00:00:00.0000000"),
@@ -295,7 +294,7 @@ namespace CarTrade.Services.Tests
                     VehicleId = 1
                 },
                 //Active FullCasco insurance
-                new InsurancePolicy { Id = 5, 
+                new InsurancePolicy { Id = 5,
                     TypeInsurance = TypeInsurance.FullCasco,
                     StartDate = DateTime.Parse("2021-05-21 00:00:00.0000000"),
                     EndDate = DateTime.Parse("2022-05-21 00:00:00.0000000"),
@@ -304,7 +303,7 @@ namespace CarTrade.Services.Tests
                     VehicleId = 2
                 },
                 //Active ThirdPartyLiability insurance
-                new InsurancePolicy { Id = 6, 
+                new InsurancePolicy { Id = 6,
                     TypeInsurance = TypeInsurance.ThirdPartyLiability,
                     StartDate = DateTime.Parse("2021-06-01 00:00:00.0000000"),
                     EndDate = DateTime.Parse("2022-06-21 00:00:00.0000000"),
@@ -313,7 +312,7 @@ namespace CarTrade.Services.Tests
                     VehicleId = 2
                 },
                 //Start now FullCasco insurance
-                new InsurancePolicy { Id = 7, 
+                new InsurancePolicy { Id = 7,
                     TypeInsurance = TypeInsurance.FullCasco,
                     StartDate = DateTime.UtcNow,
                     EndDate = DateTime.UtcNow.AddYears((int)PeriodInDays.Year),
@@ -322,7 +321,7 @@ namespace CarTrade.Services.Tests
                     VehicleId = 3
                 },
                 //Start now ThirdPartyLiability insurance
-                new InsurancePolicy { Id = 8, 
+                new InsurancePolicy { Id = 8,
                     TypeInsurance = TypeInsurance.ThirdPartyLiability,
                     StartDate = DateTime.UtcNow,
                     EndDate = DateTime.UtcNow.AddYears((int)PeriodInDays.Year),
@@ -350,111 +349,115 @@ namespace CarTrade.Services.Tests
             };
 
             await this.Context.InsurancePolicies.AddRangeAsync(insurancePolicies);
-            await this.Context.SaveChangesAsync();
+            await this.Context.SaveChangesAsync();            
         }
+
+        //TODO: make readonly collection
+        public async Task<IList<InsurancePolicy>> AllInsurancePoliciesAsync()
+            => await this.Context.InsurancePolicies.ToListAsync();
 
         public async Task FillVignettesAsync()
         {
             List<Vignette> vignettes = new List<Vignette>()
             {
                 //Expired Vignette
-                new Vignette 
-                { 
-                    Id = 1,                   
+                new Vignette
+                {
+                    Id = 1,
                     StartDate = DateTime.UtcNow.AddYears(-((int)PeriodInDays.Year + (int)PeriodInDays.Year)),
                     EndDate = DateTime.UtcNow.AddYears(-(int)PeriodInDays.Year),
-                    Expired = true,                    
+                    Expired = true,
                     VehicleId = 1
                 },
                 //Active Vignette
-                new Vignette 
-                { 
-                    Id = 2,  
+                new Vignette
+                {
+                    Id = 2,
                     StartDate = DateTime.Parse("2021-03-21 00:00:00.0000000"),
                     EndDate = DateTime.Parse("2022-03-21 00:00:00.0000000"),
-                    Expired = false,                   
+                    Expired = false,
                     VehicleId = 1
                 },
                 //Expired Vignette
-                 new Vignette 
-                 { 
+                 new Vignette
+                 {
                     Id = 3,
                     StartDate = DateTime.UtcNow.AddYears(-((int)PeriodInDays.Year + (int)PeriodInDays.Year)),
                     EndDate = DateTime.UtcNow.AddYears(-(int)PeriodInDays.Year),
-                    Expired = true,                   
+                    Expired = true,
                     VehicleId = 2
                 },
                  //Active Vignette
-                new Vignette 
-                { 
-                    Id = 4,                    
+                new Vignette
+                {
+                    Id = 4,
                     StartDate = DateTime.Parse("2021-01-01 00:00:00.0000000"),
                     EndDate = DateTime.Parse("2022-01-01 00:00:00.0000000"),
-                    Expired = false,                   
+                    Expired = false,
                     VehicleId =2
                 },
                 //Active Vignette
-                new Vignette { 
-                    Id = 5,                    
+                new Vignette {
+                    Id = 5,
                     StartDate = DateTime.Parse("2021-05-21 00:00:00.0000000"),
                     EndDate = DateTime.Parse("2022-05-21 00:00:00.0000000"),
-                    Expired = false,                    
+                    Expired = false,
                     VehicleId = 3
                 },
                 //Active Vignette
-                new Vignette 
-                { 
-                    Id = 6,                    
+                new Vignette
+                {
+                    Id = 6,
                     StartDate = DateTime.Parse("2021-06-01 00:00:00.0000000"),
                     EndDate = DateTime.Parse("2022-06-21 00:00:00.0000000"),
-                    Expired = false,                    
+                    Expired = false,
                     VehicleId = 4
                 },
                 //Start today Vignette
-                new Vignette 
-                { 
+                new Vignette
+                {
                     Id = 7,
                     StartDate = DateTime.UtcNow,
                     EndDate = DateTime.UtcNow.AddYears((int)PeriodInDays.Year),
-                    Expired = false,                    
+                    Expired = false,
                     VehicleId = 5
                 },
                 //Start Vignette
-                new Vignette 
-                { 
-                    Id = 8,                    
+                new Vignette
+                {
+                    Id = 8,
                     StartDate = DateTime.UtcNow,
                     EndDate = DateTime.UtcNow.AddYears((int)PeriodInDays.Year),
-                    Expired = false,                    
+                    Expired = false,
                     VehicleId = 6
                 },
                 //Expiring Today Vignette
-                new Vignette 
-                { 
-                    Id = 9,                    
+                new Vignette
+                {
+                    Id = 9,
                     StartDate = DateTime.UtcNow.AddYears(-((int)PeriodInDays.Year)),
                     EndDate = DateTime.UtcNow,
-                    Expired = false,                    
+                    Expired = false,
                     VehicleId = 7
                 },
                 //Expiring Today Vignette
-                new Vignette 
-                { 
-                    Id = 10,                    
+                new Vignette
+                {
+                    Id = 10,
                     StartDate = DateTime.UtcNow.AddYears(-((int)PeriodInDays.Year)),
                     EndDate = DateTime.UtcNow,
-                    Expired = false,                    
+                    Expired = false,
                     VehicleId = 8
                 },
                 //Expire but not asign
-                new Vignette 
+                new Vignette
                 {
                     Id = 11,
                     StartDate = DateTime.UtcNow.AddYears(-((int)PeriodInDays.Year + (int)PeriodInDays.Year)),
                     EndDate = DateTime.UtcNow.AddYears(-(int)PeriodInDays.Year),
                     Expired = false,
                     VehicleId = 9
-                }               
+                }
             };
 
             await this.Context.Vignettes.AddRangeAsync(vignettes);
