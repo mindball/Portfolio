@@ -24,7 +24,6 @@
 
   <ItemGroup>
     <Folder Include="Vehicles\" />
-    <Folder Include="Vignettes\" />
     <Folder Include="Users\" />
   </ItemGroup>
 

@@ -11,12 +11,20 @@ using CarTrade.Web.Infrastructure.Mapping;
 
 namespace CarTrade.Services.Tests
 {
-    public class DbContext
-    {     
-        public DbContext()
+    public class DatabaseFixture : IDisposable
+    {
+
+        /* 
+         * Setting up and seeding the database
+         * This sample recreates the database for each test. This works well for SQLite and 
+         * EF in-memory database testing but can involve significant overhead with other 
+         * database systems, including SQL Server.
+         * */
+
+        public DatabaseFixture()
         {
             var dbOptions = new DbContextOptionsBuilder<CarDbContext>()
-              .UseInMemoryDatabase("CarTradeParkingSystem").Options;
+              .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
 
             this.Context = new CarDbContext(dbOptions);
             //Mapper.Initialize(config => config.AddProfile<AutoMapperProfile>());
@@ -24,15 +32,29 @@ namespace CarTrade.Services.Tests
             {
                 cfg.AddProfile(new AutoMapperProfile());
             });
+
+            this.FillBranches();
+            this.FillBrands();
+            this.FillEmployeers();
+            this.FillInsuranceCompany();
+            this.FillVehicles();
+            this.FillInsurancePolicies();
+            this.FillVignettes();
         }
 
         public List<InsurancePolicy> AllInsurance { get; set; }
 
         public MapperConfiguration MapperConfig { get; set; }
 
-        public CarDbContext Context { get; set; }        
+        public CarDbContext Context { get; set; }
 
-        public async Task FillBranchesAsync()
+        //Tip
+
+        //The creation and seeding code does not need to be async.Making it async 
+        //will complicate the code and will not improve performance or throughput of tests.
+
+
+        private void FillBranches()
         {
             var firstBranch = new Branch { Id = 1, Town = "Стара Загора", Address = "бул. Никола Петков 55" };
             var secondBranch = new Branch { Id = 2, Town = "София", Address = "бул. Христо Ботев 98" };
@@ -40,33 +62,33 @@ namespace CarTrade.Services.Tests
             var fourthBranch = new Branch { Id = 4, Town = "Пловдив", Address = "бул. Кукленско шосе № 3 А" };
             var fifttBranch = new Branch { Id = 5, Town = "Русе", Address = "ул. Потсдам 2" };
 
-            await this.Context.Branches.AddRangeAsync(firstBranch, secondBranch,
+            this.Context.Branches.AddRange(firstBranch, secondBranch,
                 thirdBranch, fourthBranch, fifttBranch);
 
-            await this.Context.SaveChangesAsync();
+            this.Context.SaveChanges();
         }
 
-        public async Task FillBrandsAsync()
+        private void FillBrands()
         {
             var firstBrand = new Brand { Id = 1, Name = "Volkswagen" };
             var secondBrand = new Brand { Id = 2, Name = "Audi" };
 
-            await this.Context.Brands.AddRangeAsync(firstBrand, secondBrand);
+            this.Context.Brands.AddRange(firstBrand, secondBrand);
 
-            await this.Context.SaveChangesAsync();
+            this.Context.SaveChanges();
         }
 
-        public async Task FillEmployeersAsync()
+        private void FillEmployeers()
         {
             var firstEmployeer = new Employer { Id = 1, Name = "Автохит Трейд ООД" };
             var secondEmployeer = new Employer { Id = 2, Name = "Автохит 2000" };
 
-            await this.Context.Companies.AddRangeAsync(firstEmployeer, secondEmployeer);
+            this.Context.Companies.AddRange(firstEmployeer, secondEmployeer);
 
-            await this.Context.SaveChangesAsync();
+            this.Context.SaveChanges();
         }
 
-        public async Task FillInsuranceCompanyAsync()
+        private void FillInsuranceCompany()
         {
             List<InsuranceCompany> insuranceCompanies = new List<InsuranceCompany>()
             {
@@ -77,11 +99,11 @@ namespace CarTrade.Services.Tests
                 new InsuranceCompany { Id = 5, Name = "Дженерали застраховане АД" }
             };
 
-            await this.Context.InsuranceCompanies.AddRangeAsync(insuranceCompanies);
-            await this.Context.SaveChangesAsync();
+            this.Context.InsuranceCompanies.AddRange(insuranceCompanies);
+            this.Context.SaveChanges();
         }
 
-        public async Task FillVehiclesAsync()
+        private void FillVehicles()
         {
             List<Vehicle> vehicles = new List<Vehicle>()
             {
@@ -96,7 +118,7 @@ namespace CarTrade.Services.Tests
                     EndOilChange = 113000,
                     Vin = "VWVZZZ1KZ1P324444",
                     Status = VehicleStatus.OnMotion,
-                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)PeriodInDays.HalfYear),
+                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.HalfYear),
                     BranchId = 1,
                     BrandId = 1,
                     OwnerId = 1,
@@ -114,7 +136,7 @@ namespace CarTrade.Services.Tests
                     EndOilChange = 190000,
                     Vin = "VWVZZZ1KZ1P111222",
                     Status = VehicleStatus.OnMotion,
-                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)PeriodInDays.QuarterOfYear),
+                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.QuarterOfYear),
                     BranchId = 2,
                     BrandId = 1,
                     OwnerId = 1,
@@ -132,7 +154,7 @@ namespace CarTrade.Services.Tests
                     EndOilChange = 28000,
                     Vin = "VWVZZZ1KZ1P999888",
                     Status = VehicleStatus.OnMotion,
-                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)PeriodInDays.Monthly),
+                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.Monthly),
                     BranchId = 3,
                     BrandId = 1,
                     OwnerId = 1,
@@ -168,7 +190,7 @@ namespace CarTrade.Services.Tests
                     EndOilChange = 200000,
                     Vin = "VWVZZZ1KZ1P333333",
                     Status = VehicleStatus.OnMotion,
-                    InspectionSafetyCheck = DateTime.UtcNow.AddDays(-(int)PeriodInDays.Dayly),
+                    InspectionSafetyCheck = DateTime.UtcNow.AddDays(-(int)TimesPeriod.Dayly),
                     BranchId = 1,
                     BrandId = 1,
                     OwnerId = 1,
@@ -186,7 +208,7 @@ namespace CarTrade.Services.Tests
                     EndOilChange = 199000,
                     Vin = "VWVZZZ1KZ1P98744",
                     Status = VehicleStatus.OnMotion,
-                    InspectionSafetyCheck = DateTime.UtcNow.AddDays(-(int)PeriodInDays.Dayly),
+                    InspectionSafetyCheck = DateTime.UtcNow.AddDays(-(int)TimesPeriod.Dayly),
                     BranchId = 2,
                     BrandId = 2,
                     OwnerId = 2,
@@ -204,7 +226,7 @@ namespace CarTrade.Services.Tests
                     EndOilChange = 198000,
                     Vin = "VWVZZZ1KZ1P447788",
                     Status = VehicleStatus.OnMotion,
-                    InspectionSafetyCheck = DateTime.UtcNow.AddDays(-(int)PeriodInDays.Dayly),
+                    InspectionSafetyCheck = DateTime.UtcNow.AddDays(-(int)TimesPeriod.Dayly),
                     BranchId = 1,
                     BrandId = 1,
                     OwnerId = 1,
@@ -222,7 +244,7 @@ namespace CarTrade.Services.Tests
                     EndOilChange = 198000,
                     Vin = "VWVZZZ1KZ1P357159",
                     Status = VehicleStatus.OnMotion,
-                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)PeriodInDays.HalfYear),
+                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.HalfYear),
                     BranchId = 1,
                     BrandId = 1,
                     OwnerId = 1,
@@ -240,20 +262,36 @@ namespace CarTrade.Services.Tests
                     EndOilChange = 199000,
                     Vin = "VWVZZZ1KZ1P357159",
                     Status = VehicleStatus.OnMotion,
-                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)PeriodInDays.HalfYear),
+                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.HalfYear),
                     BranchId = 3,
                     BrandId = 1,
                     OwnerId = 1,
                     //List<InsurancePolicy>
                     //List<Vignette>
                 },
+                //expired all
+                new Vehicle
+                {
+                    Id = 10,
+                    Model = "Up",
+                    PlateNumber = "CT75665AM",
+                    YearОfМanufacture = DateTime.UtcNow.AddYears(5),
+                    TravelledDistance = 198000,
+                    EndOilChange = 198000,
+                    Vin = "VWVZZZ1KZ1P357159",
+                    Status = VehicleStatus.OnMotion,
+                    InspectionSafetyCheck = DateTime.UtcNow.AddDays(-(int)TimesPeriod.HalfYear),
+                    BranchId = 3,
+                    BrandId = 1,
+                    OwnerId = 1,
+                },
             };
 
-            await this.Context.Vehicles.AddRangeAsync(vehicles);
-            await this.Context.SaveChangesAsync();
+            this.Context.Vehicles.AddRange(vehicles);
+            this.Context.SaveChanges();
         }
 
-        public async Task FillInsurancePoliciesAsync()
+        private void FillInsurancePolicies()
         {
             List<InsurancePolicy> insurancePolicies = new List<InsurancePolicy>()
             {
@@ -315,7 +353,7 @@ namespace CarTrade.Services.Tests
                 new InsurancePolicy { Id = 7,
                     TypeInsurance = TypeInsurance.FullCasco,
                     StartDate = DateTime.UtcNow,
-                    EndDate = DateTime.UtcNow.AddYears((int)PeriodInDays.Year),
+                    EndDate = DateTime.UtcNow.AddYears((int)TimesPeriod.Year),
                     Expired = false,
                     InsuranceCompanyId = 3,
                     VehicleId = 3
@@ -324,7 +362,7 @@ namespace CarTrade.Services.Tests
                 new InsurancePolicy { Id = 8,
                     TypeInsurance = TypeInsurance.ThirdPartyLiability,
                     StartDate = DateTime.UtcNow,
-                    EndDate = DateTime.UtcNow.AddYears((int)PeriodInDays.Year),
+                    EndDate = DateTime.UtcNow.AddYears((int)TimesPeriod.Year),
                     Expired = false,
                     InsuranceCompanyId = 2,
                     VehicleId =3
@@ -332,7 +370,7 @@ namespace CarTrade.Services.Tests
                 //Expiring today
                 new InsurancePolicy { Id = 9,
                     TypeInsurance = TypeInsurance.FullCasco,
-                    StartDate = DateTime.UtcNow.AddYears(-((int)PeriodInDays.Year)),
+                    StartDate = DateTime.UtcNow.AddYears(-((int)TimesPeriod.Year)),
                     EndDate = DateTime.UtcNow,
                     Expired = false,
                     InsuranceCompanyId = 3,
@@ -340,7 +378,7 @@ namespace CarTrade.Services.Tests
                 },
                 new InsurancePolicy { Id = 10,
                     TypeInsurance = TypeInsurance.ThirdPartyLiability,
-                    StartDate = DateTime.UtcNow.AddYears(-((int)PeriodInDays.Year)),
+                    StartDate = DateTime.UtcNow.AddYears(-((int)TimesPeriod.Year)),
                     EndDate = DateTime.UtcNow,
                     Expired = false,
                     InsuranceCompanyId = 2,
@@ -348,15 +386,15 @@ namespace CarTrade.Services.Tests
                 }
             };
 
-            await this.Context.InsurancePolicies.AddRangeAsync(insurancePolicies);
-            await this.Context.SaveChangesAsync();            
+            this.Context.InsurancePolicies.AddRange(insurancePolicies);
+            this.Context.SaveChanges();
         }
 
         //TODO: make readonly collection
         public async Task<IList<InsurancePolicy>> AllInsurancePoliciesAsync()
             => await this.Context.InsurancePolicies.ToListAsync();
 
-        public async Task FillVignettesAsync()
+        private void FillVignettes()
         {
             List<Vignette> vignettes = new List<Vignette>()
             {
@@ -364,8 +402,8 @@ namespace CarTrade.Services.Tests
                 new Vignette
                 {
                     Id = 1,
-                    StartDate = DateTime.UtcNow.AddYears(-((int)PeriodInDays.Year + (int)PeriodInDays.Year)),
-                    EndDate = DateTime.UtcNow.AddYears(-(int)PeriodInDays.Year),
+                    StartDate = DateTime.UtcNow.AddYears(-((int)TimesPeriod.Year + (int)TimesPeriod.Year)),
+                    EndDate = DateTime.UtcNow.AddYears(-(int)TimesPeriod.Year),
                     Expired = true,
                     VehicleId = 1
                 },
@@ -382,8 +420,8 @@ namespace CarTrade.Services.Tests
                  new Vignette
                  {
                     Id = 3,
-                    StartDate = DateTime.UtcNow.AddYears(-((int)PeriodInDays.Year + (int)PeriodInDays.Year)),
-                    EndDate = DateTime.UtcNow.AddYears(-(int)PeriodInDays.Year),
+                    StartDate = DateTime.UtcNow.AddYears(-((int)TimesPeriod.Year + (int)TimesPeriod.Year)),
+                    EndDate = DateTime.UtcNow.AddYears(-(int)TimesPeriod.Year),
                     Expired = true,
                     VehicleId = 2
                 },
@@ -418,7 +456,7 @@ namespace CarTrade.Services.Tests
                 {
                     Id = 7,
                     StartDate = DateTime.UtcNow,
-                    EndDate = DateTime.UtcNow.AddYears((int)PeriodInDays.Year),
+                    EndDate = DateTime.UtcNow.AddYears((int)TimesPeriod.Year),
                     Expired = false,
                     VehicleId = 5
                 },
@@ -427,7 +465,7 @@ namespace CarTrade.Services.Tests
                 {
                     Id = 8,
                     StartDate = DateTime.UtcNow,
-                    EndDate = DateTime.UtcNow.AddYears((int)PeriodInDays.Year),
+                    EndDate = DateTime.UtcNow.AddYears((int)TimesPeriod.Year),
                     Expired = false,
                     VehicleId = 6
                 },
@@ -435,7 +473,7 @@ namespace CarTrade.Services.Tests
                 new Vignette
                 {
                     Id = 9,
-                    StartDate = DateTime.UtcNow.AddYears(-((int)PeriodInDays.Year)),
+                    StartDate = DateTime.UtcNow.AddYears(-((int)TimesPeriod.Year)),
                     EndDate = DateTime.UtcNow,
                     Expired = false,
                     VehicleId = 7
@@ -444,7 +482,7 @@ namespace CarTrade.Services.Tests
                 new Vignette
                 {
                     Id = 10,
-                    StartDate = DateTime.UtcNow.AddYears(-((int)PeriodInDays.Year)),
+                    StartDate = DateTime.UtcNow.AddYears(-((int)TimesPeriod.Year)),
                     EndDate = DateTime.UtcNow,
                     Expired = false,
                     VehicleId = 8
@@ -453,15 +491,37 @@ namespace CarTrade.Services.Tests
                 new Vignette
                 {
                     Id = 11,
-                    StartDate = DateTime.UtcNow.AddYears(-((int)PeriodInDays.Year + (int)PeriodInDays.Year)),
-                    EndDate = DateTime.UtcNow.AddYears(-(int)PeriodInDays.Year),
+                    StartDate = DateTime.UtcNow.AddYears(-((int)TimesPeriod.Year + (int)TimesPeriod.Year)),
+                    EndDate = DateTime.UtcNow.AddYears(-(int)TimesPeriod.Year),
                     Expired = false,
                     VehicleId = 9
-                }
+                },
+                 //Expire but not asign
+                new Vignette
+                {
+                    Id = 12,
+                    StartDate = DateTime.UtcNow.AddYears(-((int)TimesPeriod.Year + (int)TimesPeriod.Year)),
+                    EndDate = DateTime.UtcNow.AddYears(-(int)TimesPeriod.Year),
+                    Expired = false,
+                    VehicleId = 9
+                },
+                //Expired with asign
+                new Vignette
+                {
+                    Id = 13,
+                    StartDate = DateTime.UtcNow.AddYears(-((int)TimesPeriod.Year + (int)TimesPeriod.Year)),
+                    EndDate = DateTime.UtcNow.AddYears(-(int)TimesPeriod.Year),
+                    Expired = true,
+                    VehicleId = 10
+                },
             };
 
-            await this.Context.Vignettes.AddRangeAsync(vignettes);
-            await this.Context.SaveChangesAsync();
+            this.Context.Vignettes.AddRange(vignettes);
+            this.Context.SaveChanges();
+        }
+
+        public void Dispose()
+        {
         }
     }
 }

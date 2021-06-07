@@ -3,6 +3,7 @@ using CarTrade.Data.Enums;
 using CarTrade.Data.Models;
 using CarTrade.Services.InsurancePolicies;
 using CarTrade.Services.InsurancePolicies.Models;
+using CarTrade.Services.Tests.Enums;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,17 +14,16 @@ using static CarTrade.Common.DataConstants;
 
 namespace CarTrade.Services.Tests.InsurancePolicies
 {
-    public class InsurancePolicesTest
+    [Collection("Database collection")]
+    public class InsurancePolicesTest : Common.Data
     {
-        private DbContext dbContext;
-        private IMapper mapper; 
-        private static bool IsFilledInsurancePolicies = false;
-        private static bool IsFilledInsuranceCompany = false;
+        private DatabaseFixture dbContext;
+        private IMapper mapper;        
         private IInsurancesPoliciesService insuranceServices;        
 
-        public InsurancePolicesTest()
+        public InsurancePolicesTest(DatabaseFixture dbContext)
         {
-            this.dbContext = new DbContext();
+            this.dbContext = dbContext;
             this.mapper = this.dbContext.MapperConfig.CreateMapper();
             this.insuranceServices = new InsurancesPoliciesService(this.dbContext.Context, mapper);
         }
@@ -35,13 +35,7 @@ namespace CarTrade.Services.Tests.InsurancePolicies
         [InlineData("2022-01-01 00:00:00.0000000", "2021-12-31 23:59:59.9999999")]       
         public async Task AddPolicyAsyncShouldReturnErrorIfStartDateIsBiggerOrEqualEndDateAndLessThanOneYear(string startDate, string endDate) 
         {
-            //Arrange
-            if (!IsFilledInsurancePolicies)
-            {
-                await this.dbContext.FillInsurancePoliciesAsync();
-                IsFilledInsurancePolicies = true;
-            }
-
+            //Arrange           
             var model = new InsurancePolicyFormServiceModel
             {
                 StartDate = DateTime.Parse(startDate),
@@ -49,28 +43,18 @@ namespace CarTrade.Services.Tests.InsurancePolicies
             };
 
             //Act
-            var exceptionMessage = Assert.ThrowsAsync<ArgumentException>(() =>  this.insuranceServices.AddPolicyAsync(0, model));
-
+            var exceptionMessage = await Assert.ThrowsAsync<ArgumentException>(() 
+                =>  this.insuranceServices.AddPolicyAsync(0, model));
 
             //Assert
-            Assert.Equal(WrongDateExceptionMessage, exceptionMessage.Result.Message);
+            Assert.Equal(WrongDateExceptionMessage, exceptionMessage.Message);
         }
 
         [Fact]
         public async Task AddPolicyAsyncShouldReturnErrorIfInsuranceCompanyDoesnExist()
         {
             //Arrange
-            if (!IsFilledInsurancePolicies)
-            {
-                await this.dbContext.FillInsurancePoliciesAsync();
-                IsFilledInsurancePolicies = true;
-            }
-            if (!IsFilledInsuranceCompany)
-            {
-                await this.dbContext.FillInsuranceCompanyAsync();
-                IsFilledInsuranceCompany = true;
-            }
-
+            
             var model = new InsurancePolicyFormServiceModel
             {
                 StartDate = DateTime.Parse("2021-01-01 00:00:00.0000000"),
@@ -79,10 +63,11 @@ namespace CarTrade.Services.Tests.InsurancePolicies
             };
 
             //Act
-            var exceptionMessage = Assert.ThrowsAsync<ArgumentException>(() => this.insuranceServices.AddPolicyAsync(0, model));
+            var exceptionMessage = await Assert.ThrowsAsync<ArgumentException>(() 
+                => this.insuranceServices.AddPolicyAsync(0, model));
 
             //Assert
-            Assert.Equal(NotExistItemExceptionMessage, exceptionMessage.Result.Message);
+            Assert.Equal(NotExistItemExceptionMessage, exceptionMessage.Message);
         }
 
         [Theory]
@@ -90,18 +75,7 @@ namespace CarTrade.Services.Tests.InsurancePolicies
         [InlineData(TypeInsurance.ThirdPartyLiability)]
         public async Task AddPolicyAsyncShouldReturnErrorIfVehicleHasActiveInsurance(TypeInsurance typeInsurance)
         {
-            //Arrange
-            if (!IsFilledInsurancePolicies)
-            {
-                await this.dbContext.FillInsurancePoliciesAsync();
-                IsFilledInsurancePolicies = true;
-            }
-
-            if (!IsFilledInsuranceCompany)
-            {
-                await this.dbContext.FillInsuranceCompanyAsync();
-                IsFilledInsuranceCompany = true;
-            }
+            //Arrange          
 
             var model = new InsurancePolicyFormServiceModel
             {
@@ -112,28 +86,24 @@ namespace CarTrade.Services.Tests.InsurancePolicies
             };
 
             //Act
-            var exceptionMessage = Assert.ThrowsAsync<ArgumentException>(() => this.insuranceServices.AddPolicyAsync(1, model));
+            var exceptionMessage = await Assert.ThrowsAsync<ArgumentException>(() 
+                => this.insuranceServices.AddPolicyAsync(1, model));
 
             //Assert
-            Assert.Equal(ExistItemExceptionMessage, exceptionMessage.Result.Message);
+            Assert.Equal(ExistItemExceptionMessage, exceptionMessage.Message);
         }
 
         [Fact]
         public async Task EditPolicyAsyncShoudReturnErrorIfNotExist()
         {
             //Arrange
-            if (!IsFilledInsurancePolicies)
-            {
-                await this.dbContext.FillInsurancePoliciesAsync();
-                IsFilledInsurancePolicies = true;
-            }
-
+           
             //Act
-            var exceptionMessage = Assert.ThrowsAsync<ArgumentException>(() 
+            var exceptionMessage = await Assert.ThrowsAsync<ArgumentException>(() 
                 => this.insuranceServices.EditPolicyAsync(int.MaxValue, null));
 
             //Assert
-            Assert.Equal(NotExistItemExceptionMessage, exceptionMessage.Result.Message);
+            Assert.Equal(NotExistItemExceptionMessage, exceptionMessage.Message);
         }
 
         [Theory]
@@ -144,12 +114,7 @@ namespace CarTrade.Services.Tests.InsurancePolicies
         public async Task EditPolicyAsyncShoudReturnErrorIfDatesIsNotValid(string startDate, string endDate)
         {
             //Arrange
-            if (!IsFilledInsurancePolicies)
-            {
-                await this.dbContext.FillInsurancePoliciesAsync();
-                IsFilledInsurancePolicies = true;
-            }
-
+            
             var model = new InsurancePolicyFormServiceModel
             {
                 StartDate = DateTime.Parse(startDate),
@@ -159,10 +124,11 @@ namespace CarTrade.Services.Tests.InsurancePolicies
             //Act
             foreach (var item in await this.dbContext.AllInsurancePoliciesAsync())
             {
-                var exceptionMessage = Assert.ThrowsAsync<ArgumentException>(() => this.insuranceServices.EditPolicyAsync(item.Id, model));
+                var exceptionMessage = await Assert.ThrowsAsync<ArgumentException>(() 
+                    => this.insuranceServices.EditPolicyAsync(item.Id, model));
 
                 //Assert
-                Assert.Equal(WrongDateExceptionMessage, exceptionMessage.Result.Message);
+                Assert.Equal(WrongDateExceptionMessage, exceptionMessage.Message);
             }
         }
 
@@ -171,12 +137,7 @@ namespace CarTrade.Services.Tests.InsurancePolicies
         {
             const int policyId = 2;
             //Arrange
-            if (!IsFilledInsurancePolicies)
-            {
-                await this.dbContext.FillInsurancePoliciesAsync();
-                IsFilledInsurancePolicies = true;
-            }
-
+           
             var editingPolicy = new InsurancePolicyFormServiceModel
             {
                 StartDate = DateTime.Parse("2021-12-31 23:59:59.9999999"),
@@ -202,8 +163,8 @@ namespace CarTrade.Services.Tests.InsurancePolicies
             Assert.Equal(editingPolicy.TypeInsurance, editedPolicy.TypeInsurance);
         }
 
-        [Theory, MemberData(nameof(ExpiredDates))]        
-        public async Task SetExpiredInsurancePoliciesLogicAsyncShouldSetAllExpiredInsuranceTrue(DateTime endDate, bool expired)
+        [Theory, MemberData(nameof(ExpireDates))]        
+        public async Task SetExpiredInsurancePoliciesLogicAsyncShouldSetAllExpiredInsuranceTrue(DateTime endDate, bool expired = false)
         {
             //Arrange
             var newInsurance = new InsurancePolicy
@@ -226,16 +187,5 @@ namespace CarTrade.Services.Tests.InsurancePolicies
             //Assert
             Assert.True(newInsurance.Expired);
         }
-
-        public static IEnumerable<object[]> ExpiredDates => new[]
-        {  
-            new object[] { DateTime.UtcNow.AddYears(-1), false },
-            new object[] { DateTime.UtcNow.AddMonths(-1), false },            
-            new object[] { DateTime.UtcNow.AddDays(-1), false },
-            new object[] { DateTime.UtcNow.AddHours(-1), false },
-            new object[] { DateTime.UtcNow.AddMinutes(-1), false },
-            new object[] { DateTime.UtcNow.AddSeconds(-1), false },
-            new object[] { DateTime.UtcNow.AddMilliseconds(-1), false }
-        };
     }
 }
