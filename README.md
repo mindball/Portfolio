@@ -22,9 +22,16 @@ The project provides the following functionalities and is useful for vehicle fle
 - AutoMapper
 - [HangFire](https://www.hangfire.io/ "HangFire")
 - Bootstrap
+- xUnit
 - Moq
 - [xUnit](https://github.com/xunit/xunit)
 - In-memory databases
+- Deployed and working on Windows server 2012 Std. 
 
 ## :wrench: DB Diagram
 ![](https://res.cloudinary.com/oilairpi/image/upload/v1623133764/Portfolio/diagram_wq1ndx.jpg)
+
+## :dash: Road To
+- Asing driver, manager roles
+- Vehicle rent at day functionality
+- work on a better looking site-front end
