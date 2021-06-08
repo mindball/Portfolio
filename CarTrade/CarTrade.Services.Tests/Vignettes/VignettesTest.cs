@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using CarTrade.Data.Models;
 using CarTrade.Services.Vignettes;
 using CarTrade.Services.Vignettes.Models;
+using CarTrade.Web.Infrastructure.Mapping;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -14,18 +16,13 @@ namespace CarTrade.Services.Tests.Vignettes
     [Collection("Database collection")]
     public class VignettesTest : Common.Data
     {
-
         DatabaseFixture fixture;
-        private IMapper mapper;
-
-        private static bool IsFilledVignettes = false;
-        private IVignettesService vignetteServide;
+        private IVignettesService vignetteServise;
 
         public VignettesTest(DatabaseFixture fixture)
         {
-            this.fixture = fixture;
-            this.mapper = this.fixture.MapperConfig.CreateMapper();
-            this.vignetteServide = new VignettesService(this.fixture.Context, mapper);
+            this.fixture = fixture;           
+            this.vignetteServise = new VignettesService(this.fixture.Context, this.fixture.Mapper);
         }
 
         [Fact]
@@ -35,10 +32,10 @@ namespace CarTrade.Services.Tests.Vignettes
             var model = new VignetteFormServiceModel();
 
             //Act
-            var exceptionMessage = Assert.ThrowsAsync<ArgumentException>(() => this.vignetteServide.AddVignetteAsync(int.MaxValue, model));
+            var exceptionMessage = await Assert.ThrowsAsync<ArgumentException>(() => this.vignetteServise.AddVignetteAsync(int.MaxValue, model));
 
             //Assert
-            Assert.Equal(NotExistItemExceptionMessage, exceptionMessage.Result.Message);
+            Assert.Equal(NotExistItemExceptionMessage, exceptionMessage.Message);
         }
 
         [Fact]
@@ -59,7 +56,7 @@ namespace CarTrade.Services.Tests.Vignettes
             //Assert
             foreach (var activeVignette in existVignette)
             {
-                var exceptionMessage = Assert.ThrowsAsync<ArgumentException>(() => this.vignetteServide.AddVignetteAsync(activeVignette.VehicleId, null));
+                var exceptionMessage = Assert.ThrowsAsync<ArgumentException>(() => this.vignetteServise.AddVignetteAsync(activeVignette.VehicleId, null));
                 Assert.Equal(ExistItemExceptionMessage, exceptionMessage.Result.Message);
             }
         }
@@ -69,18 +66,131 @@ namespace CarTrade.Services.Tests.Vignettes
         {
             //Arrange  
             var newVignetteModel = new VignetteFormServiceModel
-            {                
+            {
                 Expired = false,
                 StartDate = startDate,
                 EndDate = endDate
             };
 
             //Act
-            var exceptionMessage = await Assert.ThrowsAsync<ArgumentException>(() 
-                => this.vignetteServide.AddVignetteAsync(10, newVignetteModel));
+            var exceptionMessage = await Assert.ThrowsAsync<ArgumentException>(()
+                => this.vignetteServise.AddVignetteAsync(10, newVignetteModel));
 
             //Assert
             Assert.Equal(WrongDateExceptionMessage, exceptionMessage.Message);
         }
+
+        [Fact]
+        public async Task EditVignetteAsyncShoudReturnErrorIfNotExist()
+        {
+            //Arrange
+
+            //Act
+            var exceptionMessage = await Assert.ThrowsAsync<ArgumentException>(()
+                => this.vignetteServise.EditAsync(int.MaxValue, null));
+
+            //Assert
+            Assert.Equal(NotExistItemExceptionMessage, exceptionMessage.Message);
+        }
+
+        [Fact]
+        public async Task GetByIdAsyncShouldReturnErrorIfNotExist()
+        {
+            // Arrange
+
+            //Act
+            var exceptionMessage = await Assert.ThrowsAsync<ArgumentException>(()
+               => this.vignetteServise.GetByIdAsync<object>(int.MaxValue));
+
+            //Assert
+            Assert.Equal(NotExistItemExceptionMessage, exceptionMessage.Message);
+        }
+
+        [Fact]
+        public async Task GetVignetteByVehicleAsyncShoudReturnErrorIfNotExist()
+        {
+            //Arrange
+
+            //Act
+            var exceptionMessage = await Assert.ThrowsAsync<ArgumentException>(()
+                => this.vignetteServise.GetVignetteByVehicleIdAsync<object>(int.MaxValue));
+
+            //Assert
+            Assert.Equal(NotExistItemExceptionMessage, exceptionMessage.Message);
+        }
+
+        [Theory]
+        [InlineData(1, true)]
+        [InlineData(2, true)]
+        [InlineData(5, true)]
+        [InlineData(7, false)]
+        [InlineData(9, false)]
+        [InlineData(10, false)]
+        [InlineData(11, false)]
+        public async Task DoesVehicleHaveActiveVignetteAsyncShoudTrueWhenVehicleHasActiveVignetteAndFalseWhenItNot(int vehicleId, bool expected)
+        {
+            //Arrange  
+
+            //Act
+            var isActiveVignetteResult = await this.vignetteServise.DoesVehicleHaveActiveVignetteAsync(vehicleId);
+
+            //Assert
+            Assert.Equal(expected, isActiveVignetteResult);
+        }
+
+        [Fact]
+        public async Task SetVignetteExpireLogicAsyncShouldSetAllExpiredInsuranceTrue()
+        {
+            //Arrange
+
+            //Act
+            var expectetResultVignettesWithExpiredEndDate =
+                (await this.fixture.Context
+                .Vignettes
+                .Where(vg =>
+                    vg.Expired == false
+                    && vg.EndDate <= DateTime.UtcNow)
+               .ToListAsync())
+               .Count();
+
+            var actualResultVignettesWithExpiredEndDate =
+                await this.vignetteServise.SetVignetteExpireLogicAsync();
+
+            //Assert
+            Assert.Equal(expectetResultVignettesWithExpiredEndDate,
+                actualResultVignettesWithExpiredEndDate);
+        }
+
+        //[Theory]
+        //[InlineData(1, 2)]
+        //[InlineData(3, 1)]
+        //[InlineData(11, 0)]
+        //public async Task GetVignetteByVehicleAsyncShoudReturnCollection(int vehicleId, int expectedCount)
+        //{
+        //    //Arrange  
+        //    this.fixture.MapperConfig = new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperProfile>());
+        //    this.vignetteServise = new VignettesService(this.fixture.Context, new Mapper(this.fixture.MapperConfig));
+
+        //    //Act
+        //    var vignettes = await this.vignetteServise
+        //        .GetVignetteByVehicleIdAsync<VignetteListingServiceModel>(vehicleId);
+
+        //    //Assert
+        //    Assert.Equal(expectedCount, vignettes.Count());            
+        //}
+
+        //[Fact]
+        //public async Task GetVignetteByVehicleAsyncShoudReturnEmptyCollection()
+        //{
+        //    //Arrange
+
+        //    //Act
+        //    var vignettes = await this.vignetteServise
+        //        .GetVignetteByVehicleIdAsync<VignetteListingServiceModel>(11);
+
+        //    //Assert
+        //    Assert.Equal(2, vignettes.Count());
+
+        //}
     }
 }

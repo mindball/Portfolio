@@ -27,11 +27,13 @@ namespace CarTrade.Services.Tests
               .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
 
             this.Context = new CarDbContext(dbOptions);
-            //Mapper.Initialize(config => config.AddProfile<AutoMapperProfile>());
+
             this.MapperConfig = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new AutoMapperProfile());
             });
+
+            this.Mapper = new Mapper(this.MapperConfig);
 
             this.FillBranches();
             this.FillBrands();
@@ -44,7 +46,9 @@ namespace CarTrade.Services.Tests
 
         public List<InsurancePolicy> AllInsurance { get; set; }
 
-        public MapperConfiguration MapperConfig { get; set; }
+        public  MapperConfiguration MapperConfig { get; set; }
+
+        public  IMapper Mapper { get; set; }
 
         public CarDbContext Context { get; set; }
 
@@ -284,6 +288,22 @@ namespace CarTrade.Services.Tests
                     BranchId = 3,
                     BrandId = 1,
                     OwnerId = 1,
+                },                
+                //vehicle never use vignette
+                new Vehicle
+                {
+                    Id = 11,
+                    Model = "Passat",
+                    PlateNumber = "CT72235AM",
+                    YearОfМanufacture = DateTime.UtcNow.AddYears(5),
+                    TravelledDistance = 198000,
+                    EndOilChange = 208000,
+                    Vin = "WVZWWWAAAAAWASDAS22",
+                    Status = VehicleStatus.OnMotion,
+                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.HalfYear),
+                    BranchId = 5,
+                    BrandId = 1,
+                    OwnerId = 2,
                 },
             };
 
@@ -432,7 +452,7 @@ namespace CarTrade.Services.Tests
                     StartDate = DateTime.Parse("2021-01-01 00:00:00.0000000"),
                     EndDate = DateTime.Parse("2022-01-01 00:00:00.0000000"),
                     Expired = false,
-                    VehicleId =2
+                    VehicleId = 2
                 },
                 //Active Vignette
                 new Vignette {

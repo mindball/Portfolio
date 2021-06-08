@@ -16,8 +16,8 @@ namespace CarTrade.Services.Vignettes
 
         Task<IEnumerable<TModel>> GetVignetteByVehicleIdAsync<TModel>(int vehicleId) where TModel : class;
 
-        Task<bool> DoesVehicleHaveActiveVignette(int vehicleId);
+        Task<bool> DoesVehicleHaveActiveVignetteAsync(int vehicleId);
 
-        Task SetVignetteExpireLogicAsync();
+        public Task<int> SetVignetteExpireLogicAsync();
     }
 }

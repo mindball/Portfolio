@@ -8,6 +8,8 @@ using System.Linq;
 using System;
 using AutoMapper;
 
+using static CarTrade.Common.DataConstants;
+
 namespace CarTrade.Services.Vignettes
 {
     //TODO: be consistently  - throw exceptions
@@ -27,20 +29,19 @@ namespace CarTrade.Services.Vignettes
             var existVehicle = await this.db.Vehicles.AnyAsync(v => v.Id == vehicleId);            
             if (!existVehicle)
             {
-                throw new ArgumentException("this vehicle not exist");
+                throw new ArgumentException(NotExistItemExceptionMessage);
             }
-
-            //TODO: test exist vignette
-            var existVignette = await this.DoesVehicleHaveActiveVignette(vehicleId);
+           
+            var existVignette = await this.DoesVehicleHaveActiveVignetteAsync(vehicleId);
 
             if (existVignette)
             {
-                throw new ArgumentException("vignette has not expire on this vehicle");
+                throw new ArgumentException(ExistItemExceptionMessage);
             }
 
             if (vignetteFormModel.StartDate > vignetteFormModel.EndDate)
             {
-                throw new ArgumentException("start date must be equal or small than end date");
+                throw new ArgumentException(WrongDateExceptionMessage);
             }
 
             var newVignette = this.mapper
@@ -65,7 +66,7 @@ namespace CarTrade.Services.Vignettes
                 await this.db.Vignettes.FirstOrDefaultAsync(v => v.Id == vignetteId);
             if(editVignette == null)
             {
-                throw new ArgumentException("not exit vignette");
+                throw new ArgumentException(NotExistItemExceptionMessage);
             }
 
             this.mapper.Map(vignetteFormModel, editVignette);
@@ -78,7 +79,7 @@ namespace CarTrade.Services.Vignettes
             var vignette = await this.db.Vignettes.AnyAsync(v => v.Id == vignetteId);
             if (!vignette)
             {
-                throw new ArgumentException("not exist vignette");
+                throw new ArgumentException(NotExistItemExceptionMessage);
             }
 
             return await this.db.Vignettes
@@ -91,10 +92,8 @@ namespace CarTrade.Services.Vignettes
         {
             var vehicle = await this.db.Vignettes.AnyAsync(v => v.VehicleId == vehicleId);
             if (!vehicle)
-            {
-                //enable this when implement custom exception and collect it at controllers
-                //throw new ArgumentException("not exist vignettes on this vehicle");
-                return null;
+            {                
+                throw new ArgumentException(NotExistItemExceptionMessage);                
             }
 
             return await this.db.Vignettes
@@ -103,14 +102,15 @@ namespace CarTrade.Services.Vignettes
                 .ToListAsync();
         }
 
-        public async Task<bool> DoesVehicleHaveActiveVignette(int vehicleId)
+        //TODO: if expire logic is passed and Expire is not set true and same day vignette expire 
+        public async Task<bool> DoesVehicleHaveActiveVignetteAsync(int vehicleId)
             => await this.db.Vignettes
                 .AnyAsync(vg =>
                 vg.VehicleId == vehicleId
                 && vg.Expired == false
                 && vg.EndDate > DateTime.UtcNow);               
                
-        public async Task SetVignetteExpireLogicAsync()
+        public async Task<int> SetVignetteExpireLogicAsync()
         {
             var vignettes = await this.db.Vignettes
                .Where(vg =>
@@ -123,7 +123,7 @@ namespace CarTrade.Services.Vignettes
                 vignette.Expired = true;
             }
 
-            await this.db.SaveChangesAsync();
+            return await this.db.SaveChangesAsync();
         }
     }
 }

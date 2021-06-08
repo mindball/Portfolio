@@ -79,7 +79,7 @@ namespace CarTrade.Services.InsurancePolicies
             existInsurancePolicy.Expired = insurancePolicyModel.Expired;
             existInsurancePolicy.InsuranceCompanyId = insurancePolicyModel.InsuranceCompanyId;
 
-            var result = await this.db.SaveChangesAsync();
+            await this.db.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<InsurancePolicyListingServiceModel>> GetAllInsuranceByVehicleId(int vehicleId)
@@ -108,6 +108,11 @@ namespace CarTrade.Services.InsurancePolicies
 
         private bool CompareStartEndDate(DateTime startDate, DateTime endDate)
         {
+            if(startDate == null || endDate == null)
+            {
+                return false;
+            }
+
             if (startDate >= endDate)
             {
                 return false;
