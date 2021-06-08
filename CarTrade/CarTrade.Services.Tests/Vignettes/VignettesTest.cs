@@ -1,8 +1,5 @@
-﻿using AutoMapper;
-using CarTrade.Data.Models;
-using CarTrade.Services.Vignettes;
+﻿using CarTrade.Services.Vignettes;
 using CarTrade.Services.Vignettes.Models;
-using CarTrade.Web.Infrastructure.Mapping;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;

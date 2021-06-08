@@ -17,15 +17,15 @@ namespace CarTrade.Services.Tests.InsurancePolicies
     [Collection("Database collection")]
     public class InsurancePolicesTest : Common.Data
     {
-        private DatabaseFixture dbContext;
+        private DatabaseFixture fixture;
         private IMapper mapper;        
         private IInsurancesPoliciesService insuranceServices;        
 
         public InsurancePolicesTest(DatabaseFixture dbContext)
         {
-            this.dbContext = dbContext;
-            this.mapper = this.dbContext.MapperConfig.CreateMapper();
-            this.insuranceServices = new InsurancesPoliciesService(this.dbContext.Context, mapper);
+            this.fixture = dbContext;
+            this.mapper = this.fixture.MapperConfig.CreateMapper();
+            this.insuranceServices = new InsurancesPoliciesService(this.fixture.Context, mapper);
         }
 
         [Theory]
@@ -122,7 +122,7 @@ namespace CarTrade.Services.Tests.InsurancePolicies
             };
 
             //Act
-            foreach (var item in await this.dbContext.AllInsurancePoliciesAsync())
+            foreach (var item in await this.fixture.AllInsurancePoliciesAsync())
             {
                 var exceptionMessage = await Assert.ThrowsAsync<ArgumentException>(() 
                     => this.insuranceServices.EditPolicyAsync(item.Id, model));
@@ -150,7 +150,7 @@ namespace CarTrade.Services.Tests.InsurancePolicies
             //Act
             ////Active FullCasco insurance
             await this.insuranceServices.EditPolicyAsync(policyId, editingPolicy);
-            var editedPolicy = await this.dbContext
+            var editedPolicy = await this.fixture
                 .Context
                 .InsurancePolicies
                 .FirstOrDefaultAsync(i => i.Id == policyId);
@@ -178,11 +178,11 @@ namespace CarTrade.Services.Tests.InsurancePolicies
             };
 
             //Act
-            await this.dbContext.Context.InsurancePolicies.AddAsync(newInsurance);
-            await this.dbContext.Context.SaveChangesAsync();
+            await this.fixture.Context.InsurancePolicies.AddAsync(newInsurance);
+            await this.fixture.Context.SaveChangesAsync();
 
             await insuranceServices.SetExpiredInsurancePoliciesLogicAsync();
-            newInsurance = await this.dbContext.Context
+            newInsurance = await this.fixture.Context
                 .InsurancePolicies.FirstOrDefaultAsync(i => i.VehicleId == int.MaxValue);
             //Assert
             Assert.True(newInsurance.Expired);

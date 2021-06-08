@@ -24,9 +24,11 @@
         public const int DaysBeforeItExpires = 30;
         public const int RemainDistanceOilChange = 1000;
 
-        public const string NotExistItemExceptionMessage = "missing item";
-        public const string ExistItemExceptionMessage = "This item exist or it is active";
+        public const string NotExistItemExceptionMessage = "missing item {0}";
+        public const string ExistItemExceptionMessage = "This {0} item exist or it is active";
         public const string WrongDateExceptionMessage = "Start date must be small than end date" +
                     "or the date must not be less than one year back";
+
+        public const string ValidateItemException = "This {0} not valid or exist";
     }
 }

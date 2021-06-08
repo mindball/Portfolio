@@ -69,7 +69,7 @@ namespace CarTrade.Web.Controllers
                 return this.BadRequest();
             }
 
-            var vehicleVignette = await this.vignettesService.DoesVehicleHaveActiveVignette(vehicleId);
+            var vehicleVignette = await this.vignettesService.DoesVehicleHaveActiveVignetteAsync(vehicleId);
 
             if (vehicleVignette)// && vehicleVignette.)
             {
