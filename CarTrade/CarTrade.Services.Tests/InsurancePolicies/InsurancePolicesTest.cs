@@ -3,10 +3,8 @@ using CarTrade.Data.Enums;
 using CarTrade.Data.Models;
 using CarTrade.Services.InsurancePolicies;
 using CarTrade.Services.InsurancePolicies.Models;
-using CarTrade.Services.Tests.Enums;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 

@@ -112,6 +112,10 @@ namespace CarTrade.Services.Tests
             List<Vehicle> vehicles = new List<Vehicle>()
             {
                 //Active
+                //Vignette
+                //Insurance expire
+                //Inspection
+                //OilChange
                 new Vehicle
                 {
                     Id = 1,
@@ -122,14 +126,16 @@ namespace CarTrade.Services.Tests
                     EndOilChange = 113000,
                     Vin = "VWVZZZ1KZ1P324444",
                     Status = VehicleStatus.OnMotion,
-                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.HalfYear),
+                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.HalfYearDays),
                     BranchId = 1,
                     BrandId = 1,
-                    OwnerId = 1,
-                    //List<InsurancePolicy>
-                    //List<Vignette>
+                    OwnerId = 1,                   
                 },
                 //Active
+                //Vignette
+                //Insurance expire
+                //Inspection
+                //OilChange
                 new Vehicle
                 {
                     Id = 2,
@@ -140,14 +146,15 @@ namespace CarTrade.Services.Tests
                     EndOilChange = 190000,
                     Vin = "VWVZZZ1KZ1P111222",
                     Status = VehicleStatus.OnMotion,
-                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.QuarterOfYear),
+                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.QuarterOfYearDays),
                     BranchId = 2,
                     BrandId = 1,
-                    OwnerId = 1,
-                    //List<InsurancePolicy>
-                    //List<Vignette>
-                },
-                //Expire InspectionSafetyCheck montly
+                    OwnerId = 1,                   
+                },                
+                //Vignette
+                //Insurance expire
+                //Inspection expire monthly
+                //OilChange
                 new Vehicle
                 {
                     Id = 3,
@@ -158,14 +165,17 @@ namespace CarTrade.Services.Tests
                     EndOilChange = 28000,
                     Vin = "VWVZZZ1KZ1P999888",
                     Status = VehicleStatus.OnMotion,
-                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.Monthly),
+                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.MonthlyDays),
                     BranchId = 3,
                     BrandId = 1,
                     OwnerId = 1,
                     //List<InsurancePolicy>
                     //List<Vignette>
                 },
-               //Expire InspectionSafetyCheck today
+                //Vignette
+                //InspectionSafetyCheck expire today
+                //Insurance                
+                //OilChange
                 new Vehicle
                 {
                     Id = 4,
@@ -179,11 +189,12 @@ namespace CarTrade.Services.Tests
                     InspectionSafetyCheck = DateTime.UtcNow,
                     BranchId = 1,
                     BrandId = 1,
-                    OwnerId = 1,
-                    //List<InsurancePolicy>
-                    //List<Vignette>
+                    OwnerId = 1,                    
                 },
-               //Expired InspectionSafetyCheck
+               //Vignette
+                //InspectionSafetyCheck expire
+                //Insurance expire
+                //OilChange
                 new Vehicle
                 {
                     Id = 5,
@@ -197,11 +208,12 @@ namespace CarTrade.Services.Tests
                     InspectionSafetyCheck = DateTime.UtcNow.AddDays(-(int)TimesPeriod.Dayly),
                     BranchId = 1,
                     BrandId = 1,
-                    OwnerId = 1,
-                    //List<InsurancePolicy>
-                    //List<Vignette>
+                    OwnerId = 1
                 },
-                //Expired InspectionSafetyCheck and 1000 km to oil change
+                 //Vignette
+                //InspectionSafetyCheck expire
+                //Insurance                
+                //OilChange 1000 km to oil change                
                 new Vehicle
                 {
                     Id = 6,
@@ -216,10 +228,11 @@ namespace CarTrade.Services.Tests
                     BranchId = 2,
                     BrandId = 2,
                     OwnerId = 2,
-                    //List<InsurancePolicy>
-                    //List<Vignette>
-                },
-                //Expired InspectionSafetyCheck and expired km to oil change
+                },                
+                 //Vignette expire
+                //InspectionSafetyCheck expire
+                //Insurance                
+                //OilChange expire
                 new Vehicle
                 {
                     Id = 7,
@@ -233,11 +246,12 @@ namespace CarTrade.Services.Tests
                     InspectionSafetyCheck = DateTime.UtcNow.AddDays(-(int)TimesPeriod.Dayly),
                     BranchId = 1,
                     BrandId = 1,
-                    OwnerId = 1,
-                    //List<InsurancePolicy>
-                    //List<Vignette>
-                },
-                //expire 1000 km to oil change
+                    OwnerId = 1,                    
+                },                
+                //Vignette expire
+                //InspectionSafetyCheck
+                //Insurance expire
+                //OilChange expire 1000 km to oil change
                 new Vehicle
                 {
                     Id = 8,
@@ -245,17 +259,18 @@ namespace CarTrade.Services.Tests
                     PlateNumber = "CT5555AM",
                     YearОfМanufacture = DateTime.UtcNow.AddYears(2),
                     TravelledDistance = 198000,
-                    EndOilChange = 198000,
+                    EndOilChange = 199000,
                     Vin = "VWVZZZ1KZ1P357159",
                     Status = VehicleStatus.OnMotion,
-                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.HalfYear),
+                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.HalfYearDays),
                     BranchId = 1,
                     BrandId = 1,
-                    OwnerId = 1,
-                    //List<InsurancePolicy>
-                    //List<Vignette>
-                },
-                //expired km to oil change
+                    OwnerId = 1,                    
+                },                
+                //Vignette expire
+                //InspectionSafetyCheck expire
+                //Insurance                
+                //OilChange expire 1000 km
                 new Vehicle
                 {
                     Id = 9,
@@ -266,14 +281,15 @@ namespace CarTrade.Services.Tests
                     EndOilChange = 199000,
                     Vin = "VWVZZZ1KZ1P357159",
                     Status = VehicleStatus.OnMotion,
-                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.HalfYear),
+                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.HalfYearDays),
                     BranchId = 3,
                     BrandId = 1,
-                    OwnerId = 1,
-                    //List<InsurancePolicy>
-                    //List<Vignette>
-                },
-                //expired all
+                    OwnerId = 1,                    
+                },                
+                //Vignette expire
+                //InspectionSafetyCheck expire
+                //Insurance expire   
+                //OilChange expire
                 new Vehicle
                 {
                     Id = 10,
@@ -284,25 +300,104 @@ namespace CarTrade.Services.Tests
                     EndOilChange = 198000,
                     Vin = "VWVZZZ1KZ1P357159",
                     Status = VehicleStatus.OnMotion,
-                    InspectionSafetyCheck = DateTime.UtcNow.AddDays(-(int)TimesPeriod.HalfYear),
+                    InspectionSafetyCheck = DateTime.UtcNow.AddDays(-(int)TimesPeriod.HalfYearDays),
                     BranchId = 3,
                     BrandId = 1,
                     OwnerId = 1,
-                },                
-                //vehicle never use vignette
+                }, 
+                //Vignette  never use vignette
+                //InspectionSafetyCheck  never use inspection
+                //Insurance never use insurance
+                //OilChange never use
                 new Vehicle
                 {
                     Id = 11,
                     Model = "Passat",
                     PlateNumber = "CT72235AM",
                     YearОfМanufacture = DateTime.UtcNow.AddYears(5),
-                    TravelledDistance = 198000,
-                    EndOilChange = 208000,
+                    TravelledDistance = 0,
+                    EndOilChange = 0,
                     Vin = "WVZWWWAAAAAWASDAS22",
                     Status = VehicleStatus.OnMotion,
-                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.HalfYear),
+                    InspectionSafetyCheck = DateTime.MinValue,
                     BranchId = 5,
                     BrandId = 1,
+                    OwnerId = 2,
+                },
+                //vignette expire after 30 days
+                //Insurance
+                //Inspection
+                //OilChange
+                new Vehicle
+                {
+                    Id = 12,
+                    Model = "TT",
+                    PlateNumber = "CT0987AM",
+                    YearОfМanufacture = DateTime.UtcNow.AddYears(5),
+                    TravelledDistance = 198000,
+                    EndOilChange = 208000,
+                    Vin = "WZWZASAAASDASDASDASDA",
+                    Status = VehicleStatus.OnMotion,
+                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.HalfYearDays),
+                    BranchId = 5,
+                    BrandId = 2,
+                    OwnerId = 2,
+                },                
+                //Vignette expire after 20 days
+                //Insurance
+                //Inspection
+                //OilChange
+                new Vehicle
+                {
+                    Id = 13,
+                    Model = "expire 20 days",
+                    PlateNumber = "expire 20 days",
+                    YearОfМanufacture = DateTime.UtcNow.AddYears(5),
+                    TravelledDistance = 198000,
+                    EndOilChange = 208000,
+                    Vin = "expire 20 days",
+                    Status = VehicleStatus.OnMotion,
+                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.HalfYearDays),
+                    BranchId = 5,
+                    BrandId = 2,
+                    OwnerId = 2,
+                },
+                 //Vignette expire after 7 days
+                 //Insurance
+                //Inspection
+                //OilChange
+                new Vehicle
+                {
+                    Id = 14,
+                    Model = "expire 7 days",
+                    PlateNumber = "expire 7 days",
+                    YearОfМanufacture = DateTime.UtcNow.AddYears(5),
+                    TravelledDistance = 198000,
+                    EndOilChange = 208000,
+                    Vin = "expire 7 days",
+                    Status = VehicleStatus.OnMotion,
+                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.HalfYearDays),
+                    BranchId = 5,
+                    BrandId = 2,
+                    OwnerId = 2,
+                },
+                 //Vignette expire after 1 days
+                 //Insurance
+                //Inspection
+                //OilChange
+                new Vehicle
+                {
+                    Id = 15,
+                    Model = "expire 1 day",
+                    PlateNumber = "expire 1 day",
+                    YearОfМanufacture = DateTime.UtcNow.AddYears(5),
+                    TravelledDistance = 198000,
+                    EndOilChange = 208000,
+                    Vin = "expire 1 day",
+                    Status = VehicleStatus.OnMotion,
+                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.HalfYearDays),
+                    BranchId = 5,
+                    BrandId = 2,
                     OwnerId = 2,
                 },
             };
@@ -310,99 +405,130 @@ namespace CarTrade.Services.Tests
             this.Context.Vehicles.AddRange(vehicles);
             this.Context.SaveChanges();
         }
-
+        
         private void FillInsurancePolicies()
         {
             List<InsurancePolicy> insurancePolicies = new List<InsurancePolicy>()
             {
                 //ExpiredFullCascoInsurance
-                new InsurancePolicy { Id = 1,
+                new InsurancePolicy { 
+                    Id = 1,
                     TypeInsurance = TypeInsurance.FullCasco,
-                    StartDate = DateTime.Parse("2020-03-21 00:00:00.0000000"),
-                    EndDate = DateTime.Parse("2021-03-21 00:00:00.0000000"),
+                    StartDate = DateTime.UtcNow.AddDays(-((int)TimesPeriod.YearDays + (int)TimesPeriod.YearDays)),
+                    EndDate = DateTime.UtcNow.AddDays(-(int)TimesPeriod.YearDays),
                     Expired = true,
                     InsuranceCompanyId = 1,
                     VehicleId = 1
                 },
                 //Active FullCasco insurance
-                new InsurancePolicy { Id = 2,
+                new InsurancePolicy { 
+                    Id = 2,
                     TypeInsurance = TypeInsurance.FullCasco,
-                    StartDate = DateTime.Parse("2021-03-21 00:00:00.0000000"),
-                    EndDate = DateTime.Parse("2022-03-21 00:00:00.0000000"),
+                    StartDate =  DateTime.UtcNow.AddDays(-((int)TimesPeriod.MonthlyDays * 2 + (int)TimesPeriod.YearDays)),
+                    EndDate = DateTime.UtcNow.AddDays(((int)TimesPeriod.MonthlyDays * 2)),
                     Expired = false,
                     InsuranceCompanyId = 1,
                     VehicleId = 1
                 },
-                //Expired ThirdPartyLiability Insurance
-                 new InsurancePolicy { Id = 3,
+                //Expired ThirdPartyLiability Insurance but not asign
+                 new InsurancePolicy { 
+                     Id = 3,
                      TypeInsurance = TypeInsurance.ThirdPartyLiability,
-                    StartDate = DateTime.Parse("2020-01-01 00:00:00.0000000"),
-                    EndDate = DateTime.Parse("2021-01-01 00:00:00.0000000"),
-                    Expired = true,
+                    StartDate = DateTime.UtcNow.AddDays(-((int)TimesPeriod.YearDays + (int)TimesPeriod.YearDays)),
+                    EndDate = DateTime.UtcNow.AddDays(-(int)TimesPeriod.YearDays),
+                    Expired = false,
                     InsuranceCompanyId = 2,
                     VehicleId = 1
                 },
                  //Active ThirdPartyLiability insurance
-                new InsurancePolicy { Id = 4,
+                new InsurancePolicy { 
+                    Id = 4,
                     TypeInsurance = TypeInsurance.ThirdPartyLiability,
-                    StartDate = DateTime.Parse("2021-01-01 00:00:00.0000000"),
-                    EndDate = DateTime.Parse("2022-01-01 00:00:00.0000000"),
+                    StartDate = DateTime.UtcNow,
+                    EndDate = DateTime.UtcNow.AddDays((int)TimesPeriod.YearDays),
                     Expired = false,
                     InsuranceCompanyId = 2,
                     VehicleId = 1
                 },
                 //Active FullCasco insurance
-                new InsurancePolicy { Id = 5,
+                new InsurancePolicy { 
+                    Id = 5,
                     TypeInsurance = TypeInsurance.FullCasco,
-                    StartDate = DateTime.Parse("2021-05-21 00:00:00.0000000"),
-                    EndDate = DateTime.Parse("2022-05-21 00:00:00.0000000"),
+                    StartDate = DateTime.UtcNow,
+                    EndDate = DateTime.UtcNow.AddDays((int)TimesPeriod.YearDays),
                     Expired = false,
                     InsuranceCompanyId = 3,
                     VehicleId = 2
-                },
-                //Active ThirdPartyLiability insurance
-                new InsurancePolicy { Id = 6,
-                    TypeInsurance = TypeInsurance.ThirdPartyLiability,
-                    StartDate = DateTime.Parse("2021-06-01 00:00:00.0000000"),
-                    EndDate = DateTime.Parse("2022-06-21 00:00:00.0000000"),
-                    Expired = false,
-                    InsuranceCompanyId = 2,
-                    VehicleId = 2
-                },
+                },               
                 //Start now FullCasco insurance
-                new InsurancePolicy { Id = 7,
+                new InsurancePolicy { 
+                    Id = 6,
                     TypeInsurance = TypeInsurance.FullCasco,
                     StartDate = DateTime.UtcNow,
-                    EndDate = DateTime.UtcNow.AddYears((int)TimesPeriod.Year),
+                    EndDate = DateTime.UtcNow.AddYears((int)TimesPeriod.YearDays),
                     Expired = false,
                     InsuranceCompanyId = 3,
                     VehicleId = 3
                 },
                 //Start now ThirdPartyLiability insurance
-                new InsurancePolicy { Id = 8,
+                new InsurancePolicy { 
+                    Id = 7,
                     TypeInsurance = TypeInsurance.ThirdPartyLiability,
                     StartDate = DateTime.UtcNow,
-                    EndDate = DateTime.UtcNow.AddYears((int)TimesPeriod.Year),
+                    EndDate = DateTime.UtcNow.AddYears((int)TimesPeriod.YearDays),
                     Expired = false,
                     InsuranceCompanyId = 2,
-                    VehicleId =3
+                    VehicleId = 3
                 },
                 //Expiring today
-                new InsurancePolicy { Id = 9,
+                new InsurancePolicy { 
+                    Id = 8,
                     TypeInsurance = TypeInsurance.FullCasco,
-                    StartDate = DateTime.UtcNow.AddYears(-((int)TimesPeriod.Year)),
+                    StartDate = DateTime.UtcNow.AddYears(-((int)TimesPeriod.YearDays)),
                     EndDate = DateTime.UtcNow,
                     Expired = false,
                     InsuranceCompanyId = 3,
                     VehicleId = 5
                 },
-                new InsurancePolicy { Id = 10,
+                 //Expired after 30 days
+                new InsurancePolicy { 
+                    Id = 9,
                     TypeInsurance = TypeInsurance.ThirdPartyLiability,
-                    StartDate = DateTime.UtcNow.AddYears(-((int)TimesPeriod.Year)),
-                    EndDate = DateTime.UtcNow,
+                    StartDate = DateTime.UtcNow.AddDays(-((int)TimesPeriod.MonthlyDays + (int)TimesPeriod.YearDays)),
+                    EndDate = DateTime.UtcNow.AddDays((((int)TimesPeriod.MonthlyDays) - 1)),
+                    Expired = false,
+                    InsuranceCompanyId = 2,
+                    VehicleId = 2
+                },
+                 //Expired after 20 days
+                new InsurancePolicy { 
+                    Id = 10,
+                    TypeInsurance = TypeInsurance.ThirdPartyLiability,
+                    StartDate = DateTime.UtcNow.AddDays(-((int)TimesPeriod.MonthlyDays + 11)),
+                    EndDate = DateTime.UtcNow.AddDays((((int)TimesPeriod.MonthlyDays) - 11)),
                     Expired = false,
                     InsuranceCompanyId = 2,
                     VehicleId = 5
+                },
+                 //Expired after 7 days
+                new InsurancePolicy { 
+                    Id = 11,
+                    TypeInsurance = TypeInsurance.ThirdPartyLiability,
+                    StartDate = DateTime.UtcNow.AddDays(-((int)TimesPeriod.WeeklyDays + (int)TimesPeriod.YearDays)),
+                    EndDate = DateTime.UtcNow.AddDays(((int)TimesPeriod.WeeklyDays)),
+                    Expired = false,
+                    InsuranceCompanyId = 2,
+                    VehicleId = 3
+                },
+                 //Expired after 1 days
+                new InsurancePolicy { 
+                    Id = 12,
+                    TypeInsurance = TypeInsurance.ThirdPartyLiability,
+                     StartDate = DateTime.UtcNow.AddDays(-((int)TimesPeriod.Dayly + (int)TimesPeriod.YearDays)),
+                    EndDate = DateTime.UtcNow.AddDays(((int)TimesPeriod.Dayly)),
+                    Expired = false,
+                    InsuranceCompanyId = 2,
+                    VehicleId = 8
                 }
             };
 
@@ -415,15 +541,15 @@ namespace CarTrade.Services.Tests
             => await this.Context.InsurancePolicies.ToListAsync();
 
         private void FillVignettes()
-        {
+        {           
             List<Vignette> vignettes = new List<Vignette>()
             {
-                //Expired Vignette
+                //Expired Vignette with asign
                 new Vignette
                 {
                     Id = 1,
-                    StartDate = DateTime.UtcNow.AddYears(-((int)TimesPeriod.Year + (int)TimesPeriod.Year)),
-                    EndDate = DateTime.UtcNow.AddYears(-(int)TimesPeriod.Year),
+                    StartDate = DateTime.UtcNow.AddDays(-((int)TimesPeriod.YearDays + (int)TimesPeriod.YearDays)),
+                    EndDate = DateTime.UtcNow.AddDays(-(int)TimesPeriod.YearDays),
                     Expired = true,
                     VehicleId = 1
                 },
@@ -431,17 +557,17 @@ namespace CarTrade.Services.Tests
                 new Vignette
                 {
                     Id = 2,
-                    StartDate = DateTime.Parse("2021-03-21 00:00:00.0000000"),
-                    EndDate = DateTime.Parse("2022-03-21 00:00:00.0000000"),
+                    StartDate =  DateTime.UtcNow.AddDays(-((int)TimesPeriod.MonthlyDays * 2 + (int)TimesPeriod.YearDays)),
+                    EndDate = DateTime.UtcNow.AddDays(((int)TimesPeriod.MonthlyDays * 2)),
                     Expired = false,
                     VehicleId = 1
                 },
-                //Expired Vignette
+                //Expired Vignette with asign
                  new Vignette
                  {
                     Id = 3,
-                    StartDate = DateTime.UtcNow.AddYears(-((int)TimesPeriod.Year + (int)TimesPeriod.Year)),
-                    EndDate = DateTime.UtcNow.AddYears(-(int)TimesPeriod.Year),
+                    StartDate = DateTime.UtcNow.AddDays(-((int)TimesPeriod.YearDays + (int)TimesPeriod.YearDays)),
+                    EndDate = DateTime.UtcNow.AddDays(-(int)TimesPeriod.YearDays),
                     Expired = true,
                     VehicleId = 2
                 },
@@ -449,16 +575,16 @@ namespace CarTrade.Services.Tests
                 new Vignette
                 {
                     Id = 4,
-                    StartDate = DateTime.Parse("2021-01-01 00:00:00.0000000"),
-                    EndDate = DateTime.Parse("2022-01-01 00:00:00.0000000"),
+                    StartDate =  DateTime.UtcNow.AddDays(-((int)TimesPeriod.MonthlyDays * 3 + (int)TimesPeriod.YearDays)),
+                    EndDate = DateTime.UtcNow.AddDays(((int)TimesPeriod.MonthlyDays * 3)),
                     Expired = false,
                     VehicleId = 2
                 },
                 //Active Vignette
                 new Vignette {
                     Id = 5,
-                    StartDate = DateTime.Parse("2021-05-21 00:00:00.0000000"),
-                    EndDate = DateTime.Parse("2022-05-21 00:00:00.0000000"),
+                    StartDate =  DateTime.UtcNow.AddDays(-((int)TimesPeriod.MonthlyDays + (int)TimesPeriod.YearDays)),
+                    EndDate = DateTime.UtcNow.AddDays(((int)TimesPeriod.MonthlyDays)),
                     Expired = false,
                     VehicleId = 3
                 },
@@ -466,26 +592,26 @@ namespace CarTrade.Services.Tests
                 new Vignette
                 {
                     Id = 6,
-                    StartDate = DateTime.Parse("2021-06-01 00:00:00.0000000"),
-                    EndDate = DateTime.Parse("2022-06-21 00:00:00.0000000"),
+                    StartDate =  DateTime.UtcNow.AddDays(-((int)TimesPeriod.WeeklyDays * 3)),
+                    EndDate = DateTime.UtcNow.AddDays(((int)TimesPeriod.WeeklyDays * 3 + (int)TimesPeriod.YearDays)),
                     Expired = false,
                     VehicleId = 4
                 },
-                //Start today Vignette
+                //Active Start today Vignette
                 new Vignette
                 {
                     Id = 7,
                     StartDate = DateTime.UtcNow,
-                    EndDate = DateTime.UtcNow.AddYears((int)TimesPeriod.Year),
+                    EndDate = DateTime.UtcNow.AddDays((int)TimesPeriod.YearDays),
                     Expired = false,
                     VehicleId = 5
                 },
-                //Start Vignette
+                //Active Start Vignette
                 new Vignette
                 {
                     Id = 8,
                     StartDate = DateTime.UtcNow,
-                    EndDate = DateTime.UtcNow.AddYears((int)TimesPeriod.Year),
+                    EndDate = DateTime.UtcNow.AddDays((int)TimesPeriod.YearDays),
                     Expired = false,
                     VehicleId = 6
                 },
@@ -493,7 +619,7 @@ namespace CarTrade.Services.Tests
                 new Vignette
                 {
                     Id = 9,
-                    StartDate = DateTime.UtcNow.AddYears(-((int)TimesPeriod.Year)),
+                    StartDate = DateTime.UtcNow.AddDays(-((int)TimesPeriod.YearDays)),
                     EndDate = DateTime.UtcNow,
                     Expired = false,
                     VehicleId = 7
@@ -502,7 +628,7 @@ namespace CarTrade.Services.Tests
                 new Vignette
                 {
                     Id = 10,
-                    StartDate = DateTime.UtcNow.AddYears(-((int)TimesPeriod.Year)),
+                    StartDate = DateTime.UtcNow.AddDays(-((int)TimesPeriod.YearDays)),
                     EndDate = DateTime.UtcNow,
                     Expired = false,
                     VehicleId = 8
@@ -511,29 +637,65 @@ namespace CarTrade.Services.Tests
                 new Vignette
                 {
                     Id = 11,
-                    StartDate = DateTime.UtcNow.AddYears(-((int)TimesPeriod.Year + (int)TimesPeriod.Year)),
-                    EndDate = DateTime.UtcNow.AddYears(-(int)TimesPeriod.Year),
-                    Expired = false,
-                    VehicleId = 9
-                },
-                 //Expire but not asign
-                new Vignette
-                {
-                    Id = 12,
-                    StartDate = DateTime.UtcNow.AddYears(-((int)TimesPeriod.Year + (int)TimesPeriod.Year)),
-                    EndDate = DateTime.UtcNow.AddYears(-(int)TimesPeriod.Year),
+                    StartDate = DateTime.UtcNow.AddDays(-((int)TimesPeriod.YearDays + (int)TimesPeriod.YearDays)),
+                    EndDate = DateTime.UtcNow.AddDays(-(int)TimesPeriod.YearDays),
                     Expired = false,
                     VehicleId = 9
                 },
                 //Expired with asign
                 new Vignette
                 {
-                    Id = 13,
-                    StartDate = DateTime.UtcNow.AddYears(-((int)TimesPeriod.Year + (int)TimesPeriod.Year)),
-                    EndDate = DateTime.UtcNow.AddYears(-(int)TimesPeriod.Year),
+                    Id = 12,
+                    StartDate = DateTime.UtcNow.AddDays(-((int)TimesPeriod.YearDays + (int)TimesPeriod.YearDays)),
+                    EndDate = DateTime.UtcNow.AddDays(-(int)TimesPeriod.YearDays),
                     Expired = true,
                     VehicleId = 10
                 },
+                 //Expired but not asign
+                new Vignette
+                {
+                    Id = 13,
+                    StartDate = DateTime.UtcNow.AddDays(-((int)TimesPeriod.YearDays + (int)TimesPeriod.YearDays)),
+                    EndDate = DateTime.UtcNow.AddDays(-(int)TimesPeriod.YearDays),
+                    Expired = false,
+                    VehicleId = 10
+                },                
+                 //Expired after 30 days
+                new Vignette
+                {
+                    Id = 14,
+                    StartDate = DateTime.UtcNow.AddDays(-((int)TimesPeriod.MonthlyDays + (int)TimesPeriod.YearDays)),
+                    EndDate = DateTime.UtcNow.AddDays((((int)TimesPeriod.MonthlyDays) - 1)),
+                    Expired = false,
+                    VehicleId = 12
+                },
+                //Expired after 20 days
+                new Vignette
+                {
+                    Id = 15,
+                    StartDate = DateTime.UtcNow.AddDays(-((int)TimesPeriod.MonthlyDays + 11)),
+                    EndDate = DateTime.UtcNow.AddDays((((int)TimesPeriod.MonthlyDays) - 11)),
+                    Expired = false,
+                    VehicleId = 13
+                },
+                //Expired after 7 days
+                new Vignette
+                {
+                    Id = 16,
+                    StartDate = DateTime.UtcNow.AddDays(-((int)TimesPeriod.WeeklyDays + (int)TimesPeriod.YearDays)),
+                    EndDate = DateTime.UtcNow.AddDays(((int)TimesPeriod.WeeklyDays)),
+                    Expired = false,
+                    VehicleId = 14
+                },
+                //Expired after 1 day
+                new Vignette
+                {
+                    Id = 17,
+                    StartDate = DateTime.UtcNow.AddDays(-((int)TimesPeriod.Dayly + (int)TimesPeriod.YearDays)),
+                    EndDate = DateTime.UtcNow.AddDays(((int)TimesPeriod.Dayly)),
+                    Expired = false,
+                    VehicleId = 15
+                }
             };
 
             this.Context.Vignettes.AddRange(vignettes);

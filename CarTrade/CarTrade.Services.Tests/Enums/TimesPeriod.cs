@@ -10,11 +10,11 @@ namespace CarTrade.Services.Tests.Enums
         Minute = 1,
         Hour = 1,
         Dayly = 1,
-        Weekly = 7,
-        Monthly = 31,
-        QuarterOfYear = 90,
-        FourMonths = 120,
-        HalfYear = 180,
-        Year = 365,       
+        WeeklyDays = 7,
+        MonthlyDays = 31,
+        QuarterOfYearDays = 90,
+        FourMonthsDays = 120,
+        HalfYearDays = 180,
+        YearDays = 365,       
     }
 }

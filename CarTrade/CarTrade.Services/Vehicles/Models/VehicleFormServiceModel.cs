@@ -7,7 +7,7 @@ using static CarTrade.Common.DataConstants;
 
 namespace CarTrade.Services.Vehicles.Models
 {
-    public class AddVehicleServiceModel : IMapTo<Data.Models.Vehicle>
+    public class VehicleFormServiceModel : IMapTo<Data.Models.Vehicle>
     {
         [Required]
         [MinLength(VehicleModelTypeMinLength)]

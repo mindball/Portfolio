@@ -12,8 +12,7 @@ using System.Threading.Tasks;
 using static CarTrade.Common.DataConstants;
 
 namespace CarTrade.Services.Vehicles
-{
-    //TODO: be consistently  - throw exceptions
+{    
     public class VehicleService : IVehicleService
     {
         private readonly CarDbContext db;
@@ -30,7 +29,7 @@ namespace CarTrade.Services.Vehicles
             .ProjectTo<VehicleListingServiceModel>()
             .ToListAsync();
 
-        public async Task AddVehicleAsync(AddVehicleServiceModel vehicleModel)
+        public async Task AddVehicleAsync(VehicleFormServiceModel vehicleModel)
         {
             //var vehicleStatus = VehicleStatus(vehicleModel.Status);
 
@@ -42,7 +41,7 @@ namespace CarTrade.Services.Vehicles
                 vehicleModel.OwnerId)
                 || vehicleModel.Status == Data.Enums.VehicleStatus.None)
             {
-                throw new ArgumentException();
+                throw new ArgumentException(ValidateItemException);
             }
 
             //var newVehicle = this.FillVehicleModel(vehicleModel, vehicleStatus);
@@ -52,14 +51,14 @@ namespace CarTrade.Services.Vehicles
                 await this.db.SaveChangesAsync();                    
         }
 
-        public async Task EditVehicleAsync(int vehicleId, AddVehicleServiceModel vehicleModel)
+        public async Task EditVehicleAsync(int vehicleId, VehicleFormServiceModel vehicleModel)
         {
             var vehicle = await this.db.Vehicles
                 .FirstOrDefaultAsync(v => v.Id == vehicleId);
             //TODO: Catch custom exception
             if (vehicle == null)
             {
-                throw new ArgumentException($"No such vehicle id:{vehicleId}");
+                throw new ArgumentException(NotExistItemExceptionMessage);
             }
 
             this.mapper.Map(vehicleModel, vehicle);           
@@ -103,7 +102,10 @@ namespace CarTrade.Services.Vehicles
         public async Task<IEnumerable<VehicleListExpireVignetteServiceModel>> GetVignetteExpireDataAsync(int branchId)
         => await this.db.Vehicles
                  .Where(v => v.BranchId == branchId
-                    && v.Vignettes.Any(vg => vg.VehicleId == v.Id && vg.EndDate <= DateTime.UtcNow.AddDays(DaysBeforeItExpires)))                        
+                    && v.Vignettes.Any(vg => 
+                    vg.VehicleId == v.Id
+                    &&  !vg.Expired
+                    && vg.EndDate <= DateTime.UtcNow.AddDays(DaysBeforeItExpires)))                        
                  .Select(v => new VehicleListExpireVignetteServiceModel
                  {
                      VehicleId = v.Id,
@@ -146,15 +148,15 @@ namespace CarTrade.Services.Vehicles
             int ownerId)
         {
             if (await this.db.Vehicles
-               .AnyAsync(v => v.PlateNumber == plateNumber))
+               .AnyAsync(v => v.PlateNumber == plateNumber) || plateNumber == null)
             {
-                throw new ArgumentException($"{plateNumber} exist");
+                return false;
             }
 
             if (await this.db.Vehicles
-                .AnyAsync(v => v.Vin == vin))
+                .AnyAsync(v => v.Vin == vin) || vin == null)
             {
-                throw new ArgumentException($"{vin} exist");
+                return false;
             }
 
             var existBranchId = await this.db.Branches
@@ -162,21 +164,21 @@ namespace CarTrade.Services.Vehicles
 
             if (!existBranchId)
             {
-                throw new ArgumentException($"Branch id {branchId} not exist");
+                return false;
             }
 
             var existBrandId = await this.db.Brands
                 .AnyAsync(b => b.Id == brandId);
             if (!existBrandId)
             {
-                throw new ArgumentException($"Brand: id {brandId} not exist");
+                return false;
             }
 
             var existOwnerId = await this.db.Companies
                 .AnyAsync(b => b.Id == ownerId);
             if (!existOwnerId)
             {
-                throw new ArgumentException($"Company: id {ownerId} not exist");
+                return false;
             }
 
             return true;

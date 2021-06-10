@@ -8,9 +8,9 @@ namespace CarTrade.Services.Vehicles
     {
         Task<IEnumerable<VehicleListingServiceModel>> AllAsync();
 
-        Task AddVehicleAsync(AddVehicleServiceModel vehicleModel);
+        Task AddVehicleAsync(VehicleFormServiceModel vehicleModel);
 
-        Task EditVehicleAsync(int vehicleId, AddVehicleServiceModel vehicleModel);
+        Task EditVehicleAsync(int vehicleId, VehicleFormServiceModel vehicleModel);
 
         Task<IEnumerable<VehicleListExpireInsurancePolicyServiceModel>> GetInsuranceExpireDataAsync(int branchId);
 

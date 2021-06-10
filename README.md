@@ -22,6 +22,7 @@ The project provides the following functionalities and is useful for vehicle fle
 - AutoMapper
 - [HangFire](https://www.hangfire.io/ "HangFire")
 - Bootstrap
+- FluentAssertion
 - xUnit
 - Moq
 - [xUnit](https://github.com/xunit/xunit)

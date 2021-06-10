@@ -72,7 +72,7 @@ namespace CarTrade.Web.Controllers
             }
 
             //TODO: make automatically collect from profile with reflection
-            var newCar = this.mapper.Map<AddVehicleServiceModel>(vehicleModel);
+            var newCar = this.mapper.Map<VehicleFormServiceModel>(vehicleModel);
 
             await this.vehicleService.AddVehicleAsync(newCar);
 
@@ -84,7 +84,7 @@ namespace CarTrade.Web.Controllers
         public async Task<IActionResult> Edit([FromRoute(Name = "id")]int vehicleId)
         {
             var vehicle = 
-                await this.vehicleService.GetByIdAsync<AddVehicleServiceModel>(vehicleId);
+                await this.vehicleService.GetByIdAsync<VehicleFormServiceModel>(vehicleId);
 
             if(vehicle == null)
             {
@@ -92,7 +92,7 @@ namespace CarTrade.Web.Controllers
             }   
 
             var editVehicle = this.mapper
-                .Map<AddVehicleServiceModel, VehicleFormViewModel>(vehicle, opts => 
+                .Map<VehicleFormServiceModel, VehicleFormViewModel>(vehicle, opts => 
                     opts.ConfigureMap()                    
                     .ForMember(a => a.CollectCompanyDetails, opt => 
                         opt.Ignore()));
@@ -114,7 +114,7 @@ namespace CarTrade.Web.Controllers
             }
 
             var vehicleAddServiceModel =
-                this.mapper.Map<AddVehicleServiceModel>(vehicleModel);
+                this.mapper.Map<VehicleFormServiceModel>(vehicleModel);
 
             await this.vehicleService.EditVehicleAsync(vehicleId, vehicleAddServiceModel);          
 
