@@ -128,5 +128,74 @@ namespace CarTrade.Services.Tests.Vehicles
             expected.Should().BeEquivalentTo(actual);
             Assert.Equal(expected.Count(), actual.Count());
         }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        [InlineData(int.MaxValue)]
+        [InlineData(0)]
+        [InlineData(-1)]
+        public async Task GetOilChangeExpireDataAsyncFetchCollection(int branchId)
+        {
+            //Arrange            
+            //Chang(ed)ing vehicleId =  1, 2, 6, 7, 8, 9, 10
+            //branchId                  1, 2, 4, 1, 1, 3,  3,
+            var expected = await this.fixture.Context.Vehicles
+                .Where(v => v.BranchId == branchId
+                        && (v.TravelledDistance + RemainDistanceOilChange) >= v.EndOilChange)
+                .Select(v => new VehicleListingChangeOilServiceModel
+                {
+                    VehicleId = v.Id,
+                    PlateNumber = v.PlateNumber,
+                    Vin = v.Vin,
+                    EndOilChange = v.EndOilChange
+                })
+                .ToListAsync();
+
+            //Act
+            var actual = await this.vehicleService.GetOilChangeExpireDataAsync(branchId);
+
+            //Assert
+            Assert.NotNull(actual);
+            expected.Should().BeEquivalentTo(actual);
+            Assert.Equal(expected.Count(), actual.Count());
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(3)]
+        [InlineData(4)]
+        [InlineData(5)]
+        [InlineData(int.MaxValue)]
+        [InlineData(0)]
+        [InlineData(-1)]
+        public async Task GetInspectionSafetyCheckExpireDataAsyncFetchCollection(int branchId)
+        {
+
+            //Arrange            
+            //Chang(ed)ing vehicleId =  3, 4, 5, 6, 7, 10, 12
+            //branchId                  3, 1, 1, 4, 1,  3, 5
+            var expected = await this.fixture.Context.Vehicles
+                .Where(v => v.BranchId == branchId
+                    && (v.InspectionSafetyCheck <= DateTime.UtcNow.AddDays(DaysBeforeItExpires)))
+            .Select(v => new VehicleListingInspectionSafetyCheckServiceModel
+            {
+                VehicleId = v.Id,
+                PlateNumber = v.PlateNumber,
+                Vin = v.Vin,
+                InspectionSafetyCheck = v.InspectionSafetyCheck
+            })
+            .ToListAsync();
+
+            //Act
+            var actual = await this.vehicleService.GetInspectionSafetyCheckExpireDataAsync(branchId);
+
+            //Assert
+            Assert.NotNull(actual);
+            expected.Should().BeEquivalentTo(actual);
+            Assert.Equal(expected.Count(), actual.Count());
+        }
     }
 }

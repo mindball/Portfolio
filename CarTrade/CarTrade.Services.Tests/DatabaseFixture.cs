@@ -115,7 +115,7 @@ namespace CarTrade.Services.Tests
                 //Vignette
                 //Insurance expire
                 //Inspection
-                //OilChange
+                //OilChange after 1000 km
                 new Vehicle
                 {
                     Id = 1,
@@ -135,15 +135,15 @@ namespace CarTrade.Services.Tests
                 //Vignette
                 //Insurance expire
                 //Inspection
-                //OilChange
+                //OilChange expire 999
                 new Vehicle
                 {
                     Id = 2,
                     Model = "Up",
                     PlateNumber = "CTTTTTBM",
                     YearОfМanufacture = DateTime.UtcNow.AddYears(6),
-                    TravelledDistance = 182000,
-                    EndOilChange = 190000,
+                    TravelledDistance = 180000,
+                    EndOilChange = 180999,
                     Vin = "VWVZZZ1KZ1P111222",
                     Status = VehicleStatus.OnMotion,
                     InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.QuarterOfYearDays),
@@ -165,7 +165,7 @@ namespace CarTrade.Services.Tests
                     EndOilChange = 28000,
                     Vin = "VWVZZZ1KZ1P999888",
                     Status = VehicleStatus.OnMotion,
-                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.MonthlyDays),
+                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.MonthlyDays - 1),
                     BranchId = 3,
                     BrandId = 1,
                     OwnerId = 1,
@@ -192,7 +192,7 @@ namespace CarTrade.Services.Tests
                     OwnerId = 1,                    
                 },
                //Vignette
-                //InspectionSafetyCheck expire
+                //InspectionSafetyCheck expired
                 //Insurance expire
                 //OilChange
                 new Vehicle
@@ -211,9 +211,9 @@ namespace CarTrade.Services.Tests
                     OwnerId = 1
                 },
                  //Vignette
-                //InspectionSafetyCheck expire
+                //InspectionSafetyCheck expired
                 //Insurance                
-                //OilChange 1000 km to oil change                
+                //OilChange 100 km to oil change                
                 new Vehicle
                 {
                     Id = 6,
@@ -221,16 +221,16 @@ namespace CarTrade.Services.Tests
                     PlateNumber = "CT9876AM",
                     YearОfМanufacture = DateTime.UtcNow.AddYears(5),
                     TravelledDistance = 198000,
-                    EndOilChange = 199000,
+                    EndOilChange = 198100,
                     Vin = "VWVZZZ1KZ1P98744",
                     Status = VehicleStatus.OnMotion,
                     InspectionSafetyCheck = DateTime.UtcNow.AddDays(-(int)TimesPeriod.Dayly),
-                    BranchId = 2,
+                    BranchId = 4,
                     BrandId = 2,
                     OwnerId = 2,
                 },                
                  //Vignette expire
-                //InspectionSafetyCheck expire
+                //InspectionSafetyCheck expiring
                 //Insurance                
                 //OilChange expire
                 new Vehicle
@@ -243,7 +243,7 @@ namespace CarTrade.Services.Tests
                     EndOilChange = 198000,
                     Vin = "VWVZZZ1KZ1P447788",
                     Status = VehicleStatus.OnMotion,
-                    InspectionSafetyCheck = DateTime.UtcNow.AddDays(-(int)TimesPeriod.Dayly),
+                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.WeeklyDays),
                     BranchId = 1,
                     BrandId = 1,
                     OwnerId = 1,                    
@@ -251,7 +251,7 @@ namespace CarTrade.Services.Tests
                 //Vignette expire
                 //InspectionSafetyCheck
                 //Insurance expire
-                //OilChange expire 1000 km to oil change
+                //OilChange expire 10 km to oil change
                 new Vehicle
                 {
                     Id = 8,
@@ -259,7 +259,7 @@ namespace CarTrade.Services.Tests
                     PlateNumber = "CT5555AM",
                     YearОfМanufacture = DateTime.UtcNow.AddYears(2),
                     TravelledDistance = 198000,
-                    EndOilChange = 199000,
+                    EndOilChange = 198010,
                     Vin = "VWVZZZ1KZ1P357159",
                     Status = VehicleStatus.OnMotion,
                     InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.HalfYearDays),
@@ -268,9 +268,9 @@ namespace CarTrade.Services.Tests
                     OwnerId = 1,                    
                 },                
                 //Vignette expire
-                //InspectionSafetyCheck expire
+                //InspectionSafetyCheck
                 //Insurance                
-                //OilChange expire 1000 km
+                //OilChange exceed expire TravelledDistance
                 new Vehicle
                 {
                     Id = 9,
@@ -278,7 +278,7 @@ namespace CarTrade.Services.Tests
                     PlateNumber = "CT75665AM",
                     YearОfМanufacture = DateTime.UtcNow.AddYears(5),
                     TravelledDistance = 198000,
-                    EndOilChange = 199000,
+                    EndOilChange = 197000,
                     Vin = "VWVZZZ1KZ1P357159",
                     Status = VehicleStatus.OnMotion,
                     InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.HalfYearDays),
@@ -287,7 +287,7 @@ namespace CarTrade.Services.Tests
                     OwnerId = 1,                    
                 },                
                 //Vignette expire
-                //InspectionSafetyCheck expire
+                //InspectionSafetyCheck expiring
                 //Insurance expire   
                 //OilChange expire
                 new Vehicle
@@ -300,7 +300,7 @@ namespace CarTrade.Services.Tests
                     EndOilChange = 198000,
                     Vin = "VWVZZZ1KZ1P357159",
                     Status = VehicleStatus.OnMotion,
-                    InspectionSafetyCheck = DateTime.UtcNow.AddDays(-(int)TimesPeriod.HalfYearDays),
+                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.MonthlyDays - 1),
                     BranchId = 3,
                     BrandId = 1,
                     OwnerId = 1,
@@ -316,10 +316,10 @@ namespace CarTrade.Services.Tests
                     PlateNumber = "CT72235AM",
                     YearОfМanufacture = DateTime.UtcNow.AddYears(5),
                     TravelledDistance = 0,
-                    EndOilChange = 0,
+                    EndOilChange = 999999,
                     Vin = "WVZWWWAAAAAWASDAS22",
                     Status = VehicleStatus.OnMotion,
-                    InspectionSafetyCheck = DateTime.MinValue,
+                    InspectionSafetyCheck = DateTime.MaxValue,
                     BranchId = 5,
                     BrandId = 1,
                     OwnerId = 2,
@@ -338,7 +338,7 @@ namespace CarTrade.Services.Tests
                     EndOilChange = 208000,
                     Vin = "WZWZASAAASDASDASDASDA",
                     Status = VehicleStatus.OnMotion,
-                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.HalfYearDays),
+                    InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.Dayly),
                     BranchId = 5,
                     BrandId = 2,
                     OwnerId = 2,
