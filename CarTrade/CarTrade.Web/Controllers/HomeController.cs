@@ -12,6 +12,7 @@ using CarTrade.Services.InsurancePolicies;
 using CarTrade.Services.Vehicles;
 using Hangfire;
 using CarTrade.Services.Vignettes;
+using CarTrade.Web.Infrastructure.Extensions;
 
 namespace CarTrade.Web.Controllers
 {
@@ -24,24 +25,29 @@ namespace CarTrade.Web.Controllers
         private IVehicleService vehicleService;
         private IVignettesService vignetteService;
 
+        private readonly IRecurringJobManager recurringJobManager;
+
         public HomeController(ILogger<HomeController> logger,
             IBranchesService branchesService,
             IInsurancesPoliciesService policyService,
             IVehicleService vehicleService,
-            IVignettesService vignetteService)
+            IVignettesService vignetteService,
+            IRecurringJobManager recurringJobManager)
         {
             this.branchesService = branchesService;
             this.policyService = policyService;
             this.vehicleService = vehicleService;
             this.vignetteService = vignetteService;
 
+            this.recurringJobManager = recurringJobManager;
+
             _logger = logger;
         }
 
         public async Task<IActionResult> Index()
         {
-            RecurringJob.AddOrUpdate(() => this.policyService.SetExpiredInsurancePoliciesLogicAsync(), Cron.Daily);           
-            RecurringJob.AddOrUpdate(() => this.vignetteService.SetVignetteExpireLogicAsync(), Cron.Daily);
+            this.recurringJobManager.AddOrUpdate(() => this.policyService.SetExpiredInsurancePoliciesLogicAsync(), Cron.Daily);
+            this.recurringJobManager.AddOrUpdate(() => this.vignetteService.SetVignetteExpireLogicAsync(), Cron.Daily);
 
             var allBranchesWithCriticalVehicleData = await this.branchesService.AllAsync();
             var expireViewModel = new List<ListExpireDataForAllBranchesViewModel>();
