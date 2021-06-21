@@ -22,8 +22,4 @@
     <ProjectReference Include="..\CarTrade.Web\CarTrade.Web.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Users\" />
-  </ItemGroup>
-
 </Project>

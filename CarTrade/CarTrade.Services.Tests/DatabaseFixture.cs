@@ -28,12 +28,10 @@ namespace CarTrade.Services.Tests
 
             this.Context = new CarDbContext(dbOptions);
 
-            this.MapperConfig = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new AutoMapperProfile());
-            });
+            AutoMapper.Mapper.Initialize(cfg =>
+                cfg.AddProfile<AutoMapperProfile>());
 
-            this.Mapper = new Mapper(this.MapperConfig);
+            this.Mapper = AutoMapper.Mapper.Instance;
 
             this.FillBranches();
             this.FillBrands();
@@ -544,6 +542,15 @@ namespace CarTrade.Services.Tests
         {           
             List<Vignette> vignettes = new List<Vignette>()
             {
+                 //Old time Expired Vignette with asign
+                new Vignette
+                {
+                    Id = 18,
+                    StartDate = DateTime.UtcNow.AddDays(-((int)TimesPeriod.YearDays + (int)TimesPeriod.YearDays) + (int)TimesPeriod.YearDays),
+                    EndDate = DateTime.UtcNow.AddDays(-(int)TimesPeriod.YearDays + (int)TimesPeriod.YearDays),
+                    Expired = true,
+                    VehicleId = 1
+                },
                 //Expired Vignette with asign
                 new Vignette
                 {
