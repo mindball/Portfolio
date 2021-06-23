@@ -34,21 +34,6 @@ namespace CarTrade.Web.Test.Controllers.Home
         }
 
         [Fact]
-        public void HomeControllerShouldAllowAnonymous()
-        {
-            //Arrange
-            var controller = typeof(HomeController);
-
-            //Act
-            var attributes = controller.GetCustomAttributes(true);
-
-            //Assert
-            attributes.Should()
-                .Match(attr => attr
-                    .Any(a => a.GetType() == typeof(AllowAnonymousAttribute)));
-        }
-
-        [Fact]
         public async Task Index_ReturnViewModelOfCollectionOfExpireDataForAllBranches()
         {
             //Arrange  
@@ -132,7 +117,7 @@ namespace CarTrade.Web.Test.Controllers.Home
 
             List<BranchListingServiceModel> allBranches = CollectionOfBranches(branchId);
             List<VehicleListExpireInsurancePolicyServiceModel> vehiclesWithExpireInsurance = CollectionOfInsurancePolicy();
-            List<VehicleListExpireVignetteServiceModel> vehicleWithExpireVignette = CollectionOfVignettes();
+            List<VehicleListExpireVignetteServiceModel> vehicleWithExpireVignette = CollectionOfExpiringOrExpiredVignettes();
             List<VehicleListingChangeOilServiceModel> vehicleWithExpireOilDistance = CollectionOfVehiclesWithExpireOilDistance();
             List<VehicleListingInspectionSafetyCheckServiceModel> vehicleWithExpireInspectionCheck = CollcectionOfVehicleWithExpireInspectionCheck();
             
@@ -174,8 +159,6 @@ namespace CarTrade.Web.Test.Controllers.Home
             Assert.Equal(expectedInspectionCount, actualInspectionCount.FirstOrDefault());
         }
 
-        
-
         private List<VehicleListingInspectionSafetyCheckServiceModel> CollcectionOfVehicleWithExpireInspectionCheck()
         => new List<VehicleListingInspectionSafetyCheckServiceModel>
             {
@@ -213,7 +196,7 @@ namespace CarTrade.Web.Test.Controllers.Home
                 },
             };
 
-        private List<VehicleListExpireVignetteServiceModel> CollectionOfVignettes()
+        private List<VehicleListExpireVignetteServiceModel> CollectionOfExpiringOrExpiredVignettes()
             => new List<VehicleListExpireVignetteServiceModel>()
             {
                  //Expiring Today Vignette
