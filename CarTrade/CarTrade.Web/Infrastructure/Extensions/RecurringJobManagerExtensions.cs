@@ -11,6 +11,7 @@ namespace CarTrade.Web.Infrastructure.Extensions
 {
     public static class RecurringJobManagerExtensions
     {
+        //get from: https://stackoverflow.com/questions/49136133/mocking-hangfire-recurringjob-dependency-in-net-core-2
         public static void AddOrUpdate(this IRecurringJobManager manager, Expression<Action> methodCall, Func<string> cronExpression, TimeZoneInfo timeZone = null, string queue = EnqueuedState.DefaultQueue)
         {
             var job = Job.FromExpression(methodCall);

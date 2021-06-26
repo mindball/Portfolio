@@ -17,7 +17,7 @@ using CarTrade.Web.Infrastructure.Extensions;
 namespace CarTrade.Web.Controllers
 {
     [AllowAnonymous]
-    public class HomeController : BaseController
+    public class  HomeController: Controller
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IBranchesService branchesService;
@@ -27,7 +27,8 @@ namespace CarTrade.Web.Controllers
 
         private readonly IRecurringJobManager recurringJobManager;
 
-        public HomeController(ILogger<HomeController> logger,
+        public HomeController(
+            ILogger<HomeController> logger,
             IBranchesService branchesService,
             IInsurancesPoliciesService policyService,
             IVehicleService vehicleService,
@@ -46,10 +47,15 @@ namespace CarTrade.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            this.recurringJobManager.AddOrUpdate(() => this.policyService.SetExpiredInsurancePoliciesLogicAsync(), Cron.Daily);
-            this.recurringJobManager.AddOrUpdate(() => this.vignetteService.SetVignetteExpireLogicAsync(), Cron.Daily);
-
+            //this.recurringJobManager.AddOrUpdate(() => this.policyService.SetExpiredInsurancePoliciesLogicAsync(), Cron.Daily);
+            //this.recurringJobManager.AddOrUpdate(() => this.vignetteService.SetVignetteExpireLogicAsync(), Cron.Daily);
+                       
             var allBranchesWithCriticalVehicleData = await this.branchesService.AllAsync();
+            if(allBranchesWithCriticalVehicleData.Count() <= 0 || allBranchesWithCriticalVehicleData == null)
+            {
+                return this.NotFound();
+            }
+
             var expireViewModel = new List<ListExpireDataForAllBranchesViewModel>();
 
             foreach (var branch in allBranchesWithCriticalVehicleData)

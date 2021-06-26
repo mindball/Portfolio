@@ -34,8 +34,7 @@ namespace CarTrade.Web.Controllers
             => this.View(new VignetteListingViewModel
             {
                 AllVignettes = await this.vignettesService.AllAsync()
-            }
-            );
+            });
 
         public async Task<IActionResult> ListVehicleVignetes([FromRoute(Name = "id")] int vehicleId)
         {
@@ -57,6 +56,7 @@ namespace CarTrade.Web.Controllers
             return this.RedirectToAction("index", "vehicles");
         }
 
+        //TODO: not implement
         public async Task<IActionResult> ListBranchVignetes([FromRoute(Name = "id")] int branchId)
         {
             return this.View();
@@ -118,7 +118,15 @@ namespace CarTrade.Web.Controllers
 
         public async Task<IActionResult> Edit([FromRoute(Name = "id")] int vignetteId)
         {
-            return this.View();
+            var vignette = await this.vignettesService
+                .GetByIdAsync<VignetteDetailViewModel>(vignetteId);
+
+            if(vignette == null)
+            {
+                return this.NotFound();
+            }
+
+            return this.View(vignette);
         }
     }
 }
