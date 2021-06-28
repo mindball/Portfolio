@@ -16,3 +16,17 @@ If the name of the view was not specified, you
 cannot determine it from the ViewResult returned by the action. At least not 
 in the way your controller is being tested (which is totally fine by the way).
 ```
+
+## Тестване на атрибути на контролер
+```
+Трудно, минава се през целият процес, тоест тест на цялата система (минава се през атрибута
+contex-a, action, model-state), затова е препоръчително да се направи
+Integration test
+```
+
+## Tip
+```
+If some behavior can be tested using either a unit test or an integration test, prefer the unit test, 
+since it will be almost always be faster. You might have dozens or hundreds of unit tests with many 
+different inputs, but just a handful of integration tests covering the most important scenarios.
+```

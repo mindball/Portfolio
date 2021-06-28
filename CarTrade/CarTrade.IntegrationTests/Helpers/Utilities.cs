@@ -1,62 +1,40 @@
 ﻿using CarTrade.Data;
-using CarTrade.Data.Models;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using CarTrade.Data.Enums;
 using System;
-using CarTrade.Services.Tests.Enums;
+using System.Collections.Generic;
+using System.Text;
 using AutoMapper;
 using CarTrade.Web.Infrastructure.Mapping;
+using CarTrade.Data.Models;
+using CarTrade.Data.Enums;
+using CarTrade.Services.Tests.Enums;
+using System.Threading.Tasks;
 
-namespace CarTrade.Services.Tests
+namespace CarTrade.IntegrationTests.Helpers
 {
-    public class DatabaseFixture : IDisposable
+    public static class Utilities
     {
-
-        /* 
-         * Setting up and seeding the database
-         * This sample recreates the database for each test. This works well for SQLite and 
-         * EF in-memory database testing but can involve significant overhead with other 
-         * database systems, including SQL Server.
-         * */
-
-        public DatabaseFixture()
+        public static async Task InitializeDbForTests(CarDbContext db)
         {
-            var dbOptions = new DbContextOptionsBuilder<CarDbContext>()
-              .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
-
-            this.Context = new CarDbContext(dbOptions);
-
             AutoMapper.Mapper.Initialize(cfg =>
                 cfg.AddProfile<AutoMapperProfile>());
 
-            this.Mapper = AutoMapper.Mapper.Instance;
-
-            this.FillBranches();
-            this.FillBrands();
-            this.FillEmployeers();
-            this.FillInsuranceCompany();
-            this.FillVehicles();
-            this.FillInsurancePolicies();
-            this.FillVignettes();
+            await FillBranches(db);
+            await FillBrands(db);
+            await FillEmployeers(db);
+            await FillInsuranceCompany(db);
+            await FillVehicles(db);
+            await FillInsurancePolicies(db);
+            await FillVignettes(db);
         }
 
-        public List<InsurancePolicy> AllInsurance { get; set; }
 
-        public  MapperConfiguration MapperConfig { get; set; }
+        public static async Task ReinitializeDbForTests(CarDbContext db)
+        {
+            //db.Messages.RemoveRange(db.Messages);
+            await InitializeDbForTests(db);
+        }
 
-        public  IMapper Mapper { get; set; }
-
-        public CarDbContext Context { get; set; }
-
-        //Tip
-
-        //The creation and seeding code does not need to be async.Making it async 
-        //will complicate the code and will not improve performance or throughput of tests.
-
-
-        private void FillBranches()
+        private static async Task FillBranches(CarDbContext context)
         {
             var firstBranch = new Branch { Id = 1, Town = "Стара Загора", Address = "бул. Никола Петков 55" };
             var secondBranch = new Branch { Id = 2, Town = "София", Address = "бул. Христо Ботев 98" };
@@ -64,33 +42,33 @@ namespace CarTrade.Services.Tests
             var fourthBranch = new Branch { Id = 4, Town = "Пловдив", Address = "бул. Кукленско шосе № 3 А" };
             var fifttBranch = new Branch { Id = 5, Town = "Русе", Address = "ул. Потсдам 2" };
 
-            this.Context.Branches.AddRange(firstBranch, secondBranch,
+            await context.Branches.AddRangeAsync(firstBranch, secondBranch,
                 thirdBranch, fourthBranch, fifttBranch);
 
-            this.Context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        private void FillBrands()
+        private static async Task FillBrands(CarDbContext context)
         {
             var firstBrand = new Brand { Id = 1, Name = "Volkswagen" };
             var secondBrand = new Brand { Id = 2, Name = "Audi" };
 
-            this.Context.Brands.AddRange(firstBrand, secondBrand);
+            await context.Brands.AddRangeAsync(firstBrand, secondBrand);
 
-            this.Context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        private void FillEmployeers()
+        private static async Task FillEmployeers(CarDbContext context)
         {
             var firstEmployeer = new Employer { Id = 1, Name = "Автохит Трейд ООД" };
             var secondEmployeer = new Employer { Id = 2, Name = "Автохит 2000" };
 
-            this.Context.Companies.AddRange(firstEmployeer, secondEmployeer);
+            await context.Companies.AddRangeAsync(firstEmployeer, secondEmployeer);
 
-            this.Context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        private void FillInsuranceCompany()
+        private static async Task FillInsuranceCompany(CarDbContext context)
         {
             List<InsuranceCompany> insuranceCompanies = new List<InsuranceCompany>()
             {
@@ -101,11 +79,11 @@ namespace CarTrade.Services.Tests
                 new InsuranceCompany { Id = 5, Name = "Дженерали застраховане АД" }
             };
 
-            this.Context.InsuranceCompanies.AddRange(insuranceCompanies);
-            this.Context.SaveChanges();
+            await context.InsuranceCompanies.AddRangeAsync(insuranceCompanies);
+            await context.SaveChangesAsync();
         }
 
-        private void FillVehicles()
+        private static async Task FillVehicles(CarDbContext context)
         {
             List<Vehicle> vehicles = new List<Vehicle>()
             {
@@ -127,7 +105,7 @@ namespace CarTrade.Services.Tests
                     InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.HalfYearDays),
                     BranchId = 1,
                     BrandId = 1,
-                    OwnerId = 1,                   
+                    OwnerId = 1,
                 },
                 //Active
                 //Vignette
@@ -147,7 +125,7 @@ namespace CarTrade.Services.Tests
                     InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.QuarterOfYearDays),
                     BranchId = 2,
                     BrandId = 1,
-                    OwnerId = 1,                   
+                    OwnerId = 1,
                 },                
                 //Vignette
                 //Insurance expire
@@ -187,7 +165,7 @@ namespace CarTrade.Services.Tests
                     InspectionSafetyCheck = DateTime.UtcNow,
                     BranchId = 1,
                     BrandId = 1,
-                    OwnerId = 1,                    
+                    OwnerId = 1,
                 },
                //Vignette
                 //InspectionSafetyCheck expired
@@ -244,7 +222,7 @@ namespace CarTrade.Services.Tests
                     InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.WeeklyDays),
                     BranchId = 1,
                     BrandId = 1,
-                    OwnerId = 1,                    
+                    OwnerId = 1,
                 },                
                 //Vignette expire
                 //InspectionSafetyCheck
@@ -263,7 +241,7 @@ namespace CarTrade.Services.Tests
                     InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.HalfYearDays),
                     BranchId = 1,
                     BrandId = 1,
-                    OwnerId = 1,                    
+                    OwnerId = 1,
                 },                
                 //Vignette expire
                 //InspectionSafetyCheck
@@ -282,7 +260,7 @@ namespace CarTrade.Services.Tests
                     InspectionSafetyCheck = DateTime.UtcNow.AddDays((int)TimesPeriod.HalfYearDays),
                     BranchId = 3,
                     BrandId = 1,
-                    OwnerId = 1,                    
+                    OwnerId = 1,
                 },                
                 //Vignette expire
                 //InspectionSafetyCheck expiring
@@ -400,16 +378,16 @@ namespace CarTrade.Services.Tests
                 },
             };
 
-            this.Context.Vehicles.AddRange(vehicles);
-            this.Context.SaveChanges();
+            await context.Vehicles.AddRangeAsync(vehicles);
+            await context.SaveChangesAsync();
         }
-        
-        private void FillInsurancePolicies()
+
+        private static async Task FillInsurancePolicies(CarDbContext context)
         {
             List<InsurancePolicy> insurancePolicies = new List<InsurancePolicy>()
             {
                 //ExpiredFullCascoInsurance
-                new InsurancePolicy { 
+                new InsurancePolicy {
                     Id = 1,
                     TypeInsurance = TypeInsurance.FullCasco,
                     StartDate = DateTime.UtcNow.AddDays(-((int)TimesPeriod.YearDays + (int)TimesPeriod.YearDays)),
@@ -419,7 +397,7 @@ namespace CarTrade.Services.Tests
                     VehicleId = 1
                 },
                 //Active FullCasco insurance
-                new InsurancePolicy { 
+                new InsurancePolicy {
                     Id = 2,
                     TypeInsurance = TypeInsurance.FullCasco,
                     StartDate =  DateTime.UtcNow.AddDays(-((int)TimesPeriod.MonthlyDays * 2 + (int)TimesPeriod.YearDays)),
@@ -429,7 +407,7 @@ namespace CarTrade.Services.Tests
                     VehicleId = 1
                 },
                 //Expired ThirdPartyLiability Insurance but not asign
-                 new InsurancePolicy { 
+                 new InsurancePolicy {
                      Id = 3,
                      TypeInsurance = TypeInsurance.ThirdPartyLiability,
                     StartDate = DateTime.UtcNow.AddDays(-((int)TimesPeriod.YearDays + (int)TimesPeriod.YearDays)),
@@ -439,7 +417,7 @@ namespace CarTrade.Services.Tests
                     VehicleId = 1
                 },
                  //Active ThirdPartyLiability insurance
-                new InsurancePolicy { 
+                new InsurancePolicy {
                     Id = 4,
                     TypeInsurance = TypeInsurance.ThirdPartyLiability,
                     StartDate = DateTime.UtcNow,
@@ -449,7 +427,7 @@ namespace CarTrade.Services.Tests
                     VehicleId = 1
                 },
                 //Active FullCasco insurance
-                new InsurancePolicy { 
+                new InsurancePolicy {
                     Id = 5,
                     TypeInsurance = TypeInsurance.FullCasco,
                     StartDate = DateTime.UtcNow,
@@ -459,7 +437,7 @@ namespace CarTrade.Services.Tests
                     VehicleId = 2
                 },               
                 //Start now FullCasco insurance
-                new InsurancePolicy { 
+                new InsurancePolicy {
                     Id = 6,
                     TypeInsurance = TypeInsurance.FullCasco,
                     StartDate = DateTime.UtcNow,
@@ -469,7 +447,7 @@ namespace CarTrade.Services.Tests
                     VehicleId = 3
                 },
                 //Start now ThirdPartyLiability insurance
-                new InsurancePolicy { 
+                new InsurancePolicy {
                     Id = 7,
                     TypeInsurance = TypeInsurance.ThirdPartyLiability,
                     StartDate = DateTime.UtcNow,
@@ -479,7 +457,7 @@ namespace CarTrade.Services.Tests
                     VehicleId = 3
                 },
                 //Expiring today
-                new InsurancePolicy { 
+                new InsurancePolicy {
                     Id = 8,
                     TypeInsurance = TypeInsurance.FullCasco,
                     StartDate = DateTime.UtcNow.AddYears(-((int)TimesPeriod.YearDays)),
@@ -489,7 +467,7 @@ namespace CarTrade.Services.Tests
                     VehicleId = 5
                 },
                  //Expired after 30 days
-                new InsurancePolicy { 
+                new InsurancePolicy {
                     Id = 9,
                     TypeInsurance = TypeInsurance.ThirdPartyLiability,
                     StartDate = DateTime.UtcNow.AddDays(-((int)TimesPeriod.MonthlyDays + (int)TimesPeriod.YearDays)),
@@ -499,7 +477,7 @@ namespace CarTrade.Services.Tests
                     VehicleId = 2
                 },
                  //Expired after 20 days
-                new InsurancePolicy { 
+                new InsurancePolicy {
                     Id = 10,
                     TypeInsurance = TypeInsurance.ThirdPartyLiability,
                     StartDate = DateTime.UtcNow.AddDays(-((int)TimesPeriod.MonthlyDays + 11)),
@@ -509,7 +487,7 @@ namespace CarTrade.Services.Tests
                     VehicleId = 5
                 },
                  //Expired after 7 days
-                new InsurancePolicy { 
+                new InsurancePolicy {
                     Id = 11,
                     TypeInsurance = TypeInsurance.ThirdPartyLiability,
                     StartDate = DateTime.UtcNow.AddDays(-((int)TimesPeriod.WeeklyDays + (int)TimesPeriod.YearDays)),
@@ -519,7 +497,7 @@ namespace CarTrade.Services.Tests
                     VehicleId = 3
                 },
                  //Expired after 1 days
-                new InsurancePolicy { 
+                new InsurancePolicy {
                     Id = 12,
                     TypeInsurance = TypeInsurance.ThirdPartyLiability,
                      StartDate = DateTime.UtcNow.AddDays(-((int)TimesPeriod.Dayly + (int)TimesPeriod.YearDays)),
@@ -529,20 +507,16 @@ namespace CarTrade.Services.Tests
                     VehicleId = 8
                 }
             };
-
-            this.Context.InsurancePolicies.AddRange(insurancePolicies);
-            this.Context.SaveChanges();
+                        
+            await context.InsurancePolicies.AddRangeAsync(insurancePolicies);
+            await context.SaveChangesAsync();
         }
 
-        //TODO: make readonly collection
-        public async Task<IList<InsurancePolicy>> AllInsurancePoliciesAsync()
-            => await this.Context.InsurancePolicies.ToListAsync();
-
-        private void FillVignettes()
-        {           
+        private static async Task FillVignettes(CarDbContext context)
+        {
             List<Vignette> vignettes = new List<Vignette>()
             {
-                //Old time Expired Vignette with asign
+                 //Old time Expired Vignette with asign
                 new Vignette
                 {
                     Id = 18,
@@ -705,12 +679,10 @@ namespace CarTrade.Services.Tests
                 }
             };
 
-            this.Context.Vignettes.AddRange(vignettes);
-            this.Context.SaveChanges();
+            await context.Vignettes.AddRangeAsync(vignettes);
+            await context.SaveChangesAsync();
         }
 
-        public void Dispose()
-        {
-        }
+
     }
 }

@@ -2,19 +2,14 @@
 using CarTrade.Web.Test.Infrastructure.Extensions;
 using FluentAssertions;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
 using static CarTrade.Web.WebConstants;
 
-namespace CarTrade.Web.Test.Controllers.Vignettes
+namespace CarTrade.Web.Test.Controllers.Vehicles
 {
     public class ControllerTest
     {
@@ -22,7 +17,7 @@ namespace CarTrade.Web.Test.Controllers.Vignettes
         public void ControllerShouldHasAuthorizeAttribute()
         {
             //Arrange
-            var controller = typeof(VignettesController);
+            var controller = typeof(VehiclesController);
 
             //Act
             var attributes = controller.GetCustomAttributes(true);
@@ -34,24 +29,24 @@ namespace CarTrade.Web.Test.Controllers.Vignettes
         }
 
         [Fact]
-        public async Task Controller_ShouldBeAccessibleByAdministrator()
+        public void Controller_ShouldBeAccessibleByAdministrator()
         {
             //Arrange, Act
-            var controller = new VignettesController(null, null, null).WithIdentity(AdministratorRole);
-                        
+            var controller = new VehiclesController(null, null, null, null, null).WithIdentity(AdministratorRole);
+
             //Assert
             Assert.True(controller.User.IsInRole(AdministratorRole));
         }
 
-        //няма смисъл винаги влизаш в action-a       
+        //няма смисъл винаги влизаш в action-a
         //[Fact]
         //public async Task Controller_ShouldBeNotAccessibleByOtherUsers()
         //{
         //    //Arrange
-        //    var controller = new VignettesController(null, null, null).WithAnonymousIdentity();
+        //    var controller = new VehiclesController(null, null, null, null, null);
 
         //    //Act
-        //    var result = await controller.ListBranchVignetes(1) as ViewResult;
+        //    var result = await controller.Index() as ViewResult;
         //    var viewName = result.ViewName;
 
         //    //Assert
