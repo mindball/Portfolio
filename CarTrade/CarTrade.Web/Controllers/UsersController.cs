@@ -21,8 +21,8 @@ using static CarTrade.Web.WebConstants;
 
 namespace CarTrade.Web.Controllers
 {
-    [Authorize(Roles = AdministratorRole)]
-    public class UsersController : Controller
+    
+    public class UsersController : BaseController
     {
         private readonly IUsersService usersService;
         private readonly UserManager<User> userManager;

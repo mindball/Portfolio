@@ -11,7 +11,7 @@
                 </a>
                 <form asp-controller="Vehicles" asp-action="ExpireInsurances" class="list-group-item text-center" method="post">
                     <div>
-                        <span class="categoryname">Автомобили с изт. застраховки (@branch.VehiclesWithExpirePolicy.Count())</span>
+                        <span class="categoryname">Изтичащи застраховки (@branch.VehiclesWithExpirePolicy.Count())</span>
                         @if (branch.VehiclesWithExpirePolicy.Count() > 0)
                         {
                             <input name="branchFullAddress" value="@branch.FullAddress" type="hidden" />
@@ -37,7 +37,7 @@
                 </form>
                 <form asp-controller="Vehicles" asp-action="ExpireVignettes" class="list-group-item text-center" method="post">
                     <div>
-                        <span class="categoryname">Автомобили с изт. Винетки (@branch.VehiclesWithExpireVignettes.Count())</span>
+                        <span class="categoryname">Изтичащи винетки (@branch.VehiclesWithExpireVignettes.Count())</span>
                         @if (branch.VehiclesWithExpireVignettes.Count() > 0)
                         {
                             <input name="branchFullAddress" value="@branch.FullAddress" type="hidden" />
@@ -54,7 +54,7 @@
                 </form>
                 <form asp-controller="Vehicles" asp-action="ExpireOilChangeDistance" class="list-group-item text-center" method="post">
                     <div>
-                        <span class="categoryname">Автомобили за смяна масло (@branch.VehiclesWithOilChangeDistance.Count())</span>
+                        <span class="categoryname">Смяна масло (@branch.VehiclesWithOilChangeDistance.Count())</span>
                         @if (branch.VehiclesWithOilChangeDistance.Count() > 0)
                         {
                     <input name="branchFullAddress" value="@branch.FullAddress" type="hidden" />
@@ -71,7 +71,7 @@
                 </form>
                 <form asp-controller="Vehicles" asp-action="ExpireInspectionSafetyCheck" class="list-group-item text-center" method="post">
                     <div>
-                        <span class="categoryname">Автомобили с изт. ГТП (@branch.VehiclesWithInspectionExpire.Count())</span>
+                        <span class="categoryname">Изтичащо ГТП (@branch.VehiclesWithInspectionExpire.Count())</span>
                         @if (branch.VehiclesWithInspectionExpire.Count() > 0)
                         {
                             <input name="branchFullAddress" value="@branch.FullAddress" type="hidden" />

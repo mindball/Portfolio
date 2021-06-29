@@ -66,6 +66,7 @@ namespace CarTrade.Services.Branches
                 .ProjectTo<TModel>()
                 .FirstOrDefaultAsync();
 
+        //TODO: test
         public async Task<BranchVehiclesListingServiceModel> GetAllVehicleByBranchAsync(int id)
             => await this.db.Branches.Where(b => b.Id == id)
                         .Select(b => new BranchVehiclesListingServiceModel
@@ -80,6 +81,19 @@ namespace CarTrade.Services.Branches
                                         PlateNumber = v.PlateNumber,
                                         Vin = v.Vin
                                     }).ToList()
-                        }).FirstOrDefaultAsync();       
+                        }).FirstOrDefaultAsync();
+
+        public async Task<BranchVehiclesListingServiceModel> GetAllVehicleByGivenUserBranchAddress(string userId)
+        {
+            var branchId = await this.db.Users
+                .Where(u => u.Id == userId)
+                .Select(u => u.BranchId)
+                .FirstOrDefaultAsync();
+
+            return await this.GetAllVehicleByBranchAsync(branchId);
+        }
+
+        public async Task<bool> IsThisUserEmployeeInThisBranch(int branchId, string userId)
+            => await this.db.Users.AnyAsync(u => u.Id == userId && u.BranchId == branchId);
     }
 }

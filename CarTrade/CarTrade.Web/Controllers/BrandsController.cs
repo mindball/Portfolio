@@ -8,7 +8,7 @@ using static CarTrade.Web.WebConstants;
 
 namespace CarTrade.Web.Controllers
 {
-    public class BrandsController : BaseController
+    public class BrandsController : ManagerController
     {
         private readonly IBrandService brandService;
 

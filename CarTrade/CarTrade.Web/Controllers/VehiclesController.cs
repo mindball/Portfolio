@@ -9,6 +9,7 @@ using CarTrade.Web.Infrastructure.Extensions;
 using CarTrade.Web.Models.Home;
 using CarTrade.Web.Models.Vehicles;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -16,7 +17,7 @@ using static CarTrade.Web.WebConstants;
 
 namespace CarTrade.Web.Controllers
 {
-    public class VehiclesController : BaseController
+    public class VehiclesController : ManagerController
     {
         private readonly IVehicleService vehicleService;
         private readonly IMapper mapper;
@@ -51,7 +52,11 @@ namespace CarTrade.Web.Controllers
         {
             var collectCompanyDetails = await this.FillCollectCompanyDetails();
 
-            var newVehicle = new VehicleFormViewModel();
+            var newVehicle = new VehicleFormViewModel()
+            {
+                InspectionSafetyCheck = DateTime.UtcNow,
+                YearОfМanufacture = DateTime.UtcNow
+            };
             newVehicle.CollectCompanyDetails = collectCompanyDetails;            
 
             return this.View(newVehicle);

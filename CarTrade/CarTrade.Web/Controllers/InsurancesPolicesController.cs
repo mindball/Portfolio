@@ -17,7 +17,7 @@ using static CarTrade.Web.WebConstants;
 
 namespace CarTrade.Web.Controllers
 {
-    public class InsurancesPolicesController : BaseController
+    public class InsurancesPolicesController : ManagerController
     {
         private IInsurancesPoliciesService policyService;
         private IVehicleService vehicleService;

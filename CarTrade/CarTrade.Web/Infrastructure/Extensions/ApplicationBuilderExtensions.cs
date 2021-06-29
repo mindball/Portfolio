@@ -17,7 +17,7 @@ namespace CarTrade.Web.Infrastructure.Extensions
             {
                 var defaultDbContext = serviceScope.ServiceProvider.GetService<CarDbContext>();
                 //defaultDbContext.Database.EnsureCreated();
-                //defaultDbContext.Database.Migrate();
+                defaultDbContext.Database.Migrate();
                                 
                 var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<User>>();
                 var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
@@ -29,7 +29,7 @@ namespace CarTrade.Web.Infrastructure.Extensions
                        var roles = new[]
                        {
                             adminName,
-                            WebConstants.BlogAuthorRole,
+                            WebConstants.ManagerRole,
                             WebConstants.DriverRole
                         };
 

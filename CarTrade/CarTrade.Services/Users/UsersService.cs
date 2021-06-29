@@ -36,7 +36,7 @@ namespace CarTrade.Services.Users
 
             this.db.Update(user);
             await this.db.SaveChangesAsync();                        
-        }      
+        }        
 
         public async Task<TModel> GetByIdAsync<TModel>(string userId) 
             where TModel : class

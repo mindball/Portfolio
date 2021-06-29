@@ -48,6 +48,7 @@ namespace CarTrade.Web
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
             })
+                .AddDefaultUI()
                 .AddEntityFrameworkStores<CarDbContext>()
                 .AddDefaultTokenProviders();
 

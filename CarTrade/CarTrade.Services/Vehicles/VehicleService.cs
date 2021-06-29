@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using static CarTrade.Common.DataConstants;
 
 namespace CarTrade.Services.Vehicles
-{    
+{
     public class VehicleService : IVehicleService
     {
         private readonly CarDbContext db;
@@ -34,10 +34,10 @@ namespace CarTrade.Services.Vehicles
             //var vehicleStatus = VehicleStatus(vehicleModel.Status);
 
             if (!await this.ValidateVehicleServiceModelAsync(
-                vehicleModel.PlateNumber, 
-                vehicleModel.Vin, 
-                vehicleModel.BranchId, 
-                vehicleModel.BrandId, 
+                vehicleModel.PlateNumber,
+                vehicleModel.Vin,
+                vehicleModel.BranchId,
+                vehicleModel.BrandId,
                 vehicleModel.OwnerId)
                 || vehicleModel.Status == Data.Enums.VehicleStatus.None)
             {
@@ -47,8 +47,8 @@ namespace CarTrade.Services.Vehicles
             //var newVehicle = this.FillVehicleModel(vehicleModel, vehicleStatus);
             var newVehicle = this.mapper.Map<Data.Models.Vehicle>(vehicleModel);
 
-                await this.db.Vehicles.AddAsync(newVehicle);
-                await this.db.SaveChangesAsync();                    
+            await this.db.Vehicles.AddAsync(newVehicle);
+            await this.db.SaveChangesAsync();
         }
 
         public async Task EditVehicleAsync(int vehicleId, VehicleFormServiceModel vehicleModel)
@@ -61,7 +61,7 @@ namespace CarTrade.Services.Vehicles
                 throw new ArgumentException(NotExistItemExceptionMessage);
             }
 
-            this.mapper.Map(vehicleModel, vehicle);           
+            this.mapper.Map(vehicleModel, vehicle);
 
             await this.db.SaveChangesAsync();
         }
@@ -88,12 +88,12 @@ namespace CarTrade.Services.Vehicles
                         b.InsurancePolicies
                         .Any(i => i.EndDate <= DateTime.UtcNow.AddDays(DaysBeforeItExpires)))
                  .Select(v => new VehicleListExpireInsurancePolicyServiceModel
-                 {                     
+                 {
                      VehicleId = v.Id,
                      PlateNumber = v.PlateNumber,
-                     Vin = v.Vin,                     
+                     Vin = v.Vin,
                      InsurancePolicies = v.InsurancePolicies
-                                .Where(i => i.EndDate <= DateTime.UtcNow.AddDays(DaysBeforeItExpires))                                
+                                .Where(i => i.EndDate <= DateTime.UtcNow.AddDays(DaysBeforeItExpires))
                                 .Select(i => i)
                                 .ToList()
                  })
@@ -102,10 +102,10 @@ namespace CarTrade.Services.Vehicles
         public async Task<IEnumerable<VehicleListExpireVignetteServiceModel>> GetVignetteExpireDataAsync(int branchId)
         => await this.db.Vehicles
                  .Where(v => v.BranchId == branchId
-                    && v.Vignettes.Any(vg => 
+                    && v.Vignettes.Any(vg =>
                     vg.VehicleId == v.Id
-                    &&  !vg.Expired
-                    && vg.EndDate <= DateTime.UtcNow.AddDays(DaysBeforeItExpires)))                        
+                    && !vg.Expired
+                    && vg.EndDate <= DateTime.UtcNow.AddDays(DaysBeforeItExpires)))
                  .Select(v => new VehicleListExpireVignetteServiceModel
                  {
                      VehicleId = v.Id,
@@ -120,7 +120,7 @@ namespace CarTrade.Services.Vehicles
                 .Where(v => v.BranchId == branchId
                         && (v.TravelledDistance + RemainDistanceOilChange) >= v.EndOilChange)
                 .Select(v => new VehicleListingChangeOilServiceModel
-                {                    
+                {
                     VehicleId = v.Id,
                     PlateNumber = v.PlateNumber,
                     Vin = v.Vin,
@@ -141,10 +141,10 @@ namespace CarTrade.Services.Vehicles
             })
             .ToListAsync();
 
-        private async Task<bool> ValidateVehicleServiceModelAsync(string plateNumber, 
-            string vin, 
-            int branchId, 
-            int brandId, 
+        private async Task<bool> ValidateVehicleServiceModelAsync(string plateNumber,
+            string vin,
+            int branchId,
+            int brandId,
             int ownerId)
         {
             if (await this.db.Vehicles
@@ -193,6 +193,6 @@ namespace CarTrade.Services.Vehicles
             }
 
             return vehicleStatus;
-        }        
+        }
     }
 }

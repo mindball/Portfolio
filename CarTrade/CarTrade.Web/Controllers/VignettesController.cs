@@ -12,7 +12,7 @@ using static CarTrade.Web.WebConstants;
 
 namespace CarTrade.Web.Controllers
 {
-    public class VignettesController : BaseController
+    public class VignettesController : ManagerController
     {
         private readonly IVignettesService vignettesService;
         private readonly IVehicleService vehicleService;

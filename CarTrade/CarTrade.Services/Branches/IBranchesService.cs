@@ -16,5 +16,9 @@ namespace CarTrade.Services.Branches
 
         //TODO: Check if Branch exist by name adress.
         Task<BranchVehiclesListingServiceModel> GetAllVehicleByBranchAsync(int id);
+
+        Task<BranchVehiclesListingServiceModel> GetAllVehicleByGivenUserBranchAddress(string userId);
+
+        Task<bool> IsThisUserEmployeeInThisBranch(int branchId, string userId);
     }
 }

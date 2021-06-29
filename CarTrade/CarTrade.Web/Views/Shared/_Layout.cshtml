@@ -22,20 +22,23 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        @if (User.IsInRole(WebConstants.AdministratorRole))
+                        @if (User.IsInRole(WebConstants.ManagerRole))
                         {
                             <div class="dropdown">
                                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Administration
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Users" asp-action="Index">All users</a>
-                                    <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Brands" asp-action="Index">All brands</a>
                                     <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Branches" asp-action="Index">All branches</a>
                                     <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Companies" asp-action="Index">All company</a>
+                                    <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Brands" asp-action="Index">All brands</a>
                                     <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="InsuranceCompanies" asp-action="Index">Insurance company</a>
                                     <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Vehicles" asp-action="Index">Vehicles</a>
                                     <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Vignettes" asp-action="Index">Vignettes</a>
+                                    @if (User.IsInRole(WebConstants.AdministratorRole))
+                                    {
+                                        <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Users" asp-action="Index">All users</a>
+                                    }
                                 </div>
                             </div>
 
@@ -59,14 +62,20 @@
                 @TempData[WebConstants.TempDataErrorMessageKey]
             </div>
         }
+        @if (TempData.ContainsKey(WebConstants.AccessDenied))
+        {
+            <div class="alert alert-danger">
+                @TempData[WebConstants.AccessDenied]
+            </div>
+        }
         <main role="main" class="pb-3">
             @*@if (ViewData["NavMenuPage"] != null)
-                {
-                    // ASP.NET Core will search for a component named NavMenu,
-                    // and invoke it with the provided data (here, the NavMenuPage set in the controller)
-                    @await Component.InvokeAsync("NavMenu", ViewData["NavMenuPage"])
-                }*@
-            @RenderBody()            
+            {
+                // ASP.NET Core will search for a component named NavMenu,
+                // and invoke it with the provided data (here, the NavMenuPage set in the controller)
+                @await Component.InvokeAsync("NavMenu", ViewData["NavMenuPage"])
+            }*@
+            @RenderBody()
         </main>
     </div>
     <footer class="border-top footer text-muted">

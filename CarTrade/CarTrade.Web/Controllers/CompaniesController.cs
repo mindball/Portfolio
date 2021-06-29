@@ -9,7 +9,7 @@ using static CarTrade.Web.WebConstants;
 
 namespace CarTrade.Web.Controllers
 {
-    public class CompaniesController : BaseController
+    public class CompaniesController : ManagerController
     {
         private readonly ICompaniesService companiesServices;
 

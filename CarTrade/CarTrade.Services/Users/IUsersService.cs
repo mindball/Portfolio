@@ -11,6 +11,6 @@ namespace CarTrade.Services.Users
         Task<TModel> GetByIdAsync<TModel>(string userId) where TModel : class;
 
         //TODO: reverse map
-        Task EditUserAsync(string userId, UserEditServiceModel model);
+        Task EditUserAsync(string userId, UserEditServiceModel model);       
     }
 }

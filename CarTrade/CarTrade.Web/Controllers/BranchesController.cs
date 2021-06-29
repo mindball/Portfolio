@@ -1,20 +1,29 @@
-﻿using CarTrade.Services.Branches;
+﻿using CarTrade.Data.Models;
+using CarTrade.Services.Branches;
 using CarTrade.Services.Branches.Models;
+using CarTrade.Services.Users;
 using CarTrade.Web.Infrastructure.Extensions;
 using CarTrade.Web.Models.Branches;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
 
 using static CarTrade.Web.WebConstants;
 
 namespace CarTrade.Web.Controllers
 {
-    public class BranchesController : BaseController
+    public class BranchesController : ManagerController
     {
         private readonly IBranchesService branchesService;
-        public BranchesController(IBranchesService branchesService)
+        private readonly UserManager<User> userManager;
+
+        public BranchesController(IBranchesService branchesService,
+            UserManager<User> userManager)
         {
             this.branchesService = branchesService;
+            this.userManager = userManager;
         }
         public async Task<IActionResult> Index()
         {
@@ -25,18 +34,46 @@ namespace CarTrade.Web.Controllers
                 Branches = branches
             });
         }
-
+                
+        [AllowAnonymous]
         public async Task<IActionResult> ListVehicles([FromRoute(Name = "id")] int branchId)
         {
-            var branch = await this.branchesService.GetByIdAsync<BranchVehiclesListingServiceModel>(branchId);
-            if(branch == null)
+            if(this.User.IsInRole(AdministratorRole))
             {
-                return this.BadRequest();
+                var branch = await this.branchesService.GetByIdAsync<BranchVehiclesListingServiceModel>(branchId);
+                if (branch == null)
+                {
+                    return this.BadRequest();
+                }
+
+                var allVehicle = await this.branchesService.GetAllVehicleByBranchAsync(branchId);
+
+                return this.View(allVehicle);
             }
 
-            var allVehicle = await this.branchesService.GetAllVehicleByBranchAsync(branchId);
+            if(this.User.IsInRole(ManagerRole))
+            {
+                //var branch = await this.branchesService.GetByIdAsync<BranchVehiclesListingServiceModel>(branchId);
+                //if (branch == null)
+                //{
+                //    return this.BadRequest();
+                //}
+                var userId = (await this.userManager.GetUserAsync(this.User)).Id;
+                bool existUserInCurrentBranch =
+                    await this.branchesService.IsThisUserEmployeeInThisBranch(branchId, userId);
+                if (!existUserInCurrentBranch)
+                {
+                    this.TempData[AccessDenied] = AccessDenied;
+                    return this.RedirectToAction("Index", "Home");
+                }                
+                
+                var listAllVehicleFilterByUserBranchAddress = 
+                    await this.branchesService.GetAllVehicleByGivenUserBranchAddress(userId);
 
-            return this.View(allVehicle);
+                return this.View(listAllVehicleFilterByUserBranchAddress);
+            }
+
+            return this.RedirectToAction("Index", "Home");
         }        
 
         public IActionResult Add()
@@ -91,5 +128,7 @@ namespace CarTrade.Web.Controllers
             this.TempData.AddSuccessMessage(string.Format(SuccessEditItemMessage, fullAddress));
             return this.RedirectToAction(nameof(Index));
         }
+
+        
     }
 }

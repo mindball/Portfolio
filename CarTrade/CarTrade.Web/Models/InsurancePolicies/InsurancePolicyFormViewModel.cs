@@ -15,12 +15,14 @@ namespace CarTrade.Web.Models.InsurancePolicies
         [Required]
         [Display(Name = "Start date")]
         [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}")]
         //[DateTimeFromValidateTo(nameof(EndDate))]
         public DateTime StartDate { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
         [Display(Name = "End date")]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}")]
         public DateTime EndDate { get; set; }
                 
         public bool? Expired { get; set; }              
