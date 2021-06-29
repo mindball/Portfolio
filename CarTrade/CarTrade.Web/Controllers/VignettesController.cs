@@ -5,6 +5,7 @@ using CarTrade.Services.Vignettes.Models;
 using CarTrade.Web.Infrastructure.Extensions;
 using CarTrade.Web.Models.Vignettes;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -53,7 +54,7 @@ namespace CarTrade.Web.Controllers
 
             this.TempData.AddFailureMessage(NotAsignVignettes);
 
-            return this.RedirectToAction("index", "vehicles");
+            return this.RedirectToAction(nameof(Add), new { id = vehicleId });
         }
 
         //TODO: not implement
@@ -79,7 +80,9 @@ namespace CarTrade.Web.Controllers
 
             return this.View(new VignetteFormViewModel
             {
-                VehicleId = vehicleId
+                VehicleId = vehicleId,
+                StartDate = DateTime.UtcNow,
+                EndDate = DateTime.UtcNow
             });
         }
 
@@ -127,6 +130,30 @@ namespace CarTrade.Web.Controllers
             }
 
             return this.View(vignette);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(VignetteFormDetailViewModel vignetteModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return this.View(vignetteModel);
+            }
+
+            var isActiveVignette = await this.vignettesService
+                .DoesVehicleHaveActiveVignetteAsync(vignetteModel.VehicleId);
+
+            if(isActiveVignette)
+            {
+                this.TempData.EditFailureMessage(FailureEditItemMessage);
+            }
+
+            var editVignette = this.mapper.Map<VignetteFormServiceModel>(vignetteModel);
+
+            await this.vignettesService.EditAsync(vignetteModel.Id, editVignette);
+            this.TempData.EditSuccessMessage(SuccessEditItemMessage);
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

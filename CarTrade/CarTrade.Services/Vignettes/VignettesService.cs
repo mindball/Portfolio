@@ -9,6 +9,7 @@ using System;
 using AutoMapper;
 
 using static CarTrade.Common.DataConstants;
+using CarTrade.Data.Models;
 
 namespace CarTrade.Services.Vignettes
 {
@@ -69,7 +70,10 @@ namespace CarTrade.Services.Vignettes
                 throw new ArgumentException(NotExistItemExceptionMessage);
             }
 
-            this.mapper.Map(vignetteFormModel, editVignette);
+            this.mapper.Map(vignetteFormModel, editVignette, opt =>
+             opt.ConfigureMap()
+                    .ForMember(m => m.Id, opt => opt.Ignore())
+                    .ForMember(m => m.Vehicle, opt => opt.Ignore()));
 
             await this.db.SaveChangesAsync();
         }
@@ -90,7 +94,7 @@ namespace CarTrade.Services.Vignettes
 
         public async Task<IEnumerable<TModel>> GetVignetteByVehicleIdAsync<TModel>(int vehicleId) where TModel : class
         {
-            var vehicle = await this.db.Vignettes.AnyAsync(v => v.VehicleId == vehicleId);
+            var vehicle = await this.db.Vehicles.AnyAsync(v => v.Id == vehicleId);
             if (!vehicle)
             {                
                 throw new ArgumentException(NotExistItemExceptionMessage);                

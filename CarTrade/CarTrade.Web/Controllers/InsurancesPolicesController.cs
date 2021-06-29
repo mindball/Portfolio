@@ -9,6 +9,7 @@ using CarTrade.Web.Infrastructure.Extensions;
 using CarTrade.Web.Models.InsurancePolicies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -38,7 +39,9 @@ namespace CarTrade.Web.Controllers
         public async Task<IActionResult> Add([FromRoute(Name = "id")] int vehicleId)
              => this.View(new InsurancePolicyFormViewModel
              {
-                 InsuranceCompanies = await GetInsuranceCompanies()
+                 InsuranceCompanies = await GetInsuranceCompanies(),
+                 StartDate = DateTime.UtcNow,
+                 EndDate = DateTime.UtcNow
              });
 
         [HttpPost]

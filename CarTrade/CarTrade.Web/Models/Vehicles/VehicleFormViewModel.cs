@@ -26,7 +26,7 @@ namespace CarTrade.Web.Models.Vehicles
         [Required]
         [Display(Name = "Year of Manufacture")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:D}")]
         public DateTime YearОfМanufacture { get; set; }
 
         [Required]
@@ -47,7 +47,7 @@ namespace CarTrade.Web.Models.Vehicles
         [Required]
         [Display(Name = "Inspection safety check")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:D}")]
         public DateTime InspectionSafetyCheck { get; set; }
 
         [Required]

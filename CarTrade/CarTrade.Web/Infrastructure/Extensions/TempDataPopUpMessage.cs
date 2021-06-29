@@ -20,6 +20,17 @@ namespace CarTrade.Web.Infrastructure.Extensions
             tempData[TempDataErrorMessageKey] = message;
         }
 
+        public static void EditFailureMessage(this ITempDataDictionary tempData, string message)
+        {
+            tempData[TempDataErrorMessageKey] = message;
+        }
+
+        public static void EditSuccessMessage(this ITempDataDictionary tempData, string message)
+        {
+            tempData[TempDataSuccessMessageKey] = message;
+        }
+
+
         public static void AddDeniedAccessMessage(this ITempDataDictionary tempData, string message)
         {
             tempData[AccessDenied] = message;

@@ -14,8 +14,8 @@
         public const string SuccessAddItemMessage = "Successfully add {0}";
         public const string FailureAddItemMessage = "Failed add {0}";
 
-        public const string SuccessEditItemMessage = "Successfully edited {0}";
-        public const string FailureEditItemMessage = "Failed to edit {0}";
+        public const string SuccessEditItemMessage = "Successfully edit {0}";
+        public const string FailureEditItemMessage = "Failed edit {0}";
 
         public const string ActiveItem = "{0} has active {1}";
         public const string ExpireItem = "{0} is expired";
