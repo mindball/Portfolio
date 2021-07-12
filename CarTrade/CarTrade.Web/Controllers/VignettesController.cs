@@ -97,20 +97,7 @@ namespace CarTrade.Web.Controllers
             //TODO: Check is valid vignette
             var vehicleVignette = await this.vignettesService
                 .GetVignetteByVehicleIdAsync<VignetteListingServiceModel>(vignetteModel.VehicleId);
-
-            //TODO: Check is valid vignette
-            //if (vehicleVignette == null)
-            //{
-            //    TempData.AddFailureMessage(FailureAddItemMessage);
-            //    return BadRequest();
-            //}
-
-            //if (vignetteModel.StartDate < DateTime.UtcNow.AddYears(-1) 
-            //    || vehicleVignette.StartDate >= vehicleVignette.EndDate
-            //    || vehicleVignette.EndDate <= DateTime.UtcNow
-            //    )
-            //        return BadRequest();
-
+                 
             var newVignette = this.mapper.Map<VignetteFormServiceModel>(vignetteModel);
             await this.vignettesService.AddVignetteAsync(newVignette.VehicleId, newVignette);
 
@@ -137,15 +124,8 @@ namespace CarTrade.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return this.View(vignetteModel);
-            }
-
-            var isActiveVignette = await this.vignettesService
-                .DoesVehicleHaveActiveVignetteAsync(vignetteModel.VehicleId);
-
-            if(isActiveVignette)
-            {
                 this.TempData.EditFailureMessage(FailureEditItemMessage);
+                return this.View(vignetteModel);
             }
 
             var editVignette = this.mapper.Map<VignetteFormServiceModel>(vignetteModel);

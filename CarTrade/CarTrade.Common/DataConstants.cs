@@ -11,7 +11,7 @@
         public const int PlateNumberMinLength = 7;
         public const int PlateNumberМaxLength = 12;
 
-        public const int VinMinLength = 11;
+        public const int VinMinLength = 5;
         public const int VinMaxLength = 17;
 
         public const int MinNameLength = 2;

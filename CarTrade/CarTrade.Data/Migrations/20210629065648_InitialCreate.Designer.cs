@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarTrade.Data.Migrations
 {
     [DbContext(typeof(CarDbContext))]
-    [Migration("20210527131951_RemoveNullableExpireColumn")]
-    partial class RemoveNullableExpireColumn
+    [Migration("20210629065648_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -25,22 +25,23 @@ namespace CarTrade.Web.Controllers
         private IVehicleService vehicleService;
         private IVignettesService vignetteService;
 
-        private readonly IRecurringJobManager recurringJobManager;
+        //private readonly IRecurringJobManager recurringJobManager;
 
         public HomeController(
             ILogger<HomeController> logger,
             IBranchesService branchesService,
             IInsurancesPoliciesService policyService,
             IVehicleService vehicleService,
-            IVignettesService vignetteService,
-            IRecurringJobManager recurringJobManager)
+            IVignettesService vignetteService
+            //IRecurringJobManager recurringJobManager
+            )
         {
             this.branchesService = branchesService;
             this.policyService = policyService;
             this.vehicleService = vehicleService;
             this.vignetteService = vignetteService;
 
-            this.recurringJobManager = recurringJobManager;
+            //this.recurringJobManager = recurringJobManager;
 
             _logger = logger;
         }

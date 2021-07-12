@@ -1,4 +1,5 @@
 ﻿using CarTrade.Web.Controllers;
+using CarTrade.Web.Models;
 using CarTrade.Web.Test.Infrastructure.Extensions;
 using FluentAssertions;
 using Microsoft.AspNetCore.Authorization;
@@ -32,14 +33,15 @@ namespace CarTrade.Web.Test.Controllers.Home
         public async Task Controller_ShouldBeAccessibleByAnonymous()
         {
             //Arrange
-            var controller = new HomeController(null, null, null, null, null, null).WithAnonymousIdentity();
+            var controller = new HomeController(null, null, null, null, null).WithAnonymousIdentity();
 
             //Act
             var result = controller.Error() as ViewResult;
-            var viewName = result.ViewName;
+            var actualViewModel = result.ViewData.Model.GetType();
+            var expectedViewmodel = new ErrorViewModel().GetType();
 
             //Assert
-            Assert.Equal("Error", viewName);
+            Assert.Equal(expectedViewmodel, actualViewModel);
         }
     }
 }

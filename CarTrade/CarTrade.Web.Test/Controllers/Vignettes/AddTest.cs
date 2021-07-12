@@ -47,16 +47,18 @@ namespace CarTrade.Web.Test.Controllers.Vignettes
             };
 
             MockGetVignetteByVehicleId(mockVignettesService);
-            MockIMapper(newVignette2, mockImapper);            
+            MockIMapper(newVignette2, mockImapper);
 
-            mockVignettesService.Setup(srv => srv.AddVignetteAsync(vehicleIdConst, newVignette2))
-                .Callback(() => serviceMethodCall = true);
+
+            mockVignettesService.Verify(srv => srv.AddVignetteAsync(It.IsAny<int>(), It.IsAny<VignetteFormServiceModel>()), Times.Once());
+            //mockVignettesService.Setup(srv => srv.AddVignetteAsync(vehicleIdConst, newVignette2))
+            //    .Callback(() => serviceMethodCall = true);
 
             //Act
-            var result = await controller.Add(newVignette) as RedirectToActionResult;
+            var result = await controller.Add(newVignette);
 
             //Assert
-            Assert.True(serviceMethodCall);
+            //Assert.True(serviceMethodCall);
         }
 
         [Fact]

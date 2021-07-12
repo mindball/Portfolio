@@ -43,17 +43,29 @@ namespace CarTrade.Web.Test.Controllers.Home
             var mockInsuranceService = GetMockInsuranceService();
             var mockVehicleService = GetMockVehicleService();
             var mockVignettesService = GetMockVignettesService();
-            var mockRecurring = GetMockRecurring();
-
-            SetupMockObjects(mockBranchService, mockInsuranceService, mockVignettesService);
+            //var mockRecurring = GetMockRecurring();
+                        
+            mockBranchService.Setup(cfg => cfg.AllAsync())
+                   .ReturnsAsync(() => new List<BranchListingServiceModel>
+                   { 
+                       new BranchListingServiceModel
+                       { 
+                           Id = 1,
+                           Address = "Test",                          
+                           Town = "test test"
+                       }
+                   });
+           
+            SetupMockInsuranceService(mockInsuranceService);
+            SetupMockVignettesService(mockVignettesService);
 
             var homeController = new HomeController(
                 null,
                 mockBranchService.Object,
                 mockInsuranceService.Object,
                 mockVehicleService.Object,
-                mockVignettesService.Object,
-                mockRecurring.Object);
+                mockVignettesService.Object
+               );
             //Act
             var result = await homeController.Index();
 
@@ -72,9 +84,12 @@ namespace CarTrade.Web.Test.Controllers.Home
             var mockInsuranceService = GetMockInsuranceService();
             var mockVehicleService = GetMockVehicleService();
             var mockVignettesService = GetMockVignettesService();
-            var mockRecurring = GetMockRecurring();
+            //var mockRecurring = GetMockRecurring();
 
-            SetupMockObjects(mockBranchService, mockInsuranceService, mockVignettesService);
+            SetupMockBranchService(mockBranchService);
+            SetupMockInsuranceService(mockInsuranceService);
+            SetupMockVignettesService(mockVignettesService);
+
 
             foreach (var item in this.fixture.Context.Branches)
             {
@@ -87,8 +102,8 @@ namespace CarTrade.Web.Test.Controllers.Home
                 mockBranchService.Object,
                 mockInsuranceService.Object,
                 mockVehicleService.Object,
-                mockVignettesService.Object,
-                mockRecurring.Object);
+                mockVignettesService.Object
+                );
 
             //Act
             var actionResult = await homeController.Index();
@@ -112,7 +127,7 @@ namespace CarTrade.Web.Test.Controllers.Home
             var mockInsuranceService = GetMockInsuranceService();
             var mockVehicleService = GetMockVehicleService();
             var mockVignettesService = GetMockVignettesService();
-            var mockRecurring = GetMockRecurring();
+            //var mockRecurring = GetMockRecurring();
             var mockBranchService = GetMockBranchService();
 
             List<BranchListingServiceModel> allBranches = CollectionOfBranches(branchId);
@@ -137,8 +152,8 @@ namespace CarTrade.Web.Test.Controllers.Home
                 mockBranchService.Object,
                 mockInsuranceService.Object,
                 mockVehicleService.Object,
-                mockVignettesService.Object,
-                mockRecurring.Object);
+                mockVignettesService.Object
+                );
 
             //Act
             var result = await homeController.Index();
@@ -305,33 +320,39 @@ namespace CarTrade.Web.Test.Controllers.Home
                     }
             };
 
-        private static void SetupMockObjects(Mock<IBranchesService> mockBranchService, Mock<IInsurancesPoliciesService> mockInsuranceService, Mock<IVignettesService> mockVignettesService)
+        private static void SetupMockBranchService(Mock<IBranchesService> mockBranchService)
         {
             if (mockBranchService != null)
             {
                 mockBranchService.Setup(srv => srv.AllAsync());
             }
+        }
 
+        private static void SetupMockInsuranceService(Mock<IInsurancesPoliciesService> mockInsuranceService)
+        {
             if (mockInsuranceService != null)
             {
                 mockInsuranceService.Setup(srv => srv.SetExpiredInsurancePoliciesLogicAsync());
             }
+        }
 
+        private static void SetupMockVignettesService(Mock<IVignettesService> mockVignettesService)
+        {
             if (mockVignettesService != null)
             {
                 mockVignettesService.Setup(srv => srv.SetVignetteExpireLogicAsync());
             }
         }
 
-        private static Mock<IBackgroundJobClient> GetHangFire()
-        {
-            return new Mock<IBackgroundJobClient>();
-        }
+        //private static Mock<IBackgroundJobClient> GetHangFire()
+        //{
+        //    return new Mock<IBackgroundJobClient>();
+        //}
 
-        private static Mock<IRecurringJobManager> GetMockRecurring()
-        {
-            return new Mock<IRecurringJobManager>();
-        }
+        //private static Mock<IRecurringJobManager> GetMockRecurring()
+        //{
+        //    return new Mock<IRecurringJobManager>();
+        //}
 
         private static Mock<IVignettesService> GetMockVignettesService()
         {

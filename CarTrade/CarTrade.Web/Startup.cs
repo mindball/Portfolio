@@ -47,10 +47,19 @@ namespace CarTrade.Web
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
+                //options.SignIn.RequireConfirmedAccount = true;
             })
                 .AddDefaultUI()
                 .AddEntityFrameworkStores<CarDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddAuthentication()
+                .AddFacebook(facebookOptions =>
+                    {
+                        facebookOptions.AppId = Configuration["Authentication:Facebook:Id"];
+                        facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+                    }
+                );
 
             services.AddDomainServices();
 
