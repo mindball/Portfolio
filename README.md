@@ -27,7 +27,8 @@ The project provides the following functionalities and is useful for vehicle fle
 - Moq
 - [xUnit](https://github.com/xunit/xunit)
 - In-memory databases
-- Deployed and working on Windows server 2012 Std. 
+- Deployed and working on Windows server 2012 Std.
+- Using Client OAuth Login  
 
 ## :wrench: DB Diagram
 ![](https://res.cloudinary.com/oilairpi/image/upload/v1623133764/Portfolio/diagram_wq1ndx.jpg)
