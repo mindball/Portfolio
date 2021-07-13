@@ -13,10 +13,12 @@ using CarTrade.Services.Vehicles;
 using Hangfire;
 using CarTrade.Services.Vignettes;
 using CarTrade.Web.Infrastructure.Extensions;
+using CarTrade.Web.Filters.Action;
 
 namespace CarTrade.Web.Controllers
 {
     [AllowAnonymous]
+    [TimeFilter]
     public class  HomeController: Controller
     {
         private readonly ILogger<HomeController> _logger;
