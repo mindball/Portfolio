@@ -23,7 +23,7 @@ using static CarTrade.Common.DataConstants;
 namespace CarTrade.Web.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
-    public class ExternalLoginModel : PageModel
+    public class ExternalLoginModel : RegisterFormModel
     {
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
@@ -35,97 +35,22 @@ namespace CarTrade.Web.Areas.Identity.Pages.Account
             SignInManager<User> signInManager,
             UserManager<User> userManager,
             ILogger<ExternalLoginModel> logger,
-            IBranchesService brancService,
+            IBranchesService branchService,
             ICompaniesService companyService)
+            : base(branchService, companyService)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _logger = logger;
-
-            this.brancService = brancService;
-            var allBranches = this.brancService.AllAsync().Result.AsEnumerable();
-
-            this.Branches = (List<SelectListItem>)allBranches
-                .Select(b => new SelectListItem
-                {
-                    Text = b.FullAddress,
-                    Value = b.Id.ToString()
-                })
-                .ToList();
-
-            this.companyService = companyService;
-            var allCompanies = this.companyService.AllAsync().Result.AsEnumerable();
-
-            this.Companies = (List<SelectListItem>)allCompanies
-               .Select(b => new SelectListItem
-               {
-                   Text = b.Name,
-                   Value = b.Id.ToString()
-               })
-               .ToList();
+                       
         }
-
-        [BindProperty]
-        public InputModel Input { get; set; }
+        
 
         public string ProviderDisplayName { get; set; }
 
-        public string ReturnUrl { get; set; }
-
         [TempData]
         public string ErrorMessage { get; set; }
-
-        public List<SelectListItem> Branches { get; }
-
-        public List<SelectListItem> Companies { get; }
-
-        public class InputModel
-        {
-            [Required]
-            [DataType(DataType.Text)]
-            [Display(Name = "User name")]
-            public string UserName { get; set; }
-
-            [Required]
-            [MinLength(MinNameLength)]
-            [MaxLength(MaxNameLength)]
-            [Display(Name = "First name")]
-            public string FirstName { get; set; }
-
-            [Required]
-            [MinLength(MinNameLength)]
-            [MaxLength(MaxNameLength)]
-            [Display(Name = "Second name")]
-            public string SecondName { get; set; }
-
-            [Required]
-            [MinLength(MinNameLength)]
-            [MaxLength(MaxNameLength)]
-            [Display(Name = "Last name")]
-            public string LastName { get; set; }
-
-            [Required]
-            [EmailAddress]
-            [Display(Name = "Email")]
-            public string Email { get; set; }
-
-            [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
-            [DataType(DataType.Password)]
-            [Display(Name = "Password")]
-            public string Password { get; set; }
-
-            [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-            public string ConfirmPassword { get; set; }
-
-            [Required]
-            public string Branch { get; set; }
-
-            [Required]
-            public string Employeer { get; set; }
-        }
+               
 
         public IActionResult OnGetAsync()
         {
