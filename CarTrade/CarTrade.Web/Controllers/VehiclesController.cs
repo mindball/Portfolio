@@ -201,6 +201,19 @@ namespace CarTrade.Web.Controllers
             return this.View(vehiclesWithExprireData);
         }
 
+
+        [HttpGet]
+        public async Task<IActionResult> Search(string searchString)
+        {
+            if (string.IsNullOrEmpty(searchString))
+            {
+                return this.RedirectToAction(nameof(Index));
+            }
+
+            var result = await this.vehicleService.FindVehicleAsync(searchString);
+
+            return this.View(nameof(Index), result);
+        }
         private async Task<CollectCompanyDetailsViewModel> FillCollectCompanyDetails()
         {
             var brandsEnumerable = await brandService.AllAsync();

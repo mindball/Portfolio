@@ -84,7 +84,7 @@ namespace CarTrade.Web.Controllers
             //ViewData["NavMenuPage"] = "Index";            
 
             return View(expireViewModel);
-        }
+        }        
 
         public IActionResult Privacy()
         {
