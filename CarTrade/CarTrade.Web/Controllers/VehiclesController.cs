@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CarTrade.Services.Branches;
-using CarTrade.Services.Branches.Models;
+using Microsoft.AspNetCore.Authorization;
 using CarTrade.Services.Brands;
 using CarTrade.Services.Companies;
 using CarTrade.Services.Vehicles;
@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using static CarTrade.Web.WebConstants;
+using System.Linq;
 
 namespace CarTrade.Web.Controllers
 {
@@ -201,7 +202,7 @@ namespace CarTrade.Web.Controllers
             return this.View(vehiclesWithExprireData);
         }
 
-
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Search(string searchString)
         {
@@ -214,6 +215,21 @@ namespace CarTrade.Web.Controllers
 
             return this.View(nameof(Index), result);
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> AutoComplete([FromBody] Auto auto)
+        {           
+            var result = (await this.vehicleService.FindVehicleAsync(auto.Prefix)).Select(a => new { label = a.PlateNumber, value = a.PlateNumber });
+            
+            return this.Json(result);
+        }
+
+        public class Auto
+        {
+            public string Prefix { get; set; }
+        }
+
         private async Task<CollectCompanyDetailsViewModel> FillCollectCompanyDetails()
         {
             var brandsEnumerable = await brandService.AllAsync();

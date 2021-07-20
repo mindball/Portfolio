@@ -184,15 +184,29 @@ namespace CarTrade.Services.Vehicles
             return true;
         }
 
-        private VehicleStatus VehicleStatus(string status)
+        public async Task<IEnumerable<VehicleListingServiceModel>> FindVehicleAsync(string searchString)
         {
-            VehicleStatus vehicleStatus;
-            if (!Enum.TryParse(status, out vehicleStatus))
-            {
-                vehicleStatus = Data.Enums.VehicleStatus.None;
-            }
+            var result = await this.db.Vehicles
+                .Where(a => a.PlateNumber.Contains(searchString)
+                        || a.Vin.Contains(searchString))
+                .ProjectTo<VehicleListingServiceModel>()
+                .ToListAsync();
 
-            return vehicleStatus;
+            return result;
         }
+
+        //TODO: delete this
+        //private VehicleStatus VehicleStatus(string status)
+        //{
+        //    VehicleStatus vehicleStatus;
+        //    if (!Enum.TryParse(status, out vehicleStatus))
+        //    {
+        //        vehicleStatus = Data.Enums.VehicleStatus.None;
+        //    }
+
+        //    return vehicleStatus;
+        //}
+
+
     }
 }

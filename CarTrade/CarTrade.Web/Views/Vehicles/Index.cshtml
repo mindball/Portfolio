@@ -10,12 +10,21 @@
 </div>
 <br />
 
+<form class="form-inline ml-auto" asp-controller="Vehicles" asp-action="Search" method="get">
+    <div class="md-form my-0">
+        <input name="searchString" class="form-control" type="text" id="searchVehicle" placeholder="Vin or Plate number" aria-label="Search">       
+    </div>
+    @*<button class="btn btn-outline-white btn-md my-0 ml-sm-2" type="submit">Search</button>*@
+</form>
+
+<br />
+
 <table class="table table-bordered table-hover">
     <tr>
         <th>Model</th>
         <th>Vin</th>
         <th>Plate number</th>
-        <th>Description</th>        
+        <th>Description</th>
         <th>Year of manufacture</th>
         <th>Travelled distance</th>
         <th>Oil change</th>
@@ -26,15 +35,15 @@
     @foreach (var vehicle in Model)
     {
         <tr>
-            <th>@vehicle.Model</th>           
-            <th>@vehicle.Vin</th>           
-            <th>@vehicle.PlateNumber</th>           
-            <th>@vehicle.Description</th>           
-            <th>@vehicle.YearОfМanufacture</th>           
-            <th>@vehicle.TravelledDistance</th>           
-            <th>@vehicle.EndOilChange</th>           
-            <th>@vehicle.InspectionSafetyCheck</th>           
-            <th>@vehicle.Status</th>           
+            <th>@vehicle.Model</th>
+            <th>@vehicle.Vin</th>
+            <th>@vehicle.PlateNumber</th>
+            <th>@vehicle.Description</th>
+            <th>@vehicle.YearОfМanufacture</th>
+            <th>@vehicle.TravelledDistance</th>
+            <th>@vehicle.EndOilChange</th>
+            <th>@vehicle.InspectionSafetyCheck</th>
+            <th>@vehicle.Status</th>
             <th>
                 <a href="/vehicles/edit/@vehicle.Id" class="btn btn-info btn-sm">Edit</a>
                 <a href="/vehicles/delete/@vehicle.Id" class="btn btn-danger btn-sm">Remove</a>
@@ -44,3 +53,39 @@
         </tr>
     }
 </table>
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            $("#searchVehicle").autocomplete({
+                source: function (request, response) {
+                    var myData = { "prefix": request.term };
+                    $.ajax({
+                        url: '/Vehicles/AutoComplete/',
+                        data: JSON.stringify(myData),
+                        dataType: "json",
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return item;
+                            }))
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                },
+                select: function (e, i) {
+                },
+                minLength: 0
+            }).focus(function () {
+                $(this).autocomplete("search");
+            });
+        });
+    </script>
+}
+

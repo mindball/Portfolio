@@ -20,6 +20,8 @@ namespace CarTrade.Services.Vehicles
 
         Task<IEnumerable<VehicleListingInspectionSafetyCheckServiceModel>> GetInspectionSafetyCheckExpireDataAsync(int branchId);
 
-        Task<TModel> GetByIdAsync<TModel>(int vehicleId) where TModel : class;       
+        Task<TModel> GetByIdAsync<TModel>(int vehicleId) where TModel : class;
+
+        Task<IEnumerable<VehicleListingServiceModel>> FindVehicleAsync(string searchString);
     }
 }
