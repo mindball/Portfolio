@@ -40,7 +40,7 @@
             </div>
             <div class="form-group col-md-6">
                 <label asp-for="PlateNumber"></label>
-                <input asp-for="PlateNumber" class="form-control" placeholder="CT0000CT" />
+                <input asp-for="PlateNumber" class="form-control" placeholder="CT0000CT" id="plateNumber" />
                 <span asp-validation-for="PlateNumber" class="text-danger"></span>
             </div>
             <div class="form-group col-md-6">
@@ -74,6 +74,18 @@
                 </select>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Save vehicle</button>
+        <button type="submit" class="btn btn-primary" id="saveVehicle">Save vehicle</button>
     </form>
 </div>
+
+
+<script>
+    $(function () {
+        $("#plateNumber")
+            .change(function (e) {
+                let value = $(this).val();
+                let result = value.replace(/\s/g, "");
+                $("#plateNumber").val(result);
+            });
+    });
+</script>

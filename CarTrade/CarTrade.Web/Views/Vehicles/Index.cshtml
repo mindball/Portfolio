@@ -54,11 +54,12 @@
     }
 </table>
 
-@section scripts{
+@section Scripts{
     <script type="text/javascript">
         $(function () {
             $("#searchVehicle").autocomplete({
                 source: function (request, response) {
+                    delay: 1000;
                     var myData = { "prefix": request.term };
                     $.ajax({
                         url: '/Vehicles/AutoComplete/',

@@ -68,8 +68,8 @@ namespace CarTrade.Web
             //friendly url
             //services.AddRouting(routing => routing.LowercaseUrls = true);
 
-            //services.AddControllersWithViews(options =>
-            //    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
+            services.AddControllersWithViews(options =>
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
 
             services.AddControllersWithViews();
             services.AddRazorPages();
