@@ -54,15 +54,26 @@
     }
 </table>
 
-@section Scripts{
+@section Scripts {
+    <script src="~/js/autocomplete.js"></script>
+    <script>
+        auto();
+    </script>    
+}
+
+@*@section Scripts{
     <script type="text/javascript">
         $(function () {
             $("#searchVehicle").autocomplete({
                 source: function (request, response) {
-                    delay: 1000;
+                    delay: 10000;                    
                     var myData = { "prefix": request.term };
+                    var token = $("input[name='__RequestVerificationToken']").val();                                  
                     $.ajax({
                         url: '/Vehicles/AutoComplete/',
+                        headers: {
+                            "RequestVerificationToken": token
+                        },
                         data: JSON.stringify(myData),
                         dataType: "json",
                         type: "POST",
@@ -71,10 +82,7 @@
                             response($.map(data, function (item) {
                                 return item;
                             }))
-                        },
-                        error: function (response) {
-                            alert(response.responseText);
-                        },
+                        },                        
                         failure: function (response) {
                             alert(response.responseText);
                         }
@@ -88,5 +96,5 @@
             });
         });
     </script>
-}
+}*@
 

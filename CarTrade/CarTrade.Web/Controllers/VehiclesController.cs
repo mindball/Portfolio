@@ -220,6 +220,10 @@ namespace CarTrade.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> AutoComplete([FromBody] Auto auto)
         {           
+            if(string.IsNullOrEmpty(auto.Prefix))
+            {
+                return this.Ok();
+            }
             var result = (await this.vehicleService.FindVehicleAsync(auto.Prefix)).Select(a => new { label = a.PlateNumber, value = a.PlateNumber });
             
             return this.Json(result);

@@ -14,5 +14,21 @@
 </div>
 
 @section Scripts {
-    <partial name="_VehicleFormPartial" />
+    <script src="~/js/removewhitespace.js"></script>
+    <script>
+        removeWitespace();
+    </script>
 }
+
+@*@section Scripts {
+    <script>
+        $(function () {
+            $("#plateNumber")
+                .change(function (e) {
+                    let value = $(this).val();
+                    let result = value.replace(/\s/g, "");
+                    $("#plateNumber").val(result);
+                });
+        });
+    </script>
+}*@
