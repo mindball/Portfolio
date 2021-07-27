@@ -49,6 +49,8 @@ namespace CarTrade.Data.Models
         [Required]
         public DateTime InspectionSafetyCheck { get; set; }
 
+        public DateTime? CreatedOn { get; set; }
+
         public int BranchId { get; set; }
                
         public virtual Branch Branch { get; set; }

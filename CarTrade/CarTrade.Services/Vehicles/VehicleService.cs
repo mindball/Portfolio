@@ -24,8 +24,11 @@ namespace CarTrade.Services.Vehicles
             this.mapper = mapper;
         }
 
-        public async Task<IEnumerable<VehicleListingServiceModel>> AllAsync()
-            => await this.db.Vehicles
+        public async Task<IEnumerable<VehicleListingServiceModel>> AllAsync(int page = 1)
+            => await this.db.Vehicles 
+            .OrderByDescending(v => v.CreatedOn)
+            .Skip((page - 1) * VehiclePageSize)
+            .Take(VehiclePageSize)
             .ProjectTo<VehicleListingServiceModel>()
             .ToListAsync();
 
@@ -46,6 +49,7 @@ namespace CarTrade.Services.Vehicles
 
             //var newVehicle = this.FillVehicleModel(vehicleModel, vehicleStatus);
             var newVehicle = this.mapper.Map<Data.Models.Vehicle>(vehicleModel);
+            newVehicle.CreatedOn = DateTime.UtcNow;
 
             await this.db.Vehicles.AddAsync(newVehicle);
             await this.db.SaveChangesAsync();
@@ -194,6 +198,9 @@ namespace CarTrade.Services.Vehicles
 
             return result;
         }
+
+        public async Task<int> TotalAsync()
+            => await this.db.Vehicles.CountAsync();
 
         //TODO: delete this
         //private VehicleStatus VehicleStatus(string status)

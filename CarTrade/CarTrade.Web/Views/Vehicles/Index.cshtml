@@ -1,4 +1,4 @@
-﻿@model IEnumerable<VehicleListingServiceModel>
+﻿@model VehicleListingViewModel
 @{
     ViewData["Title"] = "All vehicle";
 }
@@ -12,7 +12,7 @@
 
 <form class="form-inline ml-auto" asp-controller="Vehicles" asp-action="Search" method="get">
     <div class="md-form my-0">
-        <input name="searchString" class="form-control" type="text" id="searchVehicle" placeholder="Vin or Plate number" aria-label="Search">       
+        <input name="searchString" class="form-control" type="text" id="searchVehicle" placeholder="Vin or Plate number" aria-label="Search">
     </div>
     @*<button class="btn btn-outline-white btn-md my-0 ml-sm-2" type="submit">Search</button>*@
 </form>
@@ -32,7 +32,7 @@
         <th>Status</th>
         <th></th>
     </tr>
-    @foreach (var vehicle in Model)
+    @foreach (var vehicle in Model.Vehicles)
     {
         <tr>
             <th>@vehicle.Model</th>
@@ -54,47 +54,67 @@
     }
 </table>
 
+@if (Model.TotalVehicles > Model.Vehicles.Count())
+{
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="@(Model.CurrentPage == 1 ? "disabled" : string.Empty)">
+                <a class="page-link" asp-route-page="@Model.PreviousPage"
+                   aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="@(Model.CurrentPage == Model.TotalPages ? "disabled" : string.Empty)">
+                <a class="page-link" asp-route-page="@Model.NextPage"
+                   aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+}
+
 @section Scripts {
     <script src="~/js/autocomplete.js"></script>
     <script>
         auto();
-    </script>    
+    </script>
 }
 
 @*@section Scripts{
-    <script type="text/javascript">
-        $(function () {
-            $("#searchVehicle").autocomplete({
-                source: function (request, response) {
-                    delay: 10000;                    
-                    var myData = { "prefix": request.term };
-                    var token = $("input[name='__RequestVerificationToken']").val();                                  
-                    $.ajax({
-                        url: '/Vehicles/AutoComplete/',
-                        headers: {
-                            "RequestVerificationToken": token
-                        },
-                        data: JSON.stringify(myData),
-                        dataType: "json",
-                        type: "POST",
-                        contentType: "application/json; charset=utf-8",
-                        success: function (data) {
-                            response($.map(data, function (item) {
-                                return item;
-                            }))
-                        },                        
-                        failure: function (response) {
-                            alert(response.responseText);
-                        }
-                    });
-                },
-                select: function (e, i) {
-                },
-                minLength: 0
-            }).focus(function () {
-                $(this).autocomplete("search");
+        <script type="text/javascript">
+            $(function () {
+                $("#searchVehicle").autocomplete({
+                    source: function (request, response) {
+                        delay: 10000;
+                        var myData = { "prefix": request.term };
+                        var token = $("input[name='__RequestVerificationToken']").val();
+                        $.ajax({
+                            url: '/Vehicles/AutoComplete/',
+                            headers: {
+                                "RequestVerificationToken": token
+                            },
+                            data: JSON.stringify(myData),
+                            dataType: "json",
+                            type: "POST",
+                            contentType: "application/json; charset=utf-8",
+                            success: function (data) {
+                                response($.map(data, function (item) {
+                                    return item;
+                                }))
+                            },
+                            failure: function (response) {
+                                alert(response.responseText);
+                            }
+                        });
+                    },
+                    select: function (e, i) {
+                    },
+                    minLength: 0
+                }).focus(function () {
+                    $(this).autocomplete("search");
+                });
             });
-        });
-    </script>
-}*@
+        </script>
+    }*@
 

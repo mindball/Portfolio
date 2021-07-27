@@ -42,12 +42,13 @@ namespace CarTrade.Web.Controllers
             this.brandService = brandService;
         }
 
-        public async Task<IActionResult> Index()
-        {
-            var vehicles = await this.vehicleService.AllAsync();
-
-            return View(vehicles);
-        }
+        public async Task<IActionResult> Index(int page = 1)
+            => this.View(new VehicleListingViewModel
+            {
+                Vehicles = await this.vehicleService.AllAsync(page),
+                TotalVehicles = await this.vehicleService.TotalAsync(),
+                CurrentPage = page
+            });
 
         public async Task<IActionResult> Add()
         {

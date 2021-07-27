@@ -37,9 +37,9 @@ namespace CarTrade.Web
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            this.ConfigureHangfire(services);
+            //this.ConfigureHangfire(services);
 
-            services.AddHangfireServer();
+            //services.AddHangfireServer();
 
             services.AddIdentity<User, IdentityRole>(options =>
             {
@@ -71,12 +71,17 @@ namespace CarTrade.Web
             services.AddControllersWithViews(options =>
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
 
+            this.ConfigureHangfire(services);
+
+            services.AddHangfireServer();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IRecurringJobManager recurringJobManager)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IRecurringJobManager recurringJobManager
+            )
         {
             this.SeedHangfireJobs(recurringJobManager);
 
@@ -96,7 +101,7 @@ namespace CarTrade.Web
             app.UseStaticFiles();
 
             app.UseDatabaseMigration();
-
+            
             app.UseRouting();
 
             app.UseAuthentication();
@@ -106,10 +111,10 @@ namespace CarTrade.Web
             //backgroundJobs.Enqueue(() => Console.WriteLine("Hello world from Hangfire!"));
             //RecurringJob.AddOrUpdate(() => Console.WriteLine("RecurringJob!"), Cron.Minutely);
 
-            app.UseHangfireServer(new BackgroundJobServerOptions { WorkerCount = 2 });
-            app.UseHangfireDashboard(
-                "/Administration/HangFire",
-                new DashboardOptions { Authorization = new[] { new HangfireAuthorizationFilter() } });
+            //app.UseHangfireServer(new BackgroundJobServerOptions { WorkerCount = 2 });
+            //app.UseHangfireDashboard(
+            //    "/Administration/HangFire",
+            //    new DashboardOptions { Authorization = new[] { new HangfireAuthorizationFilter() } });
 
             app.UseEndpoints(endpoints =>
             {

@@ -8,6 +8,10 @@
         public const int VehicleModelTypeMinLength = 2;
         public const int VehicleModelTypeMaxLength = 50;
 
+
+        //TODO: make 25 or 50
+        public const int VehiclePageSize = 5;
+
         public const int PlateNumberMinLength = 7;
         public const int PlateNumberМaxLength = 12;
 
