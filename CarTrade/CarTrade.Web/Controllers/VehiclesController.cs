@@ -45,7 +45,7 @@ namespace CarTrade.Web.Controllers
         public async Task<IActionResult> Index(int page = 1)
             => this.View(new VehicleListingViewModel
             {
-                Vehicles = await this.vehicleService.AllAsync(page),
+                Vehicles = await this.vehicleService.AllWithPagingAsync(page),
                 TotalVehicles = await this.vehicleService.TotalAsync(),
                 CurrentPage = page
             });

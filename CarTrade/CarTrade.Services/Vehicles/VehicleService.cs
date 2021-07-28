@@ -24,11 +24,16 @@ namespace CarTrade.Services.Vehicles
             this.mapper = mapper;
         }
 
-        public async Task<IEnumerable<VehicleListingServiceModel>> AllAsync(int page = 1)
+        public async Task<IEnumerable<VehicleListingServiceModel>> AllWithPagingAsync(int page = 1)
             => await this.db.Vehicles 
             .OrderByDescending(v => v.CreatedOn)
             .Skip((page - 1) * VehiclePageSize)
             .Take(VehiclePageSize)
+            .ProjectTo<VehicleListingServiceModel>()
+            .ToListAsync();
+
+        public async Task<IEnumerable<VehicleListingServiceModel>> AllAsync()
+            => await this.db.Vehicles            
             .ProjectTo<VehicleListingServiceModel>()
             .ToListAsync();
 

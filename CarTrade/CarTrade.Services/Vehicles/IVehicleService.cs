@@ -6,7 +6,9 @@ namespace CarTrade.Services.Vehicles
 {
     public interface IVehicleService
     {
-        Task<IEnumerable<VehicleListingServiceModel>> AllAsync(int page = 1);
+        Task<IEnumerable<VehicleListingServiceModel>> AllWithPagingAsync(int page = 1);
+
+        Task<IEnumerable<VehicleListingServiceModel>> AllAsync();
 
         Task<int> TotalAsync();       
 

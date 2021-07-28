@@ -18,6 +18,8 @@ using CarTrade.Services.Vignettes;
 
 using static CarTrade.Web.WebConstants;
 using Hangfire.Dashboard;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace CarTrade.Web
 {
@@ -63,7 +65,9 @@ namespace CarTrade.Web
 
             services.AddDomainServices();
 
-            services.AddAutoMapper();
+            services.AddApiVersioning(opt => opt.ReportApiVersions = true);
+
+            services.AddAutoMapper();            
 
             //friendly url
             //services.AddRouting(routing => routing.LowercaseUrls = true);
@@ -111,10 +115,10 @@ namespace CarTrade.Web
             //backgroundJobs.Enqueue(() => Console.WriteLine("Hello world from Hangfire!"));
             //RecurringJob.AddOrUpdate(() => Console.WriteLine("RecurringJob!"), Cron.Minutely);
 
-            //app.UseHangfireServer(new BackgroundJobServerOptions { WorkerCount = 2 });
-            //app.UseHangfireDashboard(
-            //    "/Administration/HangFire",
-            //    new DashboardOptions { Authorization = new[] { new HangfireAuthorizationFilter() } });
+            app.UseHangfireServer(new BackgroundJobServerOptions { WorkerCount = 2 });
+            app.UseHangfireDashboard(
+                "/Administration/HangFire",
+                new DashboardOptions { Authorization = new[] { new HangfireAuthorizationFilter() } });
 
             app.UseEndpoints(endpoints =>
             {
@@ -157,5 +161,6 @@ namespace CarTrade.Web
                 return httpContext.User.IsInRole(AdministratorRole);
             }
         }
+                
     }
 }
