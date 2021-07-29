@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarTrade.Services.Tests", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarTrade.Web.Test", "CarTrade.Web.Test\CarTrade.Web.Test.csproj", "{F84C22D7-079F-4D8A-9011-8F855EAB0CA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarTrade.IntegrationTests", "CarTrade.IntegrationTests\CarTrade.IntegrationTests.csproj", "{55835687-AE98-4332-888D-9CDCBBD21C0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarTrade.IntegrationTests", "CarTrade.IntegrationTests\CarTrade.IntegrationTests.csproj", "{55835687-AE98-4332-888D-9CDCBBD21C0B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

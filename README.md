@@ -8,7 +8,7 @@ The project provides the following functionalities and is useful for vehicle fle
 - Insurance policy CRUD operations
 - User(driver) CRUD operations
 - Vignette CRUD operations
-- Branc CRUD operations
+- Branch CRUD operations
 - Brand CRUD operations
 - Company(Owner) CRUD operations
 - Insurance company CRUD operations
@@ -29,6 +29,7 @@ The project provides the following functionalities and is useful for vehicle fle
 - In-memory databases
 - Deployed and working on Windows server 2012 Std.
 - Using Client OAuth Login  
+- RESTful Web api with JWT auth 
 
 ## :wrench: DB Diagram
 ![](https://res.cloudinary.com/oilairpi/image/upload/v1623133764/Portfolio/diagram_wq1ndx.jpg)

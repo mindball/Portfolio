@@ -167,8 +167,7 @@ namespace CarTrade.Web.Test.Controllers.Vignettes
 
         [Fact]
         public async Task AddGetMethod_ShouldViewWithVignetteFormViewModel()
-        {
-             
+        {             
             //Arrange            
             var mockVehiclesService = new Mock<IVehicleService>();
             var mockVignetteService = new Mock<IVignettesService>();

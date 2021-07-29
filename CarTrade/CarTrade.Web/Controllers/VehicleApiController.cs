@@ -52,6 +52,5 @@ namespace CarTrade.Web.Controllers
             return this.Ok(vehicle);
         }
 
-
     }
 }
