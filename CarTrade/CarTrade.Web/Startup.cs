@@ -65,15 +65,16 @@ namespace CarTrade.Web
 
             services.AddDomainServices();
 
-            services.AddApiVersioning(opt => opt.ReportApiVersions = true);
 
-            services.AddAutoMapper();            
+            services.AddAutoMapper();
 
             //friendly url
             //services.AddRouting(routing => routing.LowercaseUrls = true);
+            services.AddJWT();
+            services.AddApiVersioning(opt => opt.ReportApiVersions = true);
 
-            services.AddControllersWithViews(options =>
-                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
+            //services.AddControllersWithViews(options =>
+            //    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
 
             this.ConfigureHangfire(services);
 

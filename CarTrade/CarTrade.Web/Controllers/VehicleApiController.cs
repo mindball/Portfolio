@@ -1,5 +1,6 @@
 ﻿using CarTrade.Services.Vehicles;
 using CarTrade.Services.Vehicles.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -8,12 +9,10 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace CarTrade.Web.Controllers
-{
-    [ApiController]
-    [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/vehicles")]
+{   
+    
     [Produces("application/json")]
-    public class VehicleApiController : ControllerBase
+    public class VehicleApiController : BaseApiController
     {
         private readonly IVehicleService vehicleService;
 
@@ -23,6 +22,7 @@ namespace CarTrade.Web.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<VehicleListingServiceModel>>> Get()
