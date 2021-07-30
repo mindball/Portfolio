@@ -10,6 +10,7 @@ namespace CarTrade.Web.Controllers
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
+    [IgnoreAntiforgeryToken]
     public class BaseApiController : ControllerBase
     {
     }

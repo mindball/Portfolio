@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace CarTrade.Web.Controllers
 {   
     
-    [Produces("application/json")]
+    [Produces("application/json")]    
     public class VehicleApiController : BaseApiController
     {
         private readonly IVehicleService vehicleService;

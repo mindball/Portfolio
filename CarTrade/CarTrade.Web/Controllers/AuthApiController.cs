@@ -12,8 +12,10 @@ using System.Threading.Tasks;
 
 namespace CarTrade.Web.Controllers
 {  
+    
     public class AuthApiController : BaseApiController
     {
+        [AllowAnonymous]
         [HttpPost, Route("login")]
         public IActionResult Login([FromBody] LoginModel user)
         {

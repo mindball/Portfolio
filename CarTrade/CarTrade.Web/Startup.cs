@@ -73,8 +73,8 @@ namespace CarTrade.Web
             services.AddJWT();
             services.AddApiVersioning(opt => opt.ReportApiVersions = true);
 
-            //services.AddControllersWithViews(options =>
-            //    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
+            services.AddControllersWithViews(options =>
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
 
             this.ConfigureHangfire(services);
 
