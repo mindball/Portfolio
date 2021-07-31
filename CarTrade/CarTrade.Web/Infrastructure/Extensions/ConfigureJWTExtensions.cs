@@ -24,6 +24,7 @@ namespace CarTrade.Web.Infrastructure.Extensions
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = "https://localhost:5001",
                         ValidAudience = "https://localhost:5001",
+                        //TODO: export security key at appsetting or outsider to protect
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"))
                     };
                 });

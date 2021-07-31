@@ -20,6 +20,7 @@ using static CarTrade.Web.WebConstants;
 using Hangfire.Dashboard;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Mvc.Routing;
+using CarTrade.Web.EmailNotifications;
 
 namespace CarTrade.Web
 {
@@ -43,6 +44,8 @@ namespace CarTrade.Web
 
             //services.AddHangfireServer();
 
+            services.AddJWT();
+
             services.AddIdentity<User, IdentityRole>(options =>
             {
                 options.Password.RequireDigit = false;
@@ -55,6 +58,7 @@ namespace CarTrade.Web
                 .AddEntityFrameworkStores<CarDbContext>()
                 .AddDefaultTokenProviders();
 
+
             services.AddAuthentication()
                 .AddFacebook(facebookOptions =>
                     {
@@ -63,14 +67,13 @@ namespace CarTrade.Web
                     }
                 );
 
-            services.AddDomainServices();
-
+            services.AddDomainServices();           
 
             services.AddAutoMapper();
 
             //friendly url
             //services.AddRouting(routing => routing.LowercaseUrls = true);
-            services.AddJWT();
+            
             services.AddApiVersioning(opt => opt.ReportApiVersions = true);
 
             services.AddControllersWithViews(options =>
@@ -81,6 +84,11 @@ namespace CarTrade.Web
             services.AddHangfireServer();
 
             services.AddControllersWithViews();
+
+            //TODO:  reflection
+            services.AddSingleton<IEmailConfiguration>(Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
+            services.AddTransient<IEmailService, EmailService>();
+
             services.AddRazorPages();
         }
 
