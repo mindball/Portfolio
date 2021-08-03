@@ -11,6 +11,10 @@ namespace CarTrade.Services.Users
         Task<TModel> GetByIdAsync<TModel>(string userId) where TModel : class;
 
         //TODO: reverse map
-        Task EditUserAsync(string userId, UserEditServiceModel model);       
+        Task EditUserAsync(string userId, UserEditServiceModel model);
+
+        Task<List<TModel>> GetUsersByBranchAsync<TModel>(int branchId) where TModel : class;
+
+        List<UserWithRoleIdServiceModel> GetUsersByRole(int branchId, string roleId);
     }
 }
