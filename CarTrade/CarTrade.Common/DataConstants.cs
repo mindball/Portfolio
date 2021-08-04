@@ -8,6 +8,10 @@
         public const int VehicleModelTypeMinLength = 2;
         public const int VehicleModelTypeMaxLength = 50;
 
+        public const string InsuranceExpire = "Expire insurances";
+        public const string VignetteExpire = "Expire vignettes";
+        public const string InspectionCheckExpire = "Expire inspection check";
+        public const string OilCheckExpire = "Expire oil distance";
 
         //TODO: make 25 or 50
         public const int VehiclePageSize = 5;

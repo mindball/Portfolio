@@ -1,7 +1,11 @@
-﻿namespace CarTrade.Web.EmailNotifications
+﻿using System.Threading.Tasks;
+
+namespace CarTrade.Web.EmailNotifications
 {
     public interface IEmailService
     {
-        void Send(EmailMessage emailMessage);        
+        public EmailMessage EmailMessage { get; set; }
+
+        Task Send(EmailMessage emailMessage); 
     }
 }

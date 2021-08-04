@@ -80,16 +80,18 @@ namespace CarTrade.Services.Users
             var result = from usr in db.Users
                               where usr.BranchId == branchId
                               join ur in db.UserRoles on usr.Id equals ur.UserId
-                              where ur.RoleId == roleId
+                              where ur.RoleId == roleId                              
                               select new 
                               {
                                   usr.Id,
                                   usr.UserName,
                                   usr.Email,
-                                  ur.RoleId
-                              };
+                                  ur.RoleId,
+                                  usr.Branch.Town,
+                                  usr.Branch.Address
+                              };            
 
-            var usersByRoles = new List<UserWithRoleIdServiceModel>();
+           var usersByRoles = new List<UserWithRoleIdServiceModel>();
 
             foreach (var userByRole in   result)
             {
@@ -98,7 +100,9 @@ namespace CarTrade.Services.Users
                     Id = userByRole.Id,
                     Username = userByRole.UserName,
                     Email = userByRole.Email,
-                    RoleId = userByRole.RoleId
+                    RoleId = userByRole.RoleId,
+                    Town = userByRole.Town,
+                    Address = userByRole.Address
                 });
             }
 

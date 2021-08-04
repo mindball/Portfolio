@@ -11,10 +11,11 @@ using CarTrade.Web.Models.Vehicles;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using static CarTrade.Web.WebConstants;
-using System.Linq;
+using static CarTrade.Common.DataConstants;
 
 namespace CarTrade.Web.Controllers
 {
@@ -24,11 +25,7 @@ namespace CarTrade.Web.Controllers
         private readonly IMapper mapper;
         private readonly IBranchesService branchService;
         private readonly ICompaniesService employeerService;
-        private readonly IBrandService brandService;
-        private const string InsuranceType = "expire insurances";
-        private const string VignetteType = "expire vignettes";
-        private const string InspectionCheck = "expire inspection check";
-        private const string OilCheck = "expire oil distance";
+        private readonly IBrandService brandService;       
 
         public VehiclesController(IVehicleService vehicleService,
             IMapper mapper, IBranchesService branchService,
@@ -141,7 +138,7 @@ namespace CarTrade.Web.Controllers
             {
                 FullAddress = branchFullAddress,
                 VehiclesWithExpirePolicy = vehicles,      
-                TypeOfExpire = InsuranceType
+                TypeOfExpire = InsuranceExpire
             };           
 
             return this.View(vehiclesWithExprireData);
@@ -160,7 +157,7 @@ namespace CarTrade.Web.Controllers
             {
                 FullAddress = branchFullAddress,
                 VehiclesWithExpireVignettes = vehicles,
-                TypeOfExpire = VignetteType
+                TypeOfExpire = VignetteExpire
             };           
 
             return this.View(vehiclesWithExprireData);
@@ -178,7 +175,7 @@ namespace CarTrade.Web.Controllers
             {
                 FullAddress = branchFullAddress,
                 VehiclesWithOilChangeDistance = vehicles,
-                TypeOfExpire = OilCheck
+                TypeOfExpire = OilCheckExpire
             };
 
             return this.View(vehiclesWithExprireData);
@@ -197,7 +194,7 @@ namespace CarTrade.Web.Controllers
             {
                 FullAddress = branchFullAddress,
                 VehiclesWithInspectionExpire = vehicles,
-                TypeOfExpire = InspectionCheck
+                TypeOfExpire = InspectionCheckExpire
             };
 
             return this.View(vehiclesWithExprireData);
