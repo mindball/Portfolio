@@ -1,11 +1,14 @@
-﻿using System.Threading.Tasks;
+﻿using CarTrade.Web.Models.Home;
+using System.Threading.Tasks;
 
 namespace CarTrade.Web.EmailNotifications
 {
     public interface IEmailService
     {
-        public EmailMessage EmailMessage { get; set; }
+        public EmailMessage Message { get; set; }
 
-        Task Send(EmailMessage emailMessage); 
+        Task Send(EmailMessage emailMessage);
+
+        Task ProcessingMessageAsync(ListExpireDataForAllBranchesViewModel branch);
     }
 }
