@@ -22,6 +22,7 @@ using CarTrade.Services.Vehicles.Models;
 using static CarTrade.Web.WebConstants;
 using static CarTrade.Common.DataConstants;
 using System.Text;
+using CarTrade.Web.Infrastructure.Extensions;
 
 namespace CarTrade.Web.Controllers
 {
@@ -30,8 +31,9 @@ namespace CarTrade.Web.Controllers
     public class HomeController : Controller
     {
         private const string FullAddress = "Full address";
-        private const string VehicleData = "Vehicle";
+        private const string Subject = "Expire data";        
         private const string ExpireData = "Expire date";
+        
 
         private readonly ILogger<HomeController> _logger;
         private readonly IBranchesService branchesService;
@@ -110,49 +112,88 @@ namespace CarTrade.Web.Controllers
 
         private async Task CollectManagersSendExpireNotificationAsync(
             ListExpireDataForAllBranchesViewModel branch)
-        {
-            StringBuilder messageContent = new StringBuilder();
+        {                        
+            var collectAllUsers = new List<UserWithRoleIdServiceModel>();
+            EmailMessage message = new EmailMessage();            
+            StringBuilder messageContent = new StringBuilder();            
+            messageContent.AppendEmailNewLine(string.Join(": ", FullAddress, branch.FullAddress));
+
             if (branch.VehiclesWithExpirePolicy.Count > 0)
             {
-                var userByBranch = await GetUsersByRole(branch.BranchId);
-                messageContent.AppendLine(InsuranceExpire);
-                messageContent.AppendLine(string.Join(": ", FullAddress, branch.FullAddress));
+                collectAllUsers.AddRange(await GetUsersByRoleAsync(branch.BranchId));
+                messageContent.AppendEmailNewLine(InsuranceExpire);                
+
                 foreach (var vehicle in branch.VehiclesWithExpirePolicy)
-                {
-                    messageContent.AppendLine(VehicleData);
-                    messageContent.AppendLine(string.Join(", ", vehicle.PlateNumber, vehicle.Vin));
-                    messageContent.AppendLine(string.Join(": ", ExpireData, InsuranceExpire));
-                    messageContent.AppendLine(string.Join(", ", vehicle.InsurancePolicies
+                {                    
+                    messageContent.AppendEmailNewLine(string.Join(", ", vehicle.PlateNumber, vehicle.Vin));
+                    messageContent.AppendEmailNewLine(string.Join(": ", ExpireData, InsuranceExpire));
+                    messageContent.AppendEmailNewLine(string.Join(", ", vehicle.InsurancePolicies
                                 .Select(i => new
                                 {
                                     TypeOfInsurance = i.TypeInsurance.ToString(),
                                     ExpireDate = i.EndDate
                                 })).ToString());
                 }
-                var message = BuildNotificationMessage(userByBranch, InsuranceExpire, messageContent.ToString());
-                await this.emailService.Send(message);
             }
 
             if (branch.VehiclesWithExpireVignettes.Count > 0)
             {
-                var userByBranch = await GetUsersByRole(branch.BranchId);
-                //var message = NotificationMessage(userByBranch, branch.VehiclesWithExpireVignettes);
-                //await this.emailService.Send(message);
+                collectAllUsers.AddRange(await GetUsersByRoleAsync(branch.BranchId));
+                messageContent.AppendEmailNewLine(VignetteExpire);
+
+                foreach (var vehicle in branch.VehiclesWithExpireVignettes)
+                {
+                    messageContent.AppendEmailNewLine(string.Join(", ", vehicle.PlateNumber, vehicle.Vin));
+                    messageContent.AppendEmailNewLine(string.Join(",", vehicle.ExpireDate));
+                }              
             }
 
             if (branch.VehiclesWithInspectionExpire.Count > 0)
             {
-                var userByBranch = await GetUsersByRole(branch.BranchId);
-                //var message = NotificationMessage(userByBranch);
-                //await this.emailService.Send(message);
+                collectAllUsers.AddRange(await GetUsersByRoleAsync(branch.BranchId));
+                messageContent.AppendEmailNewLine(InspectionCheckExpire);
+
+                foreach (var vehicle in branch.VehiclesWithInspectionExpire)
+                {
+                    messageContent.AppendEmailNewLine(string.Join(", ", vehicle.PlateNumber, vehicle.Vin));
+                    messageContent.AppendEmailNewLine(string.Join(",", vehicle.InspectionSafetyCheck));
+                }              
             }
 
             if (branch.VehiclesWithOilChangeDistance.Count > 0)
             {
-                var userByBranch = await GetUsersByRole(branch.BranchId);
-                //var message = NotificationMessage(userByBranch);
-                //await this.emailService.Send(message);
+                collectAllUsers.AddRange(await GetUsersByRoleAsync(branch.BranchId));
+                messageContent.AppendEmailNewLine(OilCheckExpire);
+
+                foreach (var vehicle in branch.VehiclesWithOilChangeDistance)
+                {
+                    messageContent.AppendEmailNewLine(string.Join(", ", vehicle.PlateNumber, vehicle.Vin));
+                    messageContent.AppendEmailNewLine("Must change oil before " +  vehicle.EndOilChange);
+                }                
             }
+
+            if(collectAllUsers.Count() > 0)
+            {
+                var recipients = RemoveDuplicatesSet(collectAllUsers);                
+                message = BuildNotificationMessage(recipients, Subject, messageContent.ToString());
+                await this.emailService.Send(message);
+            }
+        }
+
+        private static List<UserWithRoleIdServiceModel> RemoveDuplicatesSet(List<UserWithRoleIdServiceModel> items)
+        {            
+            var result = new List<UserWithRoleIdServiceModel>();
+            var set = new HashSet<string>();
+            foreach (var item in items)
+            {
+                if (!set.Contains(item.Email))
+                {
+                    result.Add(item);
+                    set.Add(item.Email);
+                }
+            }
+            
+            return result;
         }
 
         private EmailMessage BuildNotificationMessage(
@@ -176,7 +217,7 @@ namespace CarTrade.Web.Controllers
             return newEmailMessage;
         }
 
-        private async Task<List<UserWithRoleIdServiceModel>> GetUsersByRole(int branchId)
+        private async Task<List<UserWithRoleIdServiceModel>> GetUsersByRoleAsync(int branchId)
         {
             var managerIdRole = await this.roleManager.FindByNameAsync(ManagerRole);
             var userByBranch = this.userService.GetUsersByRole(branchId, managerIdRole.Id);
