@@ -21,6 +21,7 @@ using Hangfire.Dashboard;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Mvc.Routing;
 using CarTrade.Web.EmailNotifications;
+using CarTrade.Web.EmailNotifications.Expire;
 
 namespace CarTrade.Web
 {
@@ -87,7 +88,7 @@ namespace CarTrade.Web
 
             //TODO:  reflection
             services.AddSingleton<IEmailConfiguration>(Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
-            services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<IEmailService, ExpireEmailService>();
 
             services.AddRazorPages();
         }
@@ -159,7 +160,10 @@ namespace CarTrade.Web
             recurringJobManager.AddOrUpdate<InsurancesPoliciesService>("SetExpiredInsurancePoliciesLogic",
                 x => x.SetExpiredInsurancePoliciesLogicAsync(), Cron.Daily);
             recurringJobManager.AddOrUpdate<VignettesService>("SetExpiredVignetteLogic",
-               x => x.SetVignetteExpireLogicAsync(), Cron.Daily);            
+               x => x.SetVignetteExpireLogicAsync(), Cron.Daily);
+            recurringJobManager.AddOrUpdate<ExpireEmailService>("ProcessingExpireMessageAsync",
+                x => x.ProcessingMessageAsync(), Cron.Daily);
+
         }
 
         public class HangfireAuthorizationFilter : IDashboardAuthorizationFilter

@@ -9,6 +9,6 @@ namespace CarTrade.Web.EmailNotifications
 
         Task Send(EmailMessage emailMessage);
 
-        Task ProcessingMessageAsync(ListExpireDataForAllBranchesViewModel branch);
+        Task ProcessingMessageAsync();
     }
 }
