@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace CarTrade.Web.Infrastructure.Extensions
+namespace CarTrade.Common.Extensions
 {
     public static class StringBuilderExtensions
     {

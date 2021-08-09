@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using static CarTrade.Web.WebConstants;
+using CarTrade.Common;
 
 namespace CarTrade.Web.Controllers
 {
-    [Authorize(Roles = AdministratorRole)]
+    [Authorize(Roles = DataConstants.AdministratorRole)]
     public abstract class BaseController : Controller
     {
     }

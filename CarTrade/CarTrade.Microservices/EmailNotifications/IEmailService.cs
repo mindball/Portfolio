@@ -1,8 +1,7 @@
-﻿using CarTrade.Web.Models.Home;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace CarTrade.Web.EmailNotifications
-{
+namespace CarTrade.Microservices.EmailNotifications
+{ 
     public interface IEmailService
     {
         public EmailMessage Message { get; set; }

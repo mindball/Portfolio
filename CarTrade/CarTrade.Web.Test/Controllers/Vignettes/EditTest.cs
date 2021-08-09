@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Xunit;
 
 using static CarTrade.Web.WebConstants;
+using CarTrade.Common;
 
 namespace CarTrade.Web.Test.Controllers.Vignettes
 {
@@ -20,7 +21,7 @@ namespace CarTrade.Web.Test.Controllers.Vignettes
             var mockVignettesService = new Mock<IVignettesService>();
             mockVignettesService.Setup(v => v.GetByIdAsync<VignetteDetailViewModel>(1));
 
-            var controller = new VignettesController(mockVignettesService.Object, null, null).WithIdentity(AdministratorRole);
+            var controller = new VignettesController(mockVignettesService.Object, null, null).WithIdentity(DataConstants.AdministratorRole);
 
             //Act
             var result = controller.Edit(1);
@@ -39,7 +40,7 @@ namespace CarTrade.Web.Test.Controllers.Vignettes
             mockVignettesService.Setup(v => v.GetByIdAsync<VignetteDetailViewModel>(1))
                 .Returns(Task.FromResult(new VignetteDetailViewModel()));
 
-            var controller = new VignettesController(mockVignettesService.Object, null, null).WithIdentity(AdministratorRole);
+            var controller = new VignettesController(mockVignettesService.Object, null, null).WithIdentity(DataConstants.AdministratorRole);
 
             //Act
             var result = controller.Edit(1);

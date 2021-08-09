@@ -2,10 +2,6 @@
 {
     public static class WebConstants
     {
-        public const string DriverRole = "Driver";
-        public const string ManagerRole = "Manager";
-        public const string AdministratorRole = "Administrator";
-
         public const string HeadOffice = "HeadOffice";
 
         public const string TempDataSuccessMessageKey = "SuccessMessage";

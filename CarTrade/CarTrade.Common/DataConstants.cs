@@ -13,6 +13,10 @@
         public const string InspectionCheckExpire = "Expire inspection check";
         public const string OilCheckExpire = "Expire oil distance";
 
+        public const string DriverRole = "Driver";
+        public const string ManagerRole = "Manager";
+        public const string AdministratorRole = "Administrator";
+
         //TODO: make 25 or 50
         public const int VehiclePageSize = 5;
 

@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Xunit;
 
 using static CarTrade.Web.WebConstants;
+using CarTrade.Common;
 
 namespace CarTrade.Web.Test.Controllers.Vignettes
 {
@@ -37,10 +38,10 @@ namespace CarTrade.Web.Test.Controllers.Vignettes
         public async Task Controller_ShouldBeAccessibleByAdministrator()
         {
             //Arrange, Act
-            var controller = new VignettesController(null, null, null).WithIdentity(AdministratorRole);
+            var controller = new VignettesController(null, null, null).WithIdentity(DataConstants.AdministratorRole);
                         
             //Assert
-            Assert.True(controller.User.IsInRole(AdministratorRole));
+            Assert.True(controller.User.IsInRole(DataConstants.AdministratorRole));
         }
 
         //няма смисъл винаги влизаш в action-a       

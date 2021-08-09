@@ -16,12 +16,11 @@ using System;
 using CarTrade.Services.InsurancePolicies;
 using CarTrade.Services.Vignettes;
 
-using static CarTrade.Web.WebConstants;
+using CarTrade.Common;
 using Hangfire.Dashboard;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.Mvc.Routing;
-using CarTrade.Web.EmailNotifications;
-using CarTrade.Web.EmailNotifications.Expire;
+
+using CarTrade.Microservices.EmailNotifications;
+using CarTrade.Microservices.EmailNotifications.Expire;
 
 namespace CarTrade.Web
 {
@@ -87,7 +86,8 @@ namespace CarTrade.Web
             services.AddControllersWithViews();
 
             //TODO:  reflection
-            services.AddSingleton<IEmailConfiguration>(Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
+            services.AddSingleton<IEmailConfiguration>(Configuration.GetSection("EmailConfiguration")
+                .Get<EmailConfiguration>());
             services.AddTransient<IEmailService, ExpireEmailService>();
 
             services.AddRazorPages();
@@ -163,7 +163,6 @@ namespace CarTrade.Web
                x => x.SetVignetteExpireLogicAsync(), Cron.Daily);
             recurringJobManager.AddOrUpdate<ExpireEmailService>("ProcessingExpireMessageAsync",
                 x => x.ProcessingMessageAsync(), Cron.Daily);
-
         }
 
         public class HangfireAuthorizationFilter : IDashboardAuthorizationFilter
@@ -171,7 +170,7 @@ namespace CarTrade.Web
             public bool Authorize(DashboardContext context)
             {
                 var httpContext = context.GetHttpContext();
-                return httpContext.User.IsInRole(AdministratorRole);
+                return httpContext.User.IsInRole(DataConstants.AdministratorRole);
             }
         }
                 

@@ -35,6 +35,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CarTrade.Common\CarTrade.Common.csproj" />
     <ProjectReference Include="..\CarTrade.Data\CarTrade.Data.csproj" />
+    <ProjectReference Include="..\CarTrade.Microservices\CarTrade.Microservices.csproj" />
     <ProjectReference Include="..\CarTrade.Services\CarTrade.Services.csproj" />
   </ItemGroup>
 

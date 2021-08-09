@@ -33,7 +33,7 @@ namespace CarTrade.Web.Test.Controllers.Home
         public async Task Controller_ShouldBeAccessibleByAnonymous()
         {
             //Arrange
-            var controller = new HomeController(null, null, null, null, null, null, null, null).WithAnonymousIdentity();
+            var controller = new HomeController(null, null, null, null).WithAnonymousIdentity();
 
             //Act
             var result = controller.Error() as ViewResult;

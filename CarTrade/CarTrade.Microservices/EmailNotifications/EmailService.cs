@@ -1,21 +1,12 @@
-﻿using CarTrade.Services.Users;
-using CarTrade.Services.Users.Models;
-using CarTrade.Web.Infrastructure.Extensions;
-using CarTrade.Web.Models.Home;
-using MailKit.Net.Smtp;
+﻿using MailKit.Net.Smtp;
 using MailKit.Security;
-using Microsoft.AspNetCore.Identity;
 using MimeKit;
 using MimeKit.Text;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-
-using System.Text;
 using System.Threading.Tasks;
 
 
-namespace CarTrade.Web.EmailNotifications
+namespace CarTrade.Microservices.EmailNotifications
 {
     public abstract class EmailService : IEmailService
     {

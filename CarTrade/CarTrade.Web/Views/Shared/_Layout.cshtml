@@ -25,7 +25,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        @if (User.IsInRole(WebConstants.ManagerRole))
+                        @if (User.IsInRole(DataConstants.ManagerRole))
                         {
                             <div class="dropdown">
                                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -38,7 +38,7 @@
                                     <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="InsuranceCompanies" asp-action="Index">Insurance company</a>
                                     <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Vehicles" asp-action="Index">Vehicles</a>
                                     <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Vignettes" asp-action="Index">Vignettes</a>
-                                    @if (User.IsInRole(WebConstants.AdministratorRole))
+                                    @if (User.IsInRole(DataConstants.AdministratorRole))
                                     {
                                         <a class="nav-link text-dark dropdown-item" asp-area="" asp-controller="Users" asp-action="Index">All users</a>
                                     }

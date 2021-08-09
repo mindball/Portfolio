@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using Xunit;
 
 using static CarTrade.Web.WebConstants;
+using CarTrade.Common;
 
 namespace CarTrade.Web.Test.Controllers.Vignettes
 {
@@ -71,7 +72,7 @@ namespace CarTrade.Web.Test.Controllers.Vignettes
                 EndDate = DateTime.UtcNow.AddYears(1),
                 Expired = false
             };
-            var controller = new VignettesController(null, null, null).WithIdentity(AdministratorRole);
+            var controller = new VignettesController(null, null, null).WithIdentity(DataConstants.AdministratorRole);
             controller.ModelState.AddModelError("test", "test");
 
             //Act
@@ -124,7 +125,7 @@ namespace CarTrade.Web.Test.Controllers.Vignettes
             var vehicles = ReturnVehicleCollection();            
             mockVehiclesService.Setup(srv => srv.AllAsync())
                             .Returns(Task.FromResult(vehicles)).Verifiable();
-            var controller = new VignettesController(null, mockVehiclesService.Object, null).WithIdentity(AdministratorRole);
+            var controller = new VignettesController(null, mockVehiclesService.Object, null).WithIdentity(DataConstants.AdministratorRole);
 
             //Act
             var result = await controller.Add(int.MaxValue) as BadRequestResult;
@@ -150,7 +151,7 @@ namespace CarTrade.Web.Test.Controllers.Vignettes
             {
                 TempData = tempData
             }
-            .WithIdentity(AdministratorRole);
+            .WithIdentity(DataConstants.AdministratorRole);
 
             //Act
             var result = await controller.Add(vehicleIdConst) as RedirectToActionResult;
@@ -181,7 +182,7 @@ namespace CarTrade.Web.Test.Controllers.Vignettes
             {
                 TempData = tempData
             }
-            .WithIdentity(AdministratorRole);
+            .WithIdentity(DataConstants.AdministratorRole);
 
             //Act
             var result = await controller.Add(vehicleIdConst) as ViewResult;            

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-using static CarTrade.Web.WebConstants;
+using CarTrade.Common;
 
 namespace CarTrade.Web.Test.Controllers.Vehicles
 {
@@ -32,10 +32,10 @@ namespace CarTrade.Web.Test.Controllers.Vehicles
         public void Controller_ShouldBeAccessibleByAdministrator()
         {
             //Arrange, Act
-            var controller = new VehiclesController(null, null, null, null, null).WithIdentity(AdministratorRole);
+            var controller = new VehiclesController(null, null, null, null, null).WithIdentity(DataConstants.AdministratorRole);
 
             //Assert
-            Assert.True(controller.User.IsInRole(AdministratorRole));
+            Assert.True(controller.User.IsInRole(DataConstants.AdministratorRole));
         }
 
         //няма смисъл винаги влизаш в action-a

@@ -1,4 +1,4 @@
-﻿namespace CarTrade.Web.EmailNotifications
+﻿namespace CarTrade.Microservices.EmailNotifications
 {
     public class EmailConfiguration : IEmailConfiguration
     {

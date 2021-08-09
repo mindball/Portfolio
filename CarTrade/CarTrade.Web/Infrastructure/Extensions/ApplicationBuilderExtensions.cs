@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
+using CarTrade.Common;
 
 namespace CarTrade.Web.Infrastructure.Extensions
 {
@@ -25,12 +26,12 @@ namespace CarTrade.Web.Infrastructure.Extensions
                 Task
                    .Run(async () =>
                    {
-                       var adminName = WebConstants.AdministratorRole;
+                       var adminName = DataConstants.AdministratorRole;
                        var roles = new[]
                        {
                             adminName,
-                            WebConstants.ManagerRole,
-                            WebConstants.DriverRole
+                            DataConstants.ManagerRole,
+                            DataConstants.DriverRole
                         };
 
                        foreach (var role in roles)

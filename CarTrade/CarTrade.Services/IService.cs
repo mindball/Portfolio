@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace CarTrade.Services
+﻿namespace CarTrade.Services
 {
     public interface IService
     {      

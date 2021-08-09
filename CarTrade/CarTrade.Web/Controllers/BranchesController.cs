@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
 
+using CarTrade.Common;
 using static CarTrade.Web.WebConstants;
 
 namespace CarTrade.Web.Controllers
@@ -38,7 +39,7 @@ namespace CarTrade.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> ListVehicles([FromRoute(Name = "id")] int branchId)
         {
-            if(this.User.IsInRole(AdministratorRole))
+            if(this.User.IsInRole(DataConstants.AdministratorRole))
             {
                 var branch = await this.branchesService.GetByIdAsync<BranchVehiclesListingServiceModel>(branchId);
                 if (branch == null)
@@ -51,7 +52,7 @@ namespace CarTrade.Web.Controllers
                 return this.View(allVehicle);
             }
 
-            if(this.User.IsInRole(ManagerRole))
+            if(this.User.IsInRole(DataConstants.ManagerRole))
             {
                 //var branch = await this.branchesService.GetByIdAsync<BranchVehiclesListingServiceModel>(branchId);
                 //if (branch == null)

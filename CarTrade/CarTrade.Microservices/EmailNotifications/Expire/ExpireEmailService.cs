@@ -1,20 +1,18 @@
-﻿using CarTrade.Services.Users;
+﻿using CarTrade.Common.Extensions;
+using CarTrade.Data;
+using CarTrade.Services.Branches;
+using CarTrade.Services.Users;
 using CarTrade.Services.Users.Models;
-using CarTrade.Web.Models.Home;
-using Microsoft.AspNetCore.Identity;
+using CarTrade.Services.Vehicles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-
-using static CarTrade.Web.WebConstants;
-using static CarTrade.Common.DataConstants;
-using CarTrade.Services.Branches;
 using System.Text;
-using CarTrade.Web.Infrastructure.Extensions;
-using CarTrade.Services.Vehicles;
+using System.Threading.Tasks;
+using CarTrade.Common;
+using Microsoft.EntityFrameworkCore;
 
-namespace CarTrade.Web.EmailNotifications.Expire
+namespace CarTrade.Microservices.EmailNotifications.Expire
 {
     public class ExpireEmailService : EmailService
     {
@@ -25,18 +23,18 @@ namespace CarTrade.Web.EmailNotifications.Expire
         private readonly IUsersService userService;
         private readonly IBranchesService branchesService;
         private readonly IVehicleService vehicleService;
-
-        private readonly RoleManager<IdentityRole> roleManager;        
+        private readonly CarDbContext context;
 
         public ExpireEmailService(
-            RoleManager<IdentityRole> roleManager,
+            CarDbContext context,
             IUsersService userService,
             IEmailConfiguration emailConfiguration,
             IBranchesService branchesService,
-            IVehicleService vehicleService)
+            IVehicleService vehicleService
+            )
             : base(emailConfiguration)
         {
-            this.roleManager = roleManager;
+            this.context = context;
             this.userService = userService;
             this.branchesService = branchesService;
             this.vehicleService = vehicleService;
@@ -48,7 +46,7 @@ namespace CarTrade.Web.EmailNotifications.Expire
             if (allBranchesWithCriticalVehicleData.Count() <= 0 || allBranchesWithCriticalVehicleData == null)
             {
                 throw new ArgumentException("Missing branches");
-            }            
+            }
 
             foreach (var branch in allBranchesWithCriticalVehicleData)
             {
@@ -63,12 +61,12 @@ namespace CarTrade.Web.EmailNotifications.Expire
                 if (insurancesExpire.Count() > 0)
                 {
                     collectAllUsers.AddRange(await GetUsersByRoleAsync(branch.Id));
-                    messageContent.AppendEmailNewLine(InsuranceExpire);
+                    messageContent.AppendEmailNewLine(DataConstants.InsuranceExpire);
 
                     foreach (var vehicle in insurancesExpire)
                     {
                         messageContent.AppendEmailNewLine(string.Join(", ", vehicle.PlateNumber, vehicle.Vin));
-                        messageContent.AppendEmailNewLine(string.Join(": ", ExpireData, InsuranceExpire));
+                        messageContent.AppendEmailNewLine(string.Join(": ", ExpireData, DataConstants.InsuranceExpire));
                         messageContent.AppendEmailNewLine(string.Join(", ", vehicle.InsurancePolicies
                                     .Select(i => new
                                     {
@@ -81,7 +79,7 @@ namespace CarTrade.Web.EmailNotifications.Expire
                 if (vignettesExpire.Count() > 0)
                 {
                     collectAllUsers.AddRange(await GetUsersByRoleAsync(branch.Id));
-                    messageContent.AppendEmailNewLine(VignetteExpire);
+                    messageContent.AppendEmailNewLine(DataConstants.VignetteExpire);
 
                     foreach (var vehicle in vignettesExpire)
                     {
@@ -93,7 +91,7 @@ namespace CarTrade.Web.EmailNotifications.Expire
                 if (inspectionExpire.Count() > 0)
                 {
                     collectAllUsers.AddRange(await GetUsersByRoleAsync(branch.Id));
-                    messageContent.AppendEmailNewLine(InspectionCheckExpire);
+                    messageContent.AppendEmailNewLine(DataConstants.InspectionCheckExpire);
 
                     foreach (var vehicle in inspectionExpire)
                     {
@@ -105,7 +103,7 @@ namespace CarTrade.Web.EmailNotifications.Expire
                 if (oilExpire.Count() > 0)
                 {
                     collectAllUsers.AddRange(await GetUsersByRoleAsync(branch.Id));
-                    messageContent.AppendEmailNewLine(OilCheckExpire);
+                    messageContent.AppendEmailNewLine(DataConstants.OilCheckExpire);
 
                     foreach (var vehicle in oilExpire)
                     {
@@ -116,7 +114,7 @@ namespace CarTrade.Web.EmailNotifications.Expire
 
                 if (collectAllUsers.Count() > 0)
                 {
-                    var recipients = RemoveDuplicatesSet(collectAllUsers);                    
+                    var recipients = RemoveDuplicatesSet(collectAllUsers);
                     this.BuildNotificationMessage(recipients, Subject, messageContent.ToString());
                     await this.Send(this.Message);
                 }
@@ -125,7 +123,9 @@ namespace CarTrade.Web.EmailNotifications.Expire
 
         private async Task<List<UserWithRoleIdServiceModel>> GetUsersByRoleAsync(int branchId)
         {
-            var managerIdRole = await this.roleManager.FindByNameAsync(ManagerRole);
+            var managerIdRole = await this.context.Roles
+                .Where(r => r.Name == DataConstants.ManagerRole)
+                .FirstOrDefaultAsync();
             var userByBranch = this.userService.GetUsersByRole(branchId, managerIdRole.Id);
             return userByBranch;
         }

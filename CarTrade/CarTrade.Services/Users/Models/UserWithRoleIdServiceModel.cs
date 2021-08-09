@@ -1,4 +1,7 @@
-﻿namespace CarTrade.Services.Users.Models
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+
+namespace CarTrade.Services.Users.Models
 {
     public class UserWithRoleIdServiceModel
     {

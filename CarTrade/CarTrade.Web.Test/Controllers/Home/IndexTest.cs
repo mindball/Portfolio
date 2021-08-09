@@ -63,11 +63,7 @@ namespace CarTrade.Web.Test.Controllers.Home
                 null,
                 mockBranchService.Object,
                 mockInsuranceService.Object,
-                mockVehicleService.Object,
-                mockVignettesService.Object,
-                null,
-                null,
-                null
+                mockVehicleService.Object               
                );
             //Act
             var result = await homeController.Index();
@@ -104,11 +100,7 @@ namespace CarTrade.Web.Test.Controllers.Home
                 null,
                 mockBranchService.Object,
                 mockInsuranceService.Object,
-                mockVehicleService.Object,
-                mockVignettesService.Object,
-                null,
-                null,
-                null
+                mockVehicleService.Object                
                 );
 
             //Act
@@ -157,11 +149,7 @@ namespace CarTrade.Web.Test.Controllers.Home
                 null,
                 mockBranchService.Object,
                 mockInsuranceService.Object,
-                mockVehicleService.Object,
-                mockVignettesService.Object,
-                null,
-                null,
-                null
+                mockVehicleService.Object                
                 );
 
             //Act
