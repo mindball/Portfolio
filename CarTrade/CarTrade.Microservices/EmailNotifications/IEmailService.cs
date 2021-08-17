@@ -1,13 +1,16 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CarTrade.Microservices.EmailNotifications
 { 
     public interface IEmailService
     {
-        public EmailMessage Message { get; set; }
+        List<EmailMessage> Messages { get; set; }
 
-        Task Send(EmailMessage emailMessage);
+        Task SendAsync(List<EmailMessage> messages);
 
-        Task ProcessingMessageAsync();
+        Task<List<EmailMessage>> ProcessingMessageAsync();
+
+        Task ProcessAndSendingExpireMessages();
     }
 }

@@ -6,8 +6,8 @@ namespace CarTrade.Microservices.EmailNotifications
     {
 		public EmailMessage()
 		{
-			ToAddresses = new List<EmailAddress>();
-			FromAddresses = new List<EmailAddress>();
+			this.ToAddresses = new List<EmailAddress>();
+			this.FromAddresses = new List<EmailAddress>();
 		}
 
 		public List<EmailAddress> ToAddresses { get; set; }

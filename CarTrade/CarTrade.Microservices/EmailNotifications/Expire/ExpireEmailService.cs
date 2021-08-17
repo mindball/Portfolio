@@ -1,6 +1,5 @@
 ﻿using CarTrade.Common.Extensions;
 using CarTrade.Data;
-using CarTrade.Services.Branches;
 using CarTrade.Services.Users;
 using CarTrade.Services.Users.Models;
 using CarTrade.Services.Vehicles;
@@ -12,46 +11,48 @@ using System.Threading.Tasks;
 using CarTrade.Common;
 using Microsoft.EntityFrameworkCore;
 
+using static CarTrade.Common.DataConstants;
+
 namespace CarTrade.Microservices.EmailNotifications.Expire
 {
     public class ExpireEmailService : EmailService
     {
         private const string FullAddress = "Full address";
         private const string Subject = "Expire data";
-        private const string ExpireData = "Expire date";
+        private const string ExpireData = "Expire date";        
 
-        private readonly IUsersService userService;
-        private readonly IBranchesService branchesService;
+        private readonly IUsersService userService;        
         private readonly IVehicleService vehicleService;
         private readonly CarDbContext context;
 
         public ExpireEmailService(
             CarDbContext context,
-            IUsersService userService,
-            IEmailConfiguration emailConfiguration,
-            IBranchesService branchesService,
-            IVehicleService vehicleService
+            IEmailConfiguration emailConfiguration,            
+            IVehicleService vehicleService,
+            IUsersService userService
             )
             : base(emailConfiguration)
         {
             this.context = context;
-            this.userService = userService;
-            this.branchesService = branchesService;
+            this.userService = userService;            
             this.vehicleService = vehicleService;
         }
 
-        public override async Task ProcessingMessageAsync()
+        public override async Task<List<EmailMessage>> ProcessingMessageAsync()
         {
-            var allBranchesWithCriticalVehicleData = await this.branchesService.AllAsync();
+            var allBranchesWithCriticalVehicleData = await this.context.Branches.Select(b => b).ToListAsync();
+            var newMessages = new List<EmailMessage>();
+
             if (allBranchesWithCriticalVehicleData.Count() <= 0 || allBranchesWithCriticalVehicleData == null)
             {
-                throw new ArgumentException("Missing branches");
+                throw new ArgumentException(NotExistItemExceptionMessage);
             }
 
             foreach (var branch in allBranchesWithCriticalVehicleData)
             {
                 StringBuilder messageContent = new StringBuilder();
-                messageContent.AppendEmailNewLine(string.Join(": ", FullAddress, branch.FullAddress));
+                messageContent.AppendEmailNewLine(string.Join(": ", FullAddress, (branch.Town + " " + branch.Address)));
+
                 var insurancesExpire = await this.vehicleService.GetInsuranceExpireDataAsync(branch.Id);
                 var vignettesExpire = await this.vehicleService.GetVignetteExpireDataAsync(branch.Id);
                 var inspectionExpire = await this.vehicleService.GetInspectionSafetyCheckExpireDataAsync(branch.Id);
@@ -112,13 +113,21 @@ namespace CarTrade.Microservices.EmailNotifications.Expire
                     }
                 }
 
-                if (collectAllUsers.Count() > 0)
+                //If branch has no manager
+                if (collectAllUsers.Count() > 0 
+                    || (oilExpire.Count() 
+                    + inspectionExpire.Count() 
+                    + vignettesExpire.Count() 
+                    + insurancesExpire.Count()) > 0)
                 {
-                    var recipients = RemoveDuplicatesSet(collectAllUsers);
-                    this.BuildNotificationMessage(recipients, Subject, messageContent.ToString());
-                    await this.Send(this.Message);
-                }
+                    if(this.Messages == null) this.Messages = new List<EmailMessage>();
+
+                    var recipients = await RemoveDuplicatesSet(collectAllUsers);
+                    this.Messages.Add(this.BuildNotificationMessage(recipients, Subject, messageContent.ToString()));
+                }                
             }
+
+            return this.Messages;
         }
 
         private async Task<List<UserWithRoleIdServiceModel>> GetUsersByRoleAsync(int branchId)
@@ -130,28 +139,49 @@ namespace CarTrade.Microservices.EmailNotifications.Expire
             return userByBranch;
         }
 
-        private void BuildNotificationMessage(
+        private EmailMessage BuildNotificationMessage(
             List<UserWithRoleIdServiceModel> recipients,
             string subject,
             string content)
         {
-            this.Message = new EmailMessage();
+            var newMessage = new EmailMessage();
             foreach (var recipient in recipients)
             {
-                this.Message.ToAddresses.Add(new EmailAddress
+                newMessage.ToAddresses.Add(new EmailAddress
                 {
                     Name = recipient.Username,
                     Address = recipient.Email
                 });
             }
 
-            this.Message.Subject = subject;
-            this.Message.Content = content;
+            newMessage.Subject = subject;
+            newMessage.Content = content;
+
+            return newMessage;
         }
 
-        private static List<UserWithRoleIdServiceModel> RemoveDuplicatesSet(List<UserWithRoleIdServiceModel> items)
+        private async Task<List<UserWithRoleIdServiceModel>> RemoveDuplicatesSet(List<UserWithRoleIdServiceModel> items)
         {
+            //If branch has no manager
             var result = new List<UserWithRoleIdServiceModel>();
+            if (items.Count == 0)
+            {
+                var adminRole = await this.context.Roles
+               .Where(r => r.Name == DataConstants.AdministratorRole)
+               .FirstOrDefaultAsync();
+                var adminUserId = await this.context.UserRoles.Where(u => u.RoleId == adminRole.Id).Select(u => u.UserId).FirstOrDefaultAsync();
+                var admin = await this.context.Users.FirstOrDefaultAsync(u => u.Id == adminUserId);
+
+                result.Add(new UserWithRoleIdServiceModel
+                {
+                    Username = admin.UserName,
+                    Email = admin.Email,
+                    RoleId = adminRole.Id                    
+                });
+
+                return result;
+            }
+            
             var set = new HashSet<string>();
             foreach (var item in items)
             {
