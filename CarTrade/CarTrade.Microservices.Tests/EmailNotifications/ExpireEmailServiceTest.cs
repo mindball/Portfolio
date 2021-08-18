@@ -12,12 +12,14 @@ using Xunit;
 
 using static CarTrade.Common.DataConstants;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace CarTrade.Microservices.Tests.EmailNotifications
 {
     [Collection("Database collection")]
     public class ExpireEmailServiceTest : Services.Tests.Common.Data
     {
+        private const string searchPatternBr = "<br />";
         private DatabaseFixture fixture;
         private IEmailService emailService;
         private IVehicleService vehiclesService;
@@ -111,6 +113,86 @@ namespace CarTrade.Microservices.Tests.EmailNotifications
             Assert.NotNull(actualMessages);
             Assert.NotNull(actualRecipientEmail);
             Assert.Equal(expectedRecipient.Email, actualRecipientEmail);
+        }
+
+        [Fact]
+        public async Task ProcessingMessageAsync_ShouldReturnCorrectCountOfExpireInsurance()
+        {
+            //Arrange
+            int expectedResult = 7;
+            string searchPattern = "TypeOfInsurance";
+            //Act
+                     
+            var resultMessages = await this.emailService.ProcessingMessageAsync();
+            var actualCount = 0;
+            foreach (var message in resultMessages)
+            {
+                actualCount += (message.Content.Split(searchPattern).Length) - 1;                
+            }
+
+            //Assert
+            Assert.Equal(expectedResult, actualCount);
+        }
+
+        [Fact]
+        public async Task ProcessingMessageAsync_ShouldReturnCorrectCountOfExpireVignettes()
+        {
+            //Arrange
+            int expectedCount = 8;
+
+            //Act
+            var resultMessages = await this.emailService.ProcessingMessageAsync();             
+            var actualCount = CountBr(VignetteExpire, searchPatternBr, InspectionCheckExpire, resultMessages);
+
+            //Assert
+            Assert.Equal(expectedCount, actualCount);
+        }
+
+        [Fact]
+        public async Task ProcessingMessageAsync_ShouldReturnCorrectCountOfExpireExpireInspectionCheck()
+        {
+            //Arrange
+            int expectedCount = 7;     
+
+            //Act
+            var resultMessages = await this.emailService.ProcessingMessageAsync();
+            var actualCount = CountBr(InspectionCheckExpire, searchPatternBr, OilCheckExpire, resultMessages);
+
+            //Assert
+            Assert.Equal(expectedCount, actualCount);
+        }
+
+        [Fact]
+        public async Task ProcessingMessageAsync_ShouldReturnCorrectCountOfExpirOoilDistance()
+        {
+            //Arrange
+            int expectedCount = 7;
+
+            //Act
+            var resultMessages = await this.emailService.ProcessingMessageAsync();
+            var actualCount = CountBr(OilCheckExpire, searchPatternBr, OilCheckExpire, resultMessages);
+
+            //Assert
+            Assert.Equal(expectedCount, actualCount);
+        }
+
+        private static int CountBr(string searchPattern, string searchPattern2, string searchPattern3, List<EmailMessage> resultMessages)
+        {
+            int actualCount = 0;
+            foreach (var message in resultMessages)
+            {
+                var splitContentWhensearchPatternExist = message.Content.Split(searchPattern);
+                if (splitContentWhensearchPatternExist.Length > 1
+                    || splitContentWhensearchPatternExist.Length == 2)
+                {
+                    var expireVigneteStr = splitContentWhensearchPatternExist[1].Split(searchPattern3);
+                    var splitExpireVignetteSection =
+                        expireVigneteStr[0].Split(searchPattern2, StringSplitOptions.RemoveEmptyEntries).Length;
+                    actualCount += (splitExpireVignetteSection / 2);
+                }
+            }
+
+            return actualCount;
         }
 
         private static Mock<IVehicleService> GetMockVehiclesService()

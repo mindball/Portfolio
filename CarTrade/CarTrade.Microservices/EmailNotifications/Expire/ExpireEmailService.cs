@@ -19,7 +19,7 @@ namespace CarTrade.Microservices.EmailNotifications.Expire
     {
         private const string FullAddress = "Full address";
         private const string Subject = "Expire data";
-        private const string ExpireData = "Expire date";        
+        private const string ExpireData = "Expire date"; 
 
         private readonly IUsersService userService;        
         private readonly IVehicleService vehicleService;
@@ -65,7 +65,7 @@ namespace CarTrade.Microservices.EmailNotifications.Expire
                     messageContent.AppendEmailNewLine(DataConstants.InsuranceExpire);
 
                     foreach (var vehicle in insurancesExpire)
-                    {
+                    {  
                         messageContent.AppendEmailNewLine(string.Join(", ", vehicle.PlateNumber, vehicle.Vin));
                         messageContent.AppendEmailNewLine(string.Join(": ", ExpireData, DataConstants.InsuranceExpire));
                         messageContent.AppendEmailNewLine(string.Join(", ", vehicle.InsurancePolicies
@@ -83,7 +83,7 @@ namespace CarTrade.Microservices.EmailNotifications.Expire
                     messageContent.AppendEmailNewLine(DataConstants.VignetteExpire);
 
                     foreach (var vehicle in vignettesExpire)
-                    {
+                    {                        
                         messageContent.AppendEmailNewLine(string.Join(", ", vehicle.PlateNumber, vehicle.Vin));
                         messageContent.AppendEmailNewLine(string.Join(",", vehicle.ExpireDate));
                     }
@@ -95,7 +95,7 @@ namespace CarTrade.Microservices.EmailNotifications.Expire
                     messageContent.AppendEmailNewLine(DataConstants.InspectionCheckExpire);
 
                     foreach (var vehicle in inspectionExpire)
-                    {
+                    {                        
                         messageContent.AppendEmailNewLine(string.Join(", ", vehicle.PlateNumber, vehicle.Vin));
                         messageContent.AppendEmailNewLine(string.Join(",", vehicle.InspectionSafetyCheck));
                     }
@@ -107,7 +107,7 @@ namespace CarTrade.Microservices.EmailNotifications.Expire
                     messageContent.AppendEmailNewLine(DataConstants.OilCheckExpire);
 
                     foreach (var vehicle in oilExpire)
-                    {
+                    {                       
                         messageContent.AppendEmailNewLine(string.Join(", ", vehicle.PlateNumber, vehicle.Vin));
                         messageContent.AppendEmailNewLine("Must change oil before " + vehicle.EndOilChange);
                     }
