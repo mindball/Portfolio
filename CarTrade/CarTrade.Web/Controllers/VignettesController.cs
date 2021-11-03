@@ -75,7 +75,7 @@ namespace CarTrade.Web.Controllers
             if (vehicleVignette)// && vehicleVignette.)
             {
                 TempData.AddFailureMessage(string.Format(ActiveItem, vehicleId, "vignette"));
-                return this.RedirectToAction("edit", "vehicles", new { id = vehicleId });
+                return this.RedirectToAction<VehiclesController>(c => c.Edit(vehicleId), new { id = vehicleId });
             }
 
             return this.View(new VignetteFormViewModel

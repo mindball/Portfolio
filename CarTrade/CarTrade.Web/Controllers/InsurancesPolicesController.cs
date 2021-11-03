@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNet.Mvc.TypedRouting;
 
 using static CarTrade.Web.WebConstants;
 
@@ -71,8 +72,14 @@ namespace CarTrade.Web.Controllers
 
             TempData.AddSuccessMessage(string.Format(SuccessAddItemMessage, policyInfo));
 
-            return this.RedirectToRoute("default",
-                new { controller = "Vehicles", action = "Index" });
+            //magic strings
+            //return this.RedirectToRoute("default",
+            //    new { controller = "Vehicles", action = "Index" });
+            //var result = this.RedirectToAction<VehiclesController>(c => c.Index(1));
+            //var result2 = this.RedirectToRoute("default",
+            //        new { controller = "Vehicles", action = "Index" });
+
+            return this.RedirectToAction<VehiclesController>(c => c.Index(1));
         }
 
         public async Task<IActionResult> Details([FromRoute(Name = "id")] int vehicleId)
@@ -132,8 +139,12 @@ namespace CarTrade.Web.Controllers
 
             TempData.AddSuccessMessage(string.Format(SuccessEditItemMessage, "policy"));
 
-            return this.RedirectToRoute("default",
-                new { controller = "Vehicles", action = "Index" });
+            //magic strings
+            //return this.RedirectToRoute("default",
+            //    new { controller = "Vehicles", action = "Index" });
+
+            return this.RedirectToAction<VehiclesController>(c => c.Index(1));
+
         }
 
         private ListDetailsInsurancePolicyViewModel FillCustomVehicle(VehicleListingServiceModel vehicle)

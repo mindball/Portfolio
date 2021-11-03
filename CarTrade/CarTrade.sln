@@ -17,9 +17,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarTrade.Web.Test", "CarTra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarTrade.IntegrationTests", "CarTrade.IntegrationTests\CarTrade.IntegrationTests.csproj", "{55835687-AE98-4332-888D-9CDCBBD21C0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarTrade.Microservices", "CarTrade.Microservices\CarTrade.Microservices.csproj", "{A5534D39-8663-44D5-94E1-89F1EE19B2DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarTrade.Microservices", "CarTrade.Microservices\CarTrade.Microservices.csproj", "{A5534D39-8663-44D5-94E1-89F1EE19B2DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarTrade.Sandbox", "CarTrade.Sandbox\CarTrade.Sandbox.csproj", "{06135ACD-55B9-4295-9EAA-98FA9D2B775D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarTrade.Sandbox", "CarTrade.Sandbox\CarTrade.Sandbox.csproj", "{06135ACD-55B9-4295-9EAA-98FA9D2B775D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarTrade.Microservices.Tests", "CarTrade.Microservices.Tests\CarTrade.Microservices.Tests.csproj", "{B468BC0D-C30C-4181-88C3-2171A78F6140}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{06135ACD-55B9-4295-9EAA-98FA9D2B775D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06135ACD-55B9-4295-9EAA-98FA9D2B775D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06135ACD-55B9-4295-9EAA-98FA9D2B775D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B468BC0D-C30C-4181-88C3-2171A78F6140}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B468BC0D-C30C-4181-88C3-2171A78F6140}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B468BC0D-C30C-4181-88C3-2171A78F6140}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B468BC0D-C30C-4181-88C3-2171A78F6140}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

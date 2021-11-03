@@ -1,7 +1,4 @@
 using AutoMapper;
-using CarTrade.Data;
-using CarTrade.Data.Models;
-using CarTrade.Web.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -10,17 +7,20 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Hangfire;
-using Hangfire.SqlServer;
 using System;
-using CarTrade.Services.InsurancePolicies;
-using CarTrade.Services.Vignettes;
 
 using CarTrade.Common;
-using Hangfire.Dashboard;
-
+using CarTrade.Data;
+using CarTrade.Data.Models;
+using CarTrade.Services.InsurancePolicies;
+using CarTrade.Services.Vignettes;
 using CarTrade.Microservices.EmailNotifications;
 using CarTrade.Microservices.EmailNotifications.Expire;
+using CarTrade.Web.Infrastructure.Extensions;
+
+using Hangfire.Dashboard;
+using Hangfire;
+using Hangfire.SqlServer;
 
 namespace CarTrade.Web
 {
@@ -77,7 +77,7 @@ namespace CarTrade.Web
             services.AddApiVersioning(opt => opt.ReportApiVersions = true);
 
             services.AddControllersWithViews(options =>
-                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute())).AddTypedRouting();
 
             this.ConfigureHangfire(services);
 
@@ -91,6 +91,8 @@ namespace CarTrade.Web
             services.AddTransient<IEmailService, ExpireEmailService>();
 
             services.AddRazorPages();
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -161,8 +163,9 @@ namespace CarTrade.Web
                 x => x.SetExpiredInsurancePoliciesLogicAsync(), Cron.Daily);
             recurringJobManager.AddOrUpdate<VignettesService>("SetExpiredVignetteLogic",
                x => x.SetVignetteExpireLogicAsync(), Cron.Daily);
-            recurringJobManager.AddOrUpdate<ExpireEmailService>("ProcessingExpireMessageAsync",
-                x => x.ProcessingMessageAsync(), Cron.Daily);
+            
+            recurringJobManager.AddOrUpdate<ExpireEmailService>("SendingExpireMessage",
+              x => x.ProcessAndSendingExpireMessages(), Cron.Daily(8));
         }
 
         public class HangfireAuthorizationFilter : IDashboardAuthorizationFilter
@@ -172,7 +175,6 @@ namespace CarTrade.Web
                 var httpContext = context.GetHttpContext();
                 return httpContext.User.IsInRole(DataConstants.AdministratorRole);
             }
-        }
-                
+        }                
     }
 }

@@ -4,6 +4,8 @@
     {
         public const string HeadOffice = "HeadOffice";
 
+        public const string DefaultRoute = "default";
+
         public const string TempDataSuccessMessageKey = "SuccessMessage";
         public const string TempDataErrorMessageKey = "ErrorMessage";
 

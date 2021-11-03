@@ -41,6 +41,6 @@
         public const string WrongDateExceptionMessage = "Start date must be small than end date" +
                     "or the date must not be less than one year back";
 
-        public const string ValidateItemException = "This {0} not valid or exist";
+        public const string ValidateItemException = "This {0} not valid or exist";       
     }
 }
