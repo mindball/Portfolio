@@ -65,7 +65,9 @@ namespace CarTrade.Web.Controllers
                 if (!existUserInCurrentBranch)
                 {
                     this.TempData[AccessDenied] = AccessDenied;
-                    return this.RedirectToAction("Index", "Home");                    
+                    //return this.RedirectToAction("Index", "Home");
+
+                    return this.RedirectToAction<HomeController>(c => c.Index());
                 }                
                 
                 var listAllVehicleFilterByUserBranchAddress = 
@@ -74,7 +76,7 @@ namespace CarTrade.Web.Controllers
                 return this.View(listAllVehicleFilterByUserBranchAddress);
             }
 
-            return this.RedirectToAction("Index", "Home");
+            return this.RedirectToAction<HomeController>(c => c.Index());
         }        
 
         public IActionResult Add()
