@@ -30,6 +30,7 @@ The project provides the following functionalities and is useful for vehicle fle
 - Deployed and working on Windows server 2012 Std.
 - Using Client OAuth Login  
 - RESTful Web api with JWT auth 
+- AspNet.Mvc.TypedRouting
 
 ## :wrench: DB Diagram
 ![](https://res.cloudinary.com/oilairpi/image/upload/v1623133764/Portfolio/diagram_wq1ndx.jpg)
